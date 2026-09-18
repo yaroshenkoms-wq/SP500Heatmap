@@ -2,7 +2,6 @@ import SwiftUI
 
 struct CompaniesHeatmapView: View {
     let subsector: Subsector
-    let subsectorChange: Double
     @ObservedObject var webSocketManager: WebSocketManager
     @ObservedObject var performanceStore: PerformanceStore
     @State private var selectedPeriod = "SC"
@@ -19,6 +18,20 @@ struct CompaniesHeatmapView: View {
         subsector.companies.map { company in
             (company, changePercent(for: company.ticker))
         }
+    }
+
+    // Пересчитывается от selectedPeriod вместо статичного значения с
+    // родительского экрана, иначе заголовок не реагирует на смену периода.
+    var subsectorChange: Double {
+        var weightedChange = 0.0
+        var totalWeight = 0.0
+        for company in subsector.companies {
+            if let change = changePercent(for: company.ticker) {
+                weightedChange += change * company.marketCap
+                totalWeight += company.marketCap
+            }
+        }
+        return totalWeight > 0 ? weightedChange / totalWeight : 0
     }
     
     // Сортировка по убыванию капитализации

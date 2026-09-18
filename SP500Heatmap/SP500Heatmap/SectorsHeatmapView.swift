@@ -72,7 +72,7 @@ struct SectorsHeatmapView: View {
             GeometryReader { geometry in
                 TreemapLayout(weights: sortedSectorStats.map { $0.totalMarketCap }) {
                     ForEach(sortedSectorStats) { stat in
-                        NavigationLink(destination: SubsectorsHeatmapView(sector: stat.sector, sectorChange: stat.changePercent, webSocketManager: webSocketManager, performanceStore: performanceStore)) {
+                        NavigationLink(destination: SubsectorsHeatmapView(sector: stat.sector, webSocketManager: webSocketManager, performanceStore: performanceStore)) {
                             SectorTile(stat: stat)
                         }
                     }
