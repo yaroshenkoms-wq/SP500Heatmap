@@ -3,6 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var networkService = NetworkService.shared
     @StateObject private var webSocketManager = WebSocketManager.shared
+    @StateObject private var performanceStore = PerformanceStore.shared
     @State private var sectors: [Sector] = []
     @State private var isLoading = true
     @State private var errorMessage: String?
@@ -27,13 +28,14 @@ struct ContentView: View {
                         .buttonStyle(.borderedProminent)
                     }
                 } else {
-                    SectorsHeatmapView(sectors: sectors, webSocketManager: webSocketManager)
+                    SectorsHeatmapView(sectors: sectors, webSocketManager: webSocketManager, performanceStore: performanceStore)
                 }
             }
         }
         .task {
             await loadData()
             webSocketManager.connect()
+            performanceStore.loadIfNeeded()
         }
         .onDisappear {
             webSocketManager.disconnect()

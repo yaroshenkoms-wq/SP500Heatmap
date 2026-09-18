@@ -4,13 +4,20 @@ struct CompaniesHeatmapView: View {
     let subsector: Subsector
     let subsectorChange: Double
     @ObservedObject var webSocketManager: WebSocketManager
+    @ObservedObject var performanceStore: PerformanceStore
     @State private var selectedPeriod = "SC"
     @Environment(\.dismiss) private var dismiss
-    
+
+    private func changePercent(for ticker: String) -> Double? {
+        if selectedPeriod == "SC" {
+            return webSocketManager.priceUpdates[ticker]?.changePercent
+        }
+        return performanceStore.changePercent(for: ticker, period: selectedPeriod)
+    }
+
     var companiesWithChanges: [(company: Company, change: Double?)] {
         subsector.companies.map { company in
-            let change = webSocketManager.priceUpdates[company.ticker]?.changePercent
-            return (company, change)
+            (company, changePercent(for: company.ticker))
         }
     }
     

@@ -4,9 +4,17 @@ struct SubsectorsHeatmapView: View {
     let sector: Sector
     let sectorChange: Double
     @ObservedObject var webSocketManager: WebSocketManager
+    @ObservedObject var performanceStore: PerformanceStore
     @State private var selectedPeriod = "SC"
     @Environment(\.dismiss) private var dismiss
-    
+
+    private func changePercent(for ticker: String) -> Double? {
+        if selectedPeriod == "SC" {
+            return webSocketManager.priceUpdates[ticker]?.changePercent
+        }
+        return performanceStore.changePercent(for: ticker, period: selectedPeriod)
+    }
+
     var subsectorStats: [SubsectorStat] {
         sector.subsectors.map { subsector in
             let companies = subsector.companies
@@ -14,7 +22,7 @@ struct SubsectorsHeatmapView: View {
             var weightedChange = 0.0
             var totalWeight = 0.0
             for company in companies {
-                if let change = webSocketManager.priceUpdates[company.ticker]?.changePercent {
+                if let change = changePercent(for: company.ticker) {
                     weightedChange += change * company.marketCap
                     totalWeight += company.marketCap
                 }
@@ -58,7 +66,7 @@ struct SubsectorsHeatmapView: View {
             GeometryReader { geometry in
                 TreemapLayout(weights: sortedSubsectorStats.map { $0.totalMarketCap }) {
                     ForEach(sortedSubsectorStats) { stat in
-                        NavigationLink(destination: CompaniesHeatmapView(subsector: stat.subsector, subsectorChange: stat.changePercent, webSocketManager: webSocketManager)) {
+                        NavigationLink(destination: CompaniesHeatmapView(subsector: stat.subsector, subsectorChange: stat.changePercent, webSocketManager: webSocketManager, performanceStore: performanceStore)) {
                             SubsectorTile(stat: stat)
                         }
                     }

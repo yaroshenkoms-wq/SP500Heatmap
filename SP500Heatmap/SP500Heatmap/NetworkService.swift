@@ -54,4 +54,34 @@ struct PerformanceMetrics: Codable {
     let return6M: Double?
     let returnYTD: Double?
     let return1Y: Double?
+    let day1: Double?
+    let day3: Double?
+    let day7: Double?
+    let day30: Double?
+    let day180: Double?
+    let year1: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case return1M, return6M, returnYTD, return1Y
+        case day1 = "1d"
+        case day3 = "3d"
+        case day7 = "7d"
+        case day30 = "30d"
+        case day180 = "180d"
+        case year1 = "1y"
+    }
+
+    // Looks up a return by the same period keys PeriodSwitchView uses ("SC" has
+    // no historical value - callers should fall back to the live WebSocket price).
+    func value(forPeriod period: String) -> Double? {
+        switch period {
+        case "1d": return day1
+        case "3d": return day3
+        case "7d": return day7
+        case "30d": return day30
+        case "180d": return day180
+        case "1y": return year1
+        default: return nil
+        }
+    }
 }

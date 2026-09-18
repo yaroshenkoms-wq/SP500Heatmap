@@ -3,21 +3,29 @@ import SwiftUI
 struct SectorsHeatmapView: View {
     let sectors: [Sector]
     @ObservedObject var webSocketManager: WebSocketManager
+    @ObservedObject var performanceStore: PerformanceStore
     @State private var selectedPeriod = "SC"
-    
+
+    private func changePercent(for ticker: String) -> Double? {
+        if selectedPeriod == "SC" {
+            return webSocketManager.priceUpdates[ticker]?.changePercent
+        }
+        return performanceStore.changePercent(for: ticker, period: selectedPeriod)
+    }
+
     var indexChange: Double {
         let allCompanies = sectors.flatMap { $0.subsectors.flatMap { $0.companies } }
         var weightedChange = 0.0
         var totalWeight = 0.0
         for company in allCompanies {
-            if let change = webSocketManager.priceUpdates[company.ticker]?.changePercent {
+            if let change = changePercent(for: company.ticker) {
                 weightedChange += change * company.marketCap
                 totalWeight += company.marketCap
             }
         }
         return totalWeight > 0 ? weightedChange / totalWeight : 0
     }
-    
+
     var sectorStats: [SectorStat] {
         sectors.map { sector in
             let companies = sector.subsectors.flatMap { $0.companies }
@@ -25,7 +33,7 @@ struct SectorsHeatmapView: View {
             var weightedChange = 0.0
             var totalWeight = 0.0
             for company in companies {
-                if let change = webSocketManager.priceUpdates[company.ticker]?.changePercent {
+                if let change = changePercent(for: company.ticker) {
                     weightedChange += change * company.marketCap
                     totalWeight += company.marketCap
                 }
@@ -64,7 +72,7 @@ struct SectorsHeatmapView: View {
             GeometryReader { geometry in
                 TreemapLayout(weights: sortedSectorStats.map { $0.totalMarketCap }) {
                     ForEach(sortedSectorStats) { stat in
-                        NavigationLink(destination: SubsectorsHeatmapView(sector: stat.sector, sectorChange: stat.changePercent, webSocketManager: webSocketManager)) {
+                        NavigationLink(destination: SubsectorsHeatmapView(sector: stat.sector, sectorChange: stat.changePercent, webSocketManager: webSocketManager, performanceStore: performanceStore)) {
                             SectorTile(stat: stat)
                         }
                     }
