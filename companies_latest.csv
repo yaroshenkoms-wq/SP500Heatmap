@@ -1,0 +1,503 @@
+﻿Symbol;Market Cap;;Price;% Chg;Sector;Industry;Company Name;Adress;Date added
+A;36400.00;0.05%;128.88;-0.51%;Health Care;Life Sciences Tools & Services;Agilent Technologies, Inc.;Santa Clara, California;5/6/00
+AAPL;4286460.00;6.23%;291.57;-1.37%;Information Technology;Technology Hardware, Storage & Peripherals;Apple Inc.;Cupertino, California;30/11/82
+ABBV;397630.00;0.58%;225.06;0.13%;Health Care;Biotechnology;AbbVie Inc.;North Chicago, Illinois;31/12/12
+ABNB;79189.00;0.12%;131.29;0.32%;Consumer Discretionary;Hotels, Resorts & Cruise Lines;Airbnb, Inc.;San Francisco, California;18/9/23
+ABT;153116.00;0.22%;87.91;-1.95%;Health Care;Health Care Equipment;Abbott Laboratories;North Chicago, Illinois;4/3/57
+ACGL;31972.00;0.05%;91.58;0.49%;Financials;Property & Casualty Insurance;Arch Capital Group Ltd.;Hamilton, Bermuda;1/11/22
+ACN;113679.00;0.17%;170.83;1.98%;Information Technology;IT Consulting & Other Services;Accenture PLC;Dublin, Ireland;6/7/11
+ADBE;82150.00;0.12%;203.05;-7.20%;Information Technology;Application Software;Adobe Inc.;San Jose, California;5/5/97
+ADI;203891.00;0.30%;418.00;1.43%;Information Technology;Semiconductors;Analog Devices, Inc.;Wilmington, Massachusetts;12/10/99
+ADM;38361.00;0.06%;79.59;0.88%;Consumer Staples;Agricultural Products & Services;Archer Daniels Midland Company;Chicago, Illinois;4/3/57
+ADP;90531.00;0.13%;226.24;0.21%;Industrials;Human Resource & Employment Services;Automatic Data Processing, Inc.;Roseland, New Jersey;31/3/81
+ADSK;41978.00;0.06%;199.10;-3.15%;Information Technology;Application Software;Autodesk, Inc.;San Francisco, California;1/12/89
+AEE;30118.00;0.04%;108.83;0.53%;Utilities;Multi-Utilities;Ameren Corporation;St. Louis, Missouri;19/9/91
+AEP;70008.00;0.10%;128.65;0.13%;Utilities;Electric Utilities;American Electric Power Company, Inc.;Columbus, Ohio;4/3/57
+AES;10473.00;0.02%;14.69;0.10%;Utilities;Independent Power Producers & Energy Traders;The AES Corporation;Arlington, Virginia;2/10/98
+AFL;60197.00;0.09%;118.27;1.56%;Financials;Life & Health Insurance;Aflac Incorporated;Columbus, Georgia;28/5/99
+AIG;40191.00;0.06%;75.80;0.64%;Financials;Multi-line Insurance;American International Group, Inc.;New York City, New York;31/3/80
+AIZ;12888.00;0.02%;260.11;0.62%;Financials;Multi-line Insurance;Assurant, Inc.;Atlanta, Georgia;10/4/07
+AJG;56455.00;0.08%;219.76;-0.52%;Financials;Insurance Brokers;Arthur J. Gallagher & Co.;Rolling Meadows, Illinois;31/5/16
+AKAM;19120.00;0.03%;131.31;-0.87%;Information Technology;Internet Services & Infrastructure;Akamai Technologies, Inc.;Cambridge, Massachusetts;12/7/07
+ALB;20195.00;0.03%;171.25;7.66%;Materials;Specialty Chemicals;Albemarle Corporation;Charlotte, North Carolina;1/7/16
+ALGN;12509.00;0.02%;174.63;-1.07%;Health Care;Health Care Supplies;Align Technology, Inc.;Tempe, Arizona;19/6/17
+ALL;57046.00;0.08%;221.61;0.93%;Financials;Property & Casualty Insurance;The Allstate Corporation;Northbrook, Illinois;13/7/95
+ALLE;11549.00;0.02%;134.39;0.50%;Industrials;Building Products;Allegion PLC;Dublin, Ireland;2/12/13
+AMAT;445473.00;0.65%;559.64;1.27%;Information Technology;Semiconductor Materials & Equipment;Applied Materials, Inc.;Santa Clara, California;16/3/95
+AMCR;18753.00;0.03%;40.56;1.60%;Materials;Paper & Plastic Packaging Products & Materials;Amcor PLC;Warmley, Bristol, United Kingdom;7/6/19
+AMD;832457.00;1.21%;508.59;4.12%;Information Technology;Semiconductors;Advanced Micro Devices, Inc.;Santa Clara, California;20/3/17
+AME;51876.00;0.08%;226.34;0.06%;Industrials;Electrical Components & Equipment;AMETEK, Inc.;Berwyn, Pennsylvania;23/9/13
+AMGN;191469.00;0.28%;354.59;0.15%;Health Care;Biotechnology;Amgen Inc.;Thousand Oaks, California;2/1/92
+AMP;41608.00;0.06%;462.83;2.76%;Financials;Asset Management & Custody Banks;Ameriprise Financial, Inc.;Minneapolis, Minnesota;3/10/05
+AMT;88349.00;0.13%;189.64;0.17%;Real Estate;Telecom Tower REITs;American Tower Corporation;Boston, Massachusetts;19/11/07
+AMZN;2541593.00;3.70%;236.02;-2.27%;Consumer Discretionary;Broadline Retail;Amazon.com, Inc.;Seattle, Washington;18/11/05
+ANET;205305.00;0.30%;163.04;4.25%;Information Technology;Communications Equipment;Arista Networks, Inc.;Santa Clara, California;28/8/18
+AON;71774.00;0.10%;336.06;0.27%;Financials;Insurance Brokers;Aon plc;London, United Kingdom;23/4/96
+AOS;8129.00;0.01%;58.98;0.54%;Industrials;Building Products;A. O. Smith Corporation;Milwaukee, Wisconsin;26/7/17
+APA;13227.00;0.02%;37.39;1.66%;Energy;Oil & Gas Exploration & Production;APA Corporation;Houston, Texas;28/7/97
+APD;63649.00;0.09%;285.83;2.77%;Materials;Industrial Gases;Air Products and Chemicals, Inc.;Upper Macungie Township, Pennsylvania;30/4/85
+APH;188867.00;0.28%;153.52;0.70%;Information Technology;Electronic Components;Amphenol Corporation;Wallingford, Connecticut;30/9/08
+APO;77180.00;;133.88;-0.02%;Financials;Asset Management & Custody Banks;Apollo Global Management, Inc.;New York City, New York;23/12/24
+APP;166800.00;;496.77;3.80%;Information Technology;Application Software;;Palo Alto, California;22/9/25
+APTV;14401.00;0.02%;68.05;0.13%;Consumer Discretionary;Automotive Parts & Equipment;Aptiv PLC;Schaffhausen, Switzerland;24/12/12
+ARE;9358.00;0.01%;53.70;1.76%;Real Estate;Office REITs;Alexandria Real Estate Equities, Inc.;Pasadena, California;20/3/17
+ARES;44500.00;;134.90;1.57%;Financials;Asset Management & Custody Banks;;Los Angeles, California;11/12/25
+ATO;28191.00;0.04%;168.89;0.39%;Utilities;Gas Utilities;Atmos Energy Corporation;Dallas, Texas;15/2/19
+AVB;25868.00;0.04%;185.96;0.87%;Real Estate;Multi-Family Residential REITs;AvalonBay Communities, Inc.;Arlington, Virginia;10/1/07
+AVGO;1808090.00;2.63%;380.04;-1.43%;Information Technology;Semiconductors;Broadcom Inc.;Palo Alto, California;8/5/14
+AVY;12216.00;0.02%;159.71;0.61%;Materials;Paper & Plastic Packaging Products & Materials;Avery Dennison Corporation;Mentor, Ohio;31/12/87
+AWK;24475.00;0.04%;125.34;0.71%;Utilities;Water Utilities;American Water Works Company, Inc.;Camden, New Jersey;4/3/16
+AXON;35256.00;0.05%;436.16;-2.25%;Industrials;Aerospace & Defense;Axon Enterprise, Inc;Scottsdale, Arizona;4/5/23
+AXP;221172.00;0.32%;324.14;1.77%;Financials;Consumer Finance;American Express Company;New York City, New York;30/6/76
+AZO;50900.00;0.07%;3088.62;0.23%;Consumer Discretionary;Automotive Retail;AutoZone, Inc.;Memphis, Tennessee;2/1/97
+BA;172732.00;0.25%;219.12;-1.13%;Industrials;Aerospace & Defense;The Boeing Company;Arlington, Virginia;4/3/57
+BAC;396515.00;0.58%;55.87;1.29%;Financials;Diversified Banks;Bank of America Corporation;Charlotte, North Carolina;30/6/76
+BALL;15129.00;0.02%;56.82;0.86%;Materials;Metal, Glass & Plastic Containers;Ball Corporation;Broomfield, Colorado;31/10/84
+BAX;10595.00;0.02%;20.51;0.12%;Health Care;Health Care Equipment;Baxter International Inc.;Deerfield, Illinois;30/9/72
+BBY;16465.00;0.02%;78.12;1.32%;Consumer Discretionary;Computer & Electronics Retail;Best Buy Co., Inc.;Richfield, Minnesota;29/6/99
+BDX;40120.00;0.06%;145.61;-1.18%;Health Care;Health Care Equipment;Becton, Dickinson and Company;Franklin Lakes, New Jersey;30/9/72
+BEN;16736.00;0.02%;32.21;1.25%;Financials;Asset Management & Custody Banks;Franklin Resources, Inc.;San Mateo, California;30/4/98
+BF.B;12292.00;0.02%;26.80;0.44%;Consumer Staples;Distillers & Vintners;Brown-Forman Corporation;Louisville, Kentucky;31/10/82
+BG;24676.00;0.04%;127.18;1.52%;Consumer Staples;Agricultural Products & Services;Bunge Global SA;Chesterfield, Missouri;15/3/23
+BIIB;29775.00;0.04%;201.60;0.82%;Health Care;Biotechnology;Biogen Inc.;Cambridge, Massachusetts;13/11/03
+BKNG;126951.00;0.19%;163.80;0.13%;Consumer Discretionary;Hotels, Resorts & Cruise Lines;Booking Holdings Inc.;Norwalk, Connecticut;6/11/09
+BKR;63088.00;0.09%;63.57;0.14%;Energy;Oil & Gas Equipment & Services;Baker Hughes Company;Houston, Texas;7/7/17
+BLDR;8455.00;0.01%;78.61;0.05%;Industrials;Building Products;Builders FirstSource, Inc.;Irving, Texas;18/12/23
+BLK;160441.00;0.23%;1033.54;1.67%;Financials;Asset Management & Custody Banks;BlackRock;New York City, New York;4/4/11
+BMY;116798.00;0.17%;57.20;0.52%;Health Care;Pharmaceuticals;Bristol Myers Squibb Company;New York City, New York;4/3/57
+BNY;99312.00;0.14%;144.69;1.83%;Financials;Asset Management & Custody Banks;Bank of New York Mellon Corporation;New York City, New York;31/3/95
+BR;16681.00;0.02%;144.23;-0.44%;Industrials;Data Processing & Outsourced Services;Broadridge Financial Solutions, Inc.;Lake Success, New York;18/6/18
+BRK.B;1051255.00;1.53%;487.40;0.33%;Financials;Multi-Sector Holdings;Berkshire Hathaway Inc.;Omaha, Nebraska;16/2/10
+BRO;20440.00;0.03%;60.30;0.59%;Financials;Insurance Brokers;Brown & Brown, Inc.;Daytona Beach, Florida;20/9/21
+BSX;69034.00;0.10%;46.45;-1.54%;Health Care;Health Care Equipment;Boston Scientific Corporation;Marlborough, Massachusetts;24/2/95
+BX;92061.00;0.13%;123.92;2.52%;Financials;Asset Management & Custody Banks;Blackstone Inc.;New York City, New York;18/9/23
+BXP;10608.00;0.02%;66.52;0.43%;Real Estate;Office REITs;BXP, Inc.;Boston, Massachusetts;3/4/06
+C;239102.00;0.35%;140.19;1.53%;Financials;Diversified Banks;Citigroup Inc.;New York City, New York;31/5/88
+CAG;6471.00;0.01%;13.53;0.56%;Consumer Staples;Packaged Foods & Meats;Conagra Brands;Chicago, Illinois;31/8/83
+CAH;52338.00;0.08%;223.47;1.04%;Health Care;Health Care Distributors;Cardinal Health, Inc.;Dublin, Ohio;27/5/97
+CARR;57474.00;0.08%;69.20;-0.78%;Industrials;Building Products;Carrier Global Corporation;Palm Beach Gardens, Florida;3/4/20
+CASY;33080.00;;895.14;-2.31%;Consumer Staples;Food Retail;;Ankeny, Iowa;9/4/26
+CAT;417735.00;0.61%;906.95;1.04%;Industrials;Construction Machinery & Heavy Transportation Equipment;Caterpillar Inc.;Irving, Texas;4/3/57
+CB;126285.00;0.18%;325.59;-0.71%;Financials;Property & Casualty Insurance;Chubb Limited;Zurich, Switzerland;15/7/10
+CBOE;31479.00;0.05%;297.07;0.39%;Financials;Financial Exchanges & Data;Cboe Global Markets, Inc.;Chicago, Illinois;1/3/17
+CBRE;39250.00;0.06%;134.04;1.62%;Real Estate;Real Estate Services;CBRE Group, Inc.;Dallas, Texas;10/11/06
+CCI;40792.00;0.06%;93.46;1.55%;Real Estate;Telecom Tower REITs;Crown Castle Inc.;Houston, Texas;14/3/12
+CCL;35531.00;0.05%;28.68;1.98%;Consumer Discretionary;Hotels, Resorts & Cruise Lines;Carnival Corporation;Miami, Florida;22/12/98
+CDNS;106404.00;0.16%;385.15;0.37%;Information Technology;Application Software;Cadence Design Systems, Inc.;San Jose, California;18/9/17
+CDW;16684.00;0.02%;130.50;1.06%;Information Technology;Technology Distributors;CDW Corporation;Vernon Hills, Illinois;23/9/19
+CEG;89363.00;0.13%;248.66;0.79%;Utilities;Electric Utilities;Constellation Energy Corporation;Baltimore, Maryland;2/2/22
+CF;16776.00;0.02%;109.20;2.47%;Materials;Fertilizers & Agricultural Chemicals;CF Industries Holdings, Inc.;Deerfield, Illinois;27/8/08
+CFG;28478.00;0.04%;67.34;1.25%;Financials;Regional Banks;Citizens Financial Group, Inc.;Providence, Rhode Island;29/1/16
+CHD;22982.00;0.03%;97.00;-0.09%;Consumer Staples;Household Products;Church & Dwight Co., Inc.;Ewing, New Jersey;29/12/15
+CHRW;22867.00;0.03%;194.01;1.51%;Industrials;Air Freight & Logistics;C.H. Robinson Worldwide, Inc.;Eden Prairie, Minnesota;2/3/07
+CHTR;17390.00;0.03%;141.19;1.47%;Communication Services;Cable & Satellite;Charter Communications, Inc.;Stamford, Connecticut;8/9/16
+CI;78864.00;0.12%;298.13;1.12%;Health Care;Health Care Services;Cigna Group;Bloomfield, Connecticut;30/6/76
+CIEN;63130.00;;455.98;0.17%;Information Technology;Communications Equipment;Ciena;Hanover, Maryland;9/2/26
+CINF;26179.00;0.04%;169.32;0.61%;Financials;Property & Casualty Insurance;Cincinnati Financial Corporation;Fairfield, Ohio;18/12/97
+CL;71589.00;0.10%;89.47;0.08%;Consumer Staples;Household Products;Colgate-Palmolive Company;New York City, New York;4/3/57
+CLX;11801.00;0.02%;97.60;-0.72%;Consumer Staples;Household Products;The Clorox Company;Oakland, California;31/3/69
+CMCSA;87109.00;0.13%;24.36;1.62%;Communication Services;Cable & Satellite;Comcast Corporation;Philadelphia, Pennsylvania;19/11/02
+CME;96686.00;0.14%;266.78;1.75%;Financials;Financial Exchanges & Data;CME Group Inc.;Chicago, Illinois;11/8/06
+CMG;41326.00;0.06%;32.22;3.09%;Consumer Discretionary;Restaurants;Chipotle Mexican Grill, Inc.;Newport Beach, California;28/4/11
+CMI;91254.00;0.13%;661.31;0.86%;Industrials;Construction Machinery & Heavy Transportation Equipment;Cummins Inc.;Columbus, Indiana;31/3/65
+CMS;22666.00;0.03%;73.37;0.72%;Utilities;Multi-Utilities;CMS Energy Corporation;Jackson, Michigan;4/3/57
+CNC;31672.00;0.05%;64.14;0.94%;Health Care;Managed Health Care;Centene Corporation;St. Louis, Missouri;30/3/16
+CNP;27955.00;0.04%;42.73;0.43%;Utilities;Multi-Utilities;CenterPoint Energy, Inc.;Houston, Texas;31/7/85
+COF;114933.00;0.17%;184.69;1.46%;Financials;Consumer Finance;Capital One Financial Corporation;Tysons Corner, Virginia;1/7/98
+COHR;75330.00;;385.03;5.90%;Information Technology;Electronic Components;;Saxonburg, Pennsylvania;23/3/26
+COIN;42100.00;;159.78;-0.41%;Financials;Financial Exchanges & Data;;New York City, New York;19/5/25
+COO;13135.00;0.02%;67.31;-0.29%;Health Care;Health Care Supplies;The Cooper Companies, Inc.;San Ramon, California;23/9/16
+COP;143806.00;0.21%;118.04;2.32%;Energy;Oil & Gas Exploration & Production;ConocoPhillips;Houston, Texas;4/3/57
+COR;54571.00;0.08%;280.48;-0.35%;Health Care;Health Care Distributors;Cencora, Inc.;Conshohocken, Pennsylvania;30/8/01
+COST;433624.00;0.63%;978.12;0.25%;Consumer Staples;Consumer Staples Merchandise Retail;Costco Wholesale Corporation;Issaquah, Washington;1/10/93
+CPAY;23205.00;0.03%;355.03;1.19%;Financials;Transaction & Payment Processing Services;Corpay, Inc.;Atlanta, Georgia;20/6/18
+CPB;6804.00;0.01%;22.80;0.29%;Consumer Staples;Packaged Foods & Meats;The Campbell's Company;Camden, New Jersey;4/3/57
+CPRT;28473.00;0.04%;30.76;-0.97%;Industrials;Diversified Support Services;Copart, Inc.;Dallas, Texas;2/7/18
+CPT;11616.00;0.02%;115.56;0.97%;Real Estate;Multi-Family Residential REITs;Camden Property Trust;Houston, Texas;4/4/22
+CRH;71150.00;;106.48;1.57%;Materials;Construction Materials;;Dublin, Ireland;22/12/25
+CRL;9044.00;0.01%;187.75;-0.16%;Health Care;Life Sciences Tools & Services;Charles River Laboratories International, Inc.;Wilmington, Massachusetts;14/5/21
+CRM;134983.00;0.20%;164.82;-0.98%;Information Technology;Application Software;Salesforce Inc.;San Francisco, California;15/9/08
+CRWD;173820.00;;682.80;1.26%;Information Technology;Systems Software;CrowdStrike;Austin, Texas;24/6/24
+CSCO;479252.00;0.70%;121.43;-0.33%;Information Technology;Communications Equipment;Cisco Systems, Inc.;San Jose, California;1/12/93
+CSGP;13454.00;0.02%;32.91;0.78%;Real Estate;Real Estate Services;CoStar Group, Inc.;Washington, D.C.;19/9/22
+CSX;88791.00;0.13%;47.76;0.83%;Industrials;Rail Transportation;CSX Corporation;Jacksonville, Florida;4/3/57
+CTAS;71050.00;0.10%;177.58;-2.37%;Industrials;Diversified Support Services;Cintas Corporation;Mason, Ohio;1/3/01
+CTSH;24675.00;0.04%;52.05;1.69%;Information Technology;IT Consulting & Other Services;Cognizant Technology Solutions Corporation;Teaneck, New Jersey;17/11/06
+CTVA;50487.00;0.07%;75.49;0.84%;Materials;Fertilizers & Agricultural Chemicals;Corteva, Inc.;Indianapolis, Indiana;3/6/19
+CVNA;70750.00;;64.10;-5.49%;Consumer Discretionary;Automotive Retail;;Tempe, Arizona;22/12/25
+CVS;130578.00;0.19%;102.34;1.85%;Health Care;Health Care Services;CVS Health Corporation;Woonsocket, Rhode Island;4/3/57
+CVX;374552.00;0.55%;188.07;1.21%;Energy;Integrated Oil & Gas;Chevron Corporation;Houston, Texas;4/3/57
+D;59576.00;0.09%;67.74;1.58%;Utilities;Multi-Utilities;Dominion Energy Inc.;Richmond, Virginia;30/11/16
+DAL;54207.00;0.08%;82.51;0.83%;Industrials;Passenger Airlines;Delta Air Lines, Inc.;Atlanta, Georgia;11/9/13
+DASH;65610.00;;150.58;-2.59%;Consumer Discretionary;Specialized Consumer Services;;San Francisco, California;24/3/25
+DD;19248.00;0.03%;47.52;1.45%;Materials;Specialty Chemicals;DuPont de Nemours, Inc.;Wilmington, Delaware;3/6/19
+DDOG;81840.00;;229.90;-1.85%;Information Technology;Application Software;;New York City, New York;9/7/25
+DE;155465.00;0.23%;575.93;1.28%;Industrials;Agricultural & Farm Machinery;Deere & Company;Moline, Illinois;4/3/57
+DECK;15914.00;0.02%;114.59;0.19%;Consumer Discretionary;Footwear;Deckers Outdoor Corporation;Goleta, California;18/3/24
+DELL;256370.00;;395.57;1.05%;Information Technology;Technology Hardware, Storage & Peripherals;;Round Rock, Texas;23/9/24
+DG;25477.00;0.04%;115.50;1.01%;Consumer Staples;Consumer Staples Merchandise Retail;Dollar General Corporation;Goodlettsville, Tennessee;3/12/12
+DGX;22636.00;0.03%;204.48;0.32%;Health Care;Health Care Services;Quest Diagnostics Incorporated;Secaucus, New Jersey;12/12/02
+DHI;43655.00;0.06%;153.94;-0.31%;Consumer Discretionary;Homebuilding;D.R. Horton, Inc.;Arlington, Texas;22/6/05
+DHR;128533.00;0.19%;181.60;0.45%;Health Care;Life Sciences Tools & Services;Danaher Corporation;Washington, D.C.;18/11/98
+DIS;173729.00;0.25%;100.05;-0.29%;Communication Services;Movies & Entertainment;The Walt Disney Company;Burbank, California;30/6/76
+DLR;64666.00;0.09%;184.02;0.65%;Real Estate;Data Center REITs;Digital Realty Trust, Inc.;Austin, Texas;18/5/16
+DLTR;21935.00;0.03%;114.16;-0.63%;Consumer Staples;Consumer Staples Merchandise Retail;Dollar Tree, Inc.;Chesapeake, Virginia;19/12/11
+DOC;14233.00;0.02%;20.65;0.71%;Real Estate;Health Care REITs;Healthpeak Properties, Inc.;Denver, Colorado;31/3/08
+DOV;29497.00;0.04%;219.05;0.24%;Industrials;Industrial Machinery & Supplies & Components;Dover Corporation;Downers Grove, Illinois;31/10/85
+DOW;24313.00;0.04%;33.73;0.31%;Materials;Commodity Chemicals;Dow Inc.;Midland, Michigan;1/4/19
+DPZ;10628.00;0.02%;319.54;2.33%;Consumer Discretionary;Restaurants;Domino's Pizza Inc;Ann Arbor, Michigan;12/5/20
+DRI;24278.00;0.04%;211.96;0.53%;Consumer Discretionary;Restaurants;Darden Restaurants, Inc.;Orlando, Florida;31/5/95
+DTE;30598.00;0.04%;147.09;0.89%;Utilities;Multi-Utilities;DTE Energy Company;Detroit, Michigan;4/3/57
+DUK;97297.00;0.14%;124.80;0.49%;Utilities;Electric Utilities;Duke Energy Corporation;Charlotte, North Carolina;30/6/76
+DVA;13385.00;0.02%;208.50;2.29%;Health Care;Health Care Services;DaVita Inc.;Denver, Colorado;31/7/08
+DVN;28198.00;0.04%;45.38;1.72%;Energy;Oil & Gas Exploration & Production;Devon Energy Corporation;Oklahoma City, Oklahoma;30/8/00
+DXCM;28769.00;0.04%;74.51;-0.98%;Health Care;Health Care Equipment;DexCom, Inc.;San Diego, California;12/5/20
+EA;50861.00;0.07%;202.84;-0.10%;Communication Services;Interactive Home Entertainment;Electronic Arts Inc.;Redwood City, California;22/7/02
+EBAY;47946.00;0.07%;107.85;-1.61%;Consumer Discretionary;Broadline Retail;eBay Inc.;San Jose, California;22/7/02
+ECL;74178.00;0.11%;263.57;-0.02%;Materials;Specialty Chemicals;Ecolab Inc.;Saint Paul, Minnesota;31/1/89
+ED;39701.00;0.06%;107.73;0.83%;Utilities;Multi-Utilities;Consolidated Edison Inc;New York City, New York;4/3/57
+EFX;19142.00;0.03%;160.76;0.74%;Industrials;Research & Consulting Services;Equifax, Inc.;Atlanta, Georgia;19/6/97
+EG;13410.00;0.02%;338.90;0.79%;Financials;Reinsurance;Everest Group, Ltd.;Hamilton, Bermuda;19/6/17
+EIX;27923.00;0.04%;72.57;0.32%;Utilities;Electric Utilities;Edison International;Rosemead, California;4/3/57
+EL;32271.00;0.05%;89.20;1.34%;Consumer Staples;Personal Care Products;The Estee Lauder Companies Inc.;New York City, New York;5/1/06
+ELV;86596.00;0.13%;398.77;-0.10%;Health Care;Managed Health Care;Elevance Health, Inc.;Indianapolis, Indiana;25/7/02
+EME;36580.00;;823.05;1.42%;Industrials;Construction & Engineering;;Norwalk, Connecticut;22/9/25
+EMR;79801.00;0.12%;142.48;0.27%;Industrials;Electrical Components & Equipment;Emerson Electric Co.;Ferguson, Missouri;31/3/65
+EOG;73682.00;0.11%;138.34;1.32%;Energy;Oil & Gas Exploration & Production;EOG Resources, Inc.;Houston, Texas;2/11/00
+EQIX;103615.00;0.15%;1050.62;0.71%;Real Estate;Data Center REITs;Equinix, Inc.;Redwood City, California;20/3/15
+EQR;25135.00;0.04%;67.09;0.65%;Real Estate;Multi-Family Residential REITs;Equity Residential;Chicago, Illinois;3/12/01
+EQT;32630.00;0.05%;52.17;1.89%;Energy;Oil & Gas Exploration & Production;EQT Corporation;Pittsburgh, Pennsylvania;3/10/22
+ERIE;11850.00;;226.67;0.29%;Financials;Insurance Brokers;;Erie, Pennsylvania;23/9/24
+ES;25469.00;0.04%;67.72;-1.04%;Utilities;Electric Utilities;Eversource Energy;Hartford, Connecticut;24/7/09
+ESS;18179.00;0.03%;282.90;0.82%;Real Estate;Multi-Family Residential REITs;Essex Property Trust, Inc.;San Mateo, California;2/4/14
+ETN;151429.00;0.22%;389.98;-0.93%;Industrials;Electrical Components & Equipment;Eaton Corporation, PLC;Dublin, Ireland;4/3/57
+ETR;50646.00;0.07%;110.61;0.65%;Utilities;Electric Utilities;Entergy Corporation;New Orleans, Louisiana;4/3/57
+EVRG;19231.00;0.03%;83.42;0.73%;Utilities;Electric Utilities;Evergy Inc.;Kansas City, Missouri;5/6/18
+EW;48759.00;0.07%;84.68;-1.26%;Health Care;Health Care Equipment;Edwards Lifesciences Corporation;Irvine, California;1/4/11
+EXC;47192.00;0.07%;46.12;1.33%;Utilities;Electric Utilities;Exelon Corporation;Chicago, Illinois;4/3/57
+EXE;21240.00;;88.78;1.95%;Energy;Oil & Gas Exploration & Production;Expand Energy Corp;Oklahoma City, Oklahoma;24/3/25
+EXPD;21719.00;0.03%;165.93;-0.31%;Industrials;Air Freight & Logistics;Expeditors International of Washington, Inc.;Seattle, Washington;10/10/07
+EXPE;27496.00;0.04%;224.36;-0.13%;Consumer Discretionary;Hotels, Resorts & Cruise Lines;Expedia Group, Inc.;Seattle, Washington;2/10/07
+EXR;31901.00;0.05%;151.00;0.49%;Real Estate;Self-Storage REITs;Extra Space Storage Inc;Salt Lake City, Utah;19/1/16
+F;58766.00;0.09%;14.75;0.26%;Consumer Discretionary;Automobile Manufacturers;Ford Motor Company;Dearborn, Michigan;4/3/57
+FANG;54576.00;0.08%;193.95;1.23%;Energy;Oil & Gas Exploration & Production;Diamondback Energy, Inc.;Midland, Texas;3/12/18
+FAST;53771.00;0.08%;46.84;0.96%;Industrials;Trading Companies & Distributors;Fastenal Company;Winona, Minnesota;15/9/08
+FCX;97886.00;0.14%;68.09;2.64%;Materials;Copper;Freeport-McMoRan Inc.;Phoenix, Arizona;1/7/11
+FDS;8733.00;0.01%;239.72;1.30%;Financials;Financial Exchanges & Data;FactSet Research Systems Inc.;Norwalk, Connecticut;20/12/21
+FDX;80303.00;0.12%;336.54;-0.43%;Industrials;Air Freight & Logistics;FedEx Corporation;Memphis, Tennessee;31/12/80
+FDXF;26130.00;;174.76;-2.91%;Industrials;Cargo Ground Transportation;FedEx Freight Holding Company, Inc.;Memphis, Tennessee;1/6/26
+FE;27066.00;0.04%;46.79;0.26%;Utilities;Electric Utilities;FirstEnergy Corporation;Akron, Ohio;28/11/97
+FFIV;22376.00;0.03%;396.49;0.67%;Information Technology;Communications Equipment;F5, Inc.;Seattle, Washington;20/12/10
+FICO;27207.00;0.04%;1173.23;-1.02%;Information Technology;Application Software;Fair Isaac Corporation;Bozeman, Montana;20/3/23
+FIS;19967.00;0.03%;38.63;0.73%;Financials;Transaction & Payment Processing Services;Fidelity National Information Services, Inc.;Jacksonville, Florida;10/11/06
+FISV;28492.00;0.04%;53.43;0.70%;Financials;Transaction & Payment Processing Services;Fiserv, Inc.;Brookfield, Wisconsin;2/4/01
+FITB;49561.00;0.07%;54.64;2.29%;Financials;Regional Banks;Fifth Third Bancorp;Cincinnati, Ohio;29/3/96
+FIX;65990.00;;1877.61;1.85%;Industrials;Construction & Engineering;;Houston, Texas;22/12/25
+FOX;25448.00;0.04%;60.57;-1.30%;Communication Services;Broadcasting;Fox Corporation;New York City, New York;19/3/19
+FOXA;28267.00;0.04%;67.23;-1.56%;Communication Services;Broadcasting;Fox Corporation;New York City, New York;19/3/19
+FRT;10900.00;0.02%;126.17;1.16%;Real Estate;Retail REITs;Federal Realty Investment Trust;Rockville, Maryland;1/2/16
+FSLR;28970.00;0.04%;269.20;-0.73%;Information Technology;Semiconductors;First Solar, Inc.;Tempe, Arizona;19/12/22
+FTNT;106315.00;0.16%;144.96;-0.07%;Information Technology;Systems Software;Fortinet, Inc.;Sunnyvale, California;11/10/18
+FTV;18423.00;0.03%;60.43;0.99%;Industrials;Industrial Machinery & Supplies & Components;Fortive Corporation;Everett, Washington;1/7/16
+GD;97771.00;0.14%;361.54;0.75%;Industrials;Aerospace & Defense;General Dynamics Corporation;Reston, Virginia;4/3/57
+GDDY;75330.00;;385.03;5.90%;Information Technology;Internet Services & Infrastructure;;Tempe, Arizona;24/6/24
+GE;346937.00;0.50%;332.53;-0.07%;Industrials;Aerospace & Defense;GE Aerospace;Evendale, Ohio;4/3/57
+GEHC;29439.00;0.04%;64.71;0.31%;Health Care;Health Care Equipment;GE HealthCare Technologies Inc.;Chicago, Illinois;4/1/23
+GEN;14576.00;0.02%;24.16;0.92%;Information Technology;Systems Software;Gen Digital Inc.;Tempe, Arizona;25/3/03
+GEV;247922.00;0.36%;922.61;1.74%;Industrials;Heavy Electrical Equipment;GE Vernova Inc.;Cambridge, Massachusetts;2/4/24
+GILD;154774.00;0.23%;124.72;-0.91%;Health Care;Biotechnology;Gilead Sciences, Inc.;Foster City, California;1/7/04
+GIS;18281.00;0.03%;34.26;1.29%;Consumer Staples;Packaged Foods & Meats;General Mills, Inc.;Golden Valley, Minnesota;4/3/57
+GL;12985.00;0.02%;167.24;1.30%;Financials;Life & Health Insurance;Globe Life Inc.;McKinney, Texas;30/4/89
+GLW;152628.00;0.22%;177.34;0.45%;Information Technology;Electronic Components;Corning Incorporated;Corning, New York;27/2/95
+GM;73068.00;0.11%;81.04;0.23%;Consumer Discretionary;Automobile Manufacturers;General Motors Company;Detroit, Michigan;6/6/13
+GNRC;15327.00;0.02%;260.36;1.18%;Industrials;Electrical Components & Equipment;Generac Holdings Inc.;Waukesha, Wisconsin;22/3/21
+GOOG;4366728.00;6.35%;359.92;0.94%;Communication Services;Interactive Media & Services;Alphabet Inc.;Mountain View, California;3/4/14
+GOOGL;4390814.00;6.38%;361.90;1.15%;Communication Services;Interactive Media & Services;Alphabet Inc.;Mountain View, California;3/4/06
+GPC;14156.00;0.02%;102.86;0.59%;Consumer Discretionary;Distributors;Genuine Parts Company;Atlanta, Georgia;31/12/73
+GPN;18244.00;0.03%;66.70;1.92%;Financials;Transaction & Payment Processing Services;Global Payments Inc.;Atlanta, Georgia;25/4/16
+GRMN;46070.00;0.07%;238.88;0.12%;Consumer Discretionary;Consumer Electronics;Garmin Ltd.;Schaffhausen, Switzerland;12/12/12
+GS;312706.00;0.46%;1059.98;2.35%;Financials;Investment Banking & Brokerage;The Goldman Sachs Group, Inc.;New York City, New York;22/7/02
+GWW;62345.00;0.09%;1320.58;0.50%;Industrials;Industrial Machinery & Supplies & Components;W.W. Grainger, Inc.;Lake Forest, Illinois;30/6/81
+HAL;33207.00;0.05%;39.75;-0.03%;Energy;Oil & Gas Equipment & Services;Halliburton Company;Houston, Texas;4/3/57
+HAS;11861.00;0.02%;83.78;0.01%;Consumer Discretionary;Leisure Products;Hasbro, Inc.;Pawtucket, Rhode Island;30/9/84
+HBAN;35594.00;0.05%;17.55;1.95%;Financials;Regional Banks;Huntington Bancshares Incorporated;"Columbus, Ohio; Detroit, Michigan";28/8/97
+HCA;85402.00;0.12%;384.97;1.71%;Health Care;Health Care Facilities;HCA Healthcare, Inc.;Nashville, Tennessee;27/1/15
+HD;326391.00;0.48%;327.33;0.41%;Consumer Discretionary;Home Improvement Retail;The Home Depot, Inc.;Atlanta, Georgia;31/3/88
+HIG;35434.00;0.05%;129.26;0.67%;Financials;Property & Casualty Insurance;The Hartford Insurance Group, Inc.;Hartford, Connecticut;4/3/57
+HII;11814.00;0.02%;299.84;-0.37%;Industrials;Aerospace & Defense;Huntington Ingalls Industries, Inc.;Newport News, Virginia;3/1/18
+HLT;78840.00;0.12%;346.32;1.30%;Consumer Discretionary;Hotels, Resorts & Cruise Lines;Hilton Worldwide Holdings Inc.;Tysons Corner, Virginia;19/6/17
+HON;141170.00;0.21%;222.83;1.69%;Industrials;Industrial Conglomerates;Honeywell International Inc.;Charlotte, North Carolina;4/3/57
+HOOD;83920.00;;93.19;1.04%;Financials;Investment Banking & Brokerage;Robinhood Markets;Menlo Park, California;22/9/25
+HPE;65184.00;0.10%;49.23;5.18%;Information Technology;Technology Hardware, Storage & Peripherals;Hewlett Packard Enterprise Company;Houston, Texas;2/11/15
+HPQ;22944.00;0.03%;25.09;1.66%;Information Technology;Technology Hardware, Storage & Peripherals;HP Inc.;Palo Alto, California;31/12/74
+HRL;13513.00;0.02%;24.56;0.47%;Consumer Staples;Packaged Foods & Meats;Hormel Foods Corporation;Austin, Minnesota;4/3/09
+HSIC;9225.00;0.01%;80.98;0.94%;Health Care;Health Care Distributors;Henry Schein, Inc.;Melville, New York;17/3/15
+HST;16954.00;0.03%;24.75;1.66%;Real Estate;Hotel & Resort REITs;Host Hotels & Resorts, Inc.;Bethesda, Maryland;20/3/07
+HSY;37126.00;0.05%;183.03;1.21%;Consumer Staples;Packaged Foods & Meats;Hershey Company (The);Hershey, Pennsylvania;4/3/57
+HUBB;24866.00;0.04%;470.58;0.27%;Industrials;Industrial Machinery & Supplies & Components;Hubbell Inc;Shelton, Connecticut;18/10/23
+HUM;45001.00;0.07%;374.83;1.66%;Health Care;Managed Health Care;Humana Inc.;Louisville, Kentucky;10/12/12
+HWM;104876.00;0.15%;262.12;-0.94%;Industrials;Aerospace & Defense;Howmet Aerospace Inc.;Pittsburgh, Pennsylvania;21/10/16
+IBKR;154030.00;;90.81;2.23%;Financials;Investment Banking & Brokerage;Interactive Brokers Group, Inc.;Greenwich, Connecticut;28/8/25
+IBM;256342.00;0.37%;272.74;-0.77%;Information Technology;IT Consulting & Other Services;International Business Machines Corporation;Armonk, New York;4/3/57
+ICE;79467.00;0.12%;140.52;1.11%;Financials;Financial Exchanges & Data;Intercontinental Exchange Inc.;Atlanta, Georgia;26/9/07
+IDXX;43957.00;0.06%;556.94;-0.17%;Health Care;Health Care Equipment;IDEXX Laboratories, Inc.;Westbrook, Maine;5/1/17
+IEX;16147.00;0.02%;218.17;0.59%;Industrials;Industrial Machinery & Supplies & Components;IDEX Corporation;Northbrook, Illinois;9/8/19
+IFF;19852.00;0.03%;77.76;0.32%;Materials;Specialty Chemicals;International Flavors & Fragrances Inc.;New York City, New York;31/3/76
+INCY;21683.00;0.03%;108.54;0.65%;Health Care;Biotechnology;Incyte Corporation;Wilmington, Delaware;28/2/17
+INTC;613383.00;0.89%;121.58;3.95%;Information Technology;Semiconductors;Intel Corporation;Santa Clara, California;31/12/76
+INTU;74026.00;0.11%;270.31;-2.38%;Information Technology;Application Software;Intuit Inc.;Mountain View, California;5/12/00
+INVH;17705.00;0.03%;29.81;1.21%;Real Estate;Single-Family Residential REITs;Invitation Home;Dallas, Texas;19/9/22
+IP;18656.00;0.03%;35.23;0.80%;Materials;Paper & Plastic Packaging Products & Materials;International Paper Company;Memphis, Tennessee;4/3/57
+IQV;30075.00;0.04%;180.20;-0.48%;Health Care;Life Sciences Tools & Services;IQVIA Holdings Inc.;Durham, North Carolina;29/8/17
+IR;28668.00;0.04%;73.26;0.08%;Industrials;Industrial Machinery & Supplies & Components;Ingersoll Rand Inc.;Davidson, North Carolina;3/3/20
+IRM;37761.00;0.06%;126.92;1.40%;Real Estate;Other Specialized REITs;Iron Mountain Incorporated;Portsmouth, New Hampshire;6/1/09
+ISRG;144525.00;0.21%;407.65;-1.27%;Health Care;Health Care Equipment;Intuitive Surgical, Inc.;Sunnyvale, California;2/6/08
+IT;9837.00;0.01%;146.92;-1.27%;Information Technology;IT Consulting & Other Services;Gartner, Inc.;Stamford, Connecticut;5/4/17
+ITW;73586.00;0.11%;255.77;0.52%;Industrials;Industrial Machinery & Supplies & Components;Illinois Tool Works Inc.;Glenview, Illinois;28/2/86
+IVZ;12804.00;0.02%;28.88;2.10%;Financials;Asset Management & Custody Banks;Invesco Ltd.;Atlanta, Georgia;21/8/08
+J;15138.00;0.02%;128.20;1.50%;Industrials;Construction & Engineering;Jacobs Solutions Inc.;Dallas, Texas;26/10/07
+JBHT;27159.00;0.04%;288.02;-0.39%;Industrials;Cargo Ground Transportation;J.B. Hunt Transport Services, Inc.;Lowell, Arkansas;1/7/15
+JBL;40406.00;0.06%;383.00;1.62%;Information Technology;Electronic Manufacturing Services;Jabil, Inc.;St. Petersburg, Florida;18/12/23
+JCI;88418.00;0.13%;144.92;0.63%;Industrials;Building Products;Johnson Controls International plc;Cork, Ireland;27/8/10
+JKHY;9097.00;0.01%;128.08;1.68%;Financials;Transaction & Payment Processing Services;Jack Henry & Associates, Inc.;Monett, Missouri;13/11/18
+JNJ;578484.00;0.84%;240.31;0.83%;Health Care;Pharmaceuticals;Johnson & Johnson;New Brunswick, New Jersey;30/6/73
+JPM;858033.00;1.25%;320.22;2.15%;Financials;Diversified Banks;JPMorgan Chase & Co.;New York City, New York;30/6/75
+KDP;42727.00;0.06%;31.40;0.53%;Consumer Staples;Soft Drinks & Non-alcoholic Beverages;Keurig Dr Pepper, Inc;Burlington, Massachusetts;21/6/22
+KEY;24491.00;0.04%;22.59;1.16%;Financials;Regional Banks;KeyCorp;Cleveland, Ohio;1/3/94
+KEYS;59584.00;0.09%;348.65;2.53%;Information Technology;Electronic Equipment & Instruments;Keysight Technologies Inc.;Santa Rosa, California;6/11/18
+KHC;28773.00;0.04%;24.26;0.14%;Consumer Staples;Packaged Foods & Meats;Kraft Heinz Company;"Chicago, Illinois; Pittsburgh, Pennsylvania";6/7/15
+KIM;17477.00;0.03%;25.92;0.64%;Real Estate;Retail REITs;Kimco Realty Corporation;Jericho, New York;4/4/06
+KKR;86410.00;;96.24;0.99%;Financials;Asset Management & Custody Banks;;New York City, New York;24/6/24
+KLAC;32378.00;0.05%;247.03;2.44%;Information Technology;Semiconductor Materials & Equipment;KLA Corporation;Milpitas, California;30/9/97
+KMB;33938.00;0.05%;102.27;0.72%;Consumer Staples;Household Products;Kimberly-Clark Corporation;Irving, Texas;4/3/57
+KMI;71579.00;0.10%;32.17;2.59%;Energy;Oil & Gas Storage & Transportation;Kinder Morgan, Inc.;Houston, Texas;25/5/12
+KO;354391.00;0.52%;82.37;-0.20%;Consumer Staples;Soft Drinks & Non-alcoholic Beverages;CocaCola Company (The);Atlanta, Georgia;4/3/57
+KR;39461.00;0.06%;64.41;0.46%;Consumer Staples;Food Retail;The Kroger Co.;Cincinnati, Ohio;4/3/57
+KVUE;34819.00;0.05%;18.14;0.36%;Consumer Staples;Personal Care Products;Kenvue Inc.;Skillman, New Jersey;25/8/23
+L;22283.00;0.03%;108.29;0.86%;Financials;Multi-line Insurance;Loews Corporation;New York City, New York;31/5/95
+LDOS;15594.00;0.02%;123.97;1.55%;Industrials;Diversified Support Services;Leidos Holdings, Inc.;Reston, Virginia;9/8/19
+LEN;22384.00;0.03%;90.63;-4.55%;Consumer Discretionary;Homebuilding;Lennar Corporation;Miami, Florida;4/10/05
+LH;21691.00;0.03%;264.53;-0.28%;Health Care;Health Care Services;Labcorp Holdings Inc.;Burlington, North Carolina;1/11/04
+LHX;57423.00;0.08%;308.25;-1.26%;Industrials;Aerospace & Defense;L3Harris Technologies Inc;Melbourne, Florida;22/9/08
+LII;17820.00;;512.15;-0.94%;Industrials;Building Products;;Richardson, Texas;23/12/24
+LIN;242055.00;0.35%;523.31;1.53%;Materials;Industrial Gases;Linde PLC;Guildford, United Kingdom;1/7/92
+LITE;71700.00;;921.56;3.59%;Information Technology;Communications Equipment;Lumentum Holdings Inc.;San Jose, California;23/3/26
+LLY;1081966.00;1.57%;1148.90;-1.04%;Health Care;Pharmaceuticals;Eli Lilly and Company;Indianapolis, Indiana;31/12/70
+LMT;125491.00;0.18%;544.29;-0.80%;Industrials;Aerospace & Defense;Lockheed Martin Corporation;Bethesda, Maryland;4/3/57
+LNT;18861.00;0.03%;73.02;0.54%;Utilities;Electric Utilities;Alliant Energy Corporation;Madison, Wisconsin;1/7/16
+LOW;123555.00;0.18%;220.36;-0.31%;Consumer Discretionary;Home Improvement Retail;Lowe's Companies, Inc.;Mooresville, North Carolina;29/2/84
+LRCX;461000.00;0.67%;367.83;1.47%;Information Technology;Semiconductor Materials & Equipment;Lam Research Corporation;Fremont, California;29/6/12
+LULU;14462.00;0.02%;119.72;-1.74%;Consumer Discretionary;Apparel, Accessories & Luxury Goods;lululemon athletica inc.;Vancouver, Canada;18/10/23
+LUV;21946.00;0.03%;44.90;1.38%;Industrials;Passenger Airlines;Southwest Airlines Co.;Dallas, Texas;1/7/94
+LVS;33394.00;0.05%;50.40;-0.42%;Consumer Discretionary;Casinos & Gaming;Las Vegas Sands Corp.;Las Vegas, Nevada;3/10/19
+LYB;20755.00;0.03%;64.30;1.31%;Materials;Specialty Chemicals;LyondellBasell Industries N.V.;Rotterdam, Netherlands;5/9/12
+LYV;40574.00;0.06%;172.25;-0.05%;Communication Services;Movies & Entertainment;Live Nation Entertainment, Inc.;Beverly Hills, California;23/12/19
+MA;433350.00;0.63%;490.45;0.81%;Financials;Transaction & Payment Processing Services;Mastercard Incorporated;Harrison, New York;18/7/08
+MAA;16251.00;0.02%;139.62;1.10%;Real Estate;Multi-Family Residential REITs;Mid-America Apartment Communities, Inc.;Memphis, Tennessee;2/12/16
+MAR;105287.00;0.15%;398.81;0.48%;Consumer Discretionary;Hotels, Resorts & Cruise Lines;Marriott International, Inc.;Bethesda, Maryland;29/5/98
+MAS;14982.00;0.02%;74.27;0.71%;Industrials;Building Products;Masco Corporation;Livonia, Michigan;30/6/81
+MCD;203968.00;0.30%;287.07;0.81%;Consumer Discretionary;Restaurants;McDonald's Corporation;Chicago, Illinois;30/6/70
+MCHP;51397.00;0.08%;94.69;1.88%;Information Technology;Semiconductors;Microchip Technology Incorporated;Chandler, Arizona;7/9/07
+MCK;94910.00;0.14%;789.60;0.31%;Health Care;Health Care Distributors;McKesson Corporation;Irving, Texas;13/1/99
+MCO;77803.00;0.11%;445.35;0.80%;Financials;Financial Exchanges & Data;Moody's Corporation;New York City, New York;1/7/98
+MDLZ;80377.00;0.12%;62.62;-1.17%;Consumer Staples;Packaged Foods & Meats;Mondelez International, Inc.;Chicago, Illinois;2/10/12
+MDT;102894.00;0.15%;80.14;-0.23%;Health Care;Health Care Equipment;Medtronic PLC;Galway, Ireland;31/10/86
+MET;57385.00;0.08%;89.19;1.83%;Financials;Life & Health Insurance;MetLife, Inc.;New York City, New York;11/12/00
+META;1445132.00;2.10%;570.29;0.33%;Communication Services;Interactive Media & Services;Meta Platforms, Inc.;Menlo Park, California;23/12/13
+MGM;12357.00;0.02%;48.30;2.29%;Consumer Discretionary;Casinos & Gaming;MGM Resorts International;Paradise, Nevada;26/7/17
+MKC;13187.00;0.02%;49.07;-0.32%;Consumer Staples;Packaged Foods & Meats;McCormick & Company, Incorporated;Hunt Valley, Maryland;20/3/03
+MLM;34505.00;0.05%;574.61;1.60%;Materials;Construction Materials;Martin Marietta Materials, Inc.;Raleigh, North Carolina;2/7/14
+MMM;82570.00;0.12%;158.31;0.25%;Industrials;Industrial Conglomerates;3M Company;Saint Paul, Minnesota;4/3/57
+MNST;89984.00;0.13%;91.99;-0.04%;Consumer Staples;Soft Drinks & Non-alcoholic Beverages;Monster Beverage Corporation;Corona, California;28/6/12
+MO;119713.00;0.17%;71.69;0.39%;Consumer Staples;Tobacco;Altria Group, Inc.;Richmond, Virginia;4/3/57
+MOS;7178.00;0.01%;22.61;7.20%;Materials;Fertilizers & Agricultural Chemicals;The Mosaic Company;Tampa, Florida;26/9/11
+MPC;77931.00;0.11%;266.95;2.35%;Energy;Oil & Gas Refining & Marketing;Marathon Petroleum Corporation;Findlay, Ohio;1/7/11
+MPWR;77580.00;0.11%;1575.77;891.30%;Information Technology;Semiconductors;Monolithic Power Systems, Inc.;Kirkland, Washington;12/2/21
+MRK;297776.00;0.43%;120.57;-0.16%;Health Care;Pharmaceuticals;Merck & Co., Inc.;Kenilworth, New Jersey;4/3/57
+MRNA;20122.00;0.03%;50.65;2.04%;Health Care;Biotechnology;Moderna, Inc.;Cambridge, Massachusetts;21/7/21
+MRSH;81490.00;;168.68;0.32%;Financials;Insurance Brokers;;New York City, New York;31/8/87
+MS;337575.00;0.49%;214.02;0.64%;Financials;Investment Banking & Brokerage;Morgan Stanley;New York City, New York;29/7/93
+MSCI;43542.00;0.06%;598.11;0.64%;Financials;Financial Exchanges & Data;MSCI Inc;New York City, New York;4/4/18
+MSFT;2877443.00;4.18%;387.10;-0.83%;Information Technology;Systems Software;Microsoft Corporation;Redmond, Washington;1/6/94
+MSI;68533.00;0.10%;412.86;0.61%;Information Technology;Communications Equipment;Motorola Solutions, Inc.;Chicago, Illinois;4/3/57
+MTB;33734.00;0.05%;230.35;1.11%;Financials;Regional Banks;M&T Bank Corporation;Buffalo, New York;23/2/04
+MTD;22995.00;0.03%;1137.94;-0.29%;Health Care;Life Sciences Tools & Services;Mettler-Toledo International, Inc.;Columbus, Ohio;6/9/16
+MU;1120747.00;1.63%;989.50;-0.64%;Information Technology;Semiconductors;Micron Technology, Inc.;Boise, Idaho;27/9/94
+NCLH;8841.00;0.01%;19.26;1.03%;Consumer Discretionary;Hotels, Resorts & Cruise Lines;Norwegian Cruise Line Holdings Ltd.;Miami-Dade County, Florida[4];13/10/17
+NDAQ;49750.00;0.07%;87.91;1.35%;Financials;Financial Exchanges & Data;Nasdaq, Inc.;New York City, New York;22/10/08
+NDSN;16023.00;0.02%;287.56;0.68%;Industrials;Industrial Machinery & Supplies & Components;Nordson Corporation;Westlake, Ohio;15/2/22
+NEE;178582.00;0.26%;85.64;0.94%;Utilities;Multi-Utilities;NextEra Energy, Inc.;Juno Beach, Florida;30/6/76
+NEM;105606.00;0.15%;98.92;1.37%;Materials;Gold;Newmont Corporation;Denver, Colorado;30/6/69
+NFLX;338662.00;0.49%;80.36;-1.13%;Communication Services;Movies & Entertainment;Netflix, Inc.;Los Gatos, California;20/12/10
+NI;22547.00;0.03%;47.03;0.88%;Utilities;Multi-Utilities;NiSource, Inc;Merrillville, Indiana;2/11/00
+NKE;67324.00;0.10%;45.46;-1.08%;Consumer Discretionary;Apparel, Accessories & Luxury Goods;NIKE, Inc.;Washington County, Oregon;30/11/88
+NOC;78167.00;0.11%;550.36;-0.39%;Industrials;Aerospace & Defense;Northrop Grumman Corporation;West Falls Church, Virginia[3];4/3/57
+NOW;104227.00;0.15%;101.09;-1.93%;Information Technology;Systems Software;ServiceNow, Inc.;Santa Clara, California;21/11/19
+NRG;26190.00;0.04%;124.13;0.35%;Utilities;Independent Power Producers & Energy Traders;NRG Energy, Inc.;Houston, Texas;29/1/10
+NSC;70785.00;0.10%;315.17;1.49%;Industrials;Rail Transportation;Norfolk Southern Corporation;Atlanta, Georgia;4/3/57
+NTAP;31822.00;0.05%;162.09;1.01%;Information Technology;Technology Hardware, Storage & Peripherals;NetApp, Inc.;San Jose, California;25/6/99
+NTRS;32292.00;0.05%;174.29;2.07%;Financials;Asset Management & Custody Banks;Northern Trust Corporation;Chicago, Illinois;30/1/98
+NUE;60653.00;0.09%;266.32;2.08%;Materials;Steel;Nucor Corporation;Charlotte, North Carolina;30/4/85
+NVDA;4966324.00;7.22%;204.90;0.01%;Information Technology;Semiconductors;NVIDIA Corporation;Santa Clara, California;30/11/01
+NVR;17288.00;0.03%;6403.04;-1.18%;Consumer Discretionary;Homebuilding;NVR, Inc.;Reston, Virginia;26/9/19
+NWS;16323.00;0.02%;29.79;-1.12%;Communication Services;Publishing;News Corporation;New York City, New York;18/9/15
+NWSA;14344.00;0.02%;26.18;-0.47%;Communication Services;Publishing;News Corporation;New York City, New York;1/8/13
+NXPI;76848.00;0.11%;303.89;0.44%;Information Technology;Semiconductors;NXP Semiconductors N.V.;Eindhoven, Netherlands;22/3/21
+O;58470.00;0.09%;62.70;1.28%;Real Estate;Retail REITs;Realty Income Corporation;San Diego, California;7/4/15
+ODFL;51138.00;0.07%;245.47;-0.92%;Industrials;Cargo Ground Transportation;Old Dominion Freight Line, Inc.;Thomasville, North Carolina;9/12/19
+OKE;57577.00;0.08%;91.39;2.45%;Energy;Oil & Gas Storage & Transportation;ONEOK, Inc.;Tulsa, Oklahoma;15/3/10
+OMC;22019.00;0.03%;77.26;2.21%;Communication Services;Advertising;Omnicom Group Inc.;New York City, New York;31/12/97
+ON;45895.00;0.07%;116.79;0.71%;Information Technology;Semiconductors;onsemi;Phoenix, Arizona;21/6/22
+ORCL;523571.00;0.76%;182.05;-1.12%;Information Technology;Application Software;Oracle Corporation;Austin, Texas;31/8/89
+ORLY;74034.00;0.11%;89.34;-0.85%;Consumer Discretionary;Automotive Retail;O'Reilly Automotive, Inc.;Springfield, Missouri;27/3/09
+OTIS;27121.00;0.04%;70.68;0.78%;Industrials;Industrial Machinery & Supplies & Components;Otis Worldwide Corporation;Farmington, Connecticut;3/4/20
+OXY;56738.00;0.08%;57.04;2.84%;Energy;Oil & Gas Exploration & Production;Occidental Petroleum Corporation;Houston, Texas;4/3/57
+PANW;227036.00;0.33%;278.38;-0.41%;Information Technology;Systems Software;Palo Alto Networks, Inc.;Santa Clara, California;20/6/23
+PAYX;36000.00;0.05%;100.39;1.12%;Industrials;Human Resource & Employment Services;Paychex, Inc.;Penfield, New York;1/10/98
+PCAR;62460.00;0.09%;118.54;0.81%;Industrials;Construction Machinery & Heavy Transportation Equipment;PACCAR Inc.;Bellevue, Washington;31/12/80
+PCG;45385.00;0.07%;16.94;0.86%;Utilities;Multi-Utilities;Pacific Gas & Electric Co.;Oakland, California;3/10/22
+PEG;39722.00;0.06%;79.71;1.18%;Utilities;Electric Utilities;Public Service Enterprise Group Incorporated;Newark, New Jersey;4/3/57
+PEP;195951.00;0.29%;143.34;-0.27%;Consumer Staples;Soft Drinks & Non-alcoholic Beverages;PepsiCo, Inc.;Purchase, New York;4/3/57
+PFE;149639.00;0.22%;26.26;0.32%;Health Care;Pharmaceuticals;Pfizer Inc.;New York City, New York;4/3/57
+PFG;24012.00;0.04%;111.00;1.19%;Financials;Life & Health Insurance;Principal Financial Group, Inc.;Des Moines, Iowa;22/7/02
+PG;348778.00;0.51%;149.78;0.97%;Consumer Staples;Personal Care Products;Procter & Gamble Company (The);Cincinnati, Ohio;4/3/57
+PGR;118831.00;0.17%;203.36;0.54%;Financials;Property & Casualty Insurance;The Progressive Corporation;Mayfield Village, Ohio;4/8/97
+PH;113575.00;0.17%;900.74;-0.18%;Industrials;Industrial Machinery & Supplies & Components;Parker-Hannifin Corporation;Cleveland, Ohio;30/11/85
+PHM;23448.00;0.03%;123.09;-0.73%;Consumer Discretionary;Homebuilding;PulteGroup, Inc.;Atlanta, Georgia;30/4/84
+PKG;20264.00;0.03%;227.43;1.35%;Materials;Paper & Plastic Packaging Products & Materials;Packaging Corporation of America;Lake Forest, Illinois;26/7/17
+PLD;138991.00;0.20%;149.08;1.28%;Real Estate;Industrial REITs;Prologis, Inc.;San Francisco, California;17/7/03
+PLTR;306830.00;;127.99;-2.36%;Information Technology;Application Software;Palantir Technologies Inc.;Aventura, Florida;23/9/24
+PM;287062.00;0.42%;184.18;1.89%;Consumer Staples;Tobacco;Philip Morris International Inc.;New York City, New York;31/3/08
+PNC;95361.00;0.14%;237.47;1.51%;Financials;Diversified Banks;The PNC Financial Services Group, Inc;Pittsburgh, Pennsylvania;30/4/88
+PNR;11881.00;0.02%;73.52;1.30%;Industrials;Industrial Machinery & Supplies & Components;Pentair plc;Worsley, United Kingdom;1/10/12
+PNW;12497.00;0.02%;103.12;0.70%;Utilities;Multi-Utilities;Pinnacle West Capital Corporation;Phoenix, Arizona;4/10/99
+PODD;10335.00;0.02%;149.07;-0.08%;Health Care;Health Care Equipment;Insulet Corporation;Acton, Massachusetts;15/3/23
+POOL;7112.00;0.01%;195.16;1.46%;Consumer Discretionary;Distributors;Pool Corporation;Covington, Louisiana;7/10/20
+PPG;26612.00;0.04%;119.39;0.97%;Materials;Specialty Chemicals;PPG Industries, Inc.;Pittsburgh, Pennsylvania;4/3/57
+PPL;26885.00;0.04%;35.74;0.78%;Utilities;Electric Utilities;PPL Corporation;Allentown, Pennsylvania;1/10/01
+PRU;37606.00;0.06%;108.38;1.75%;Financials;Life & Health Insurance;Prudential Financial, Inc.;Newark, New Jersey;22/7/02
+PSA;57359.00;0.08%;326.74;0.63%;Real Estate;Self-Storage REITs;Public Storage;Glendale, California;19/8/05
+PSKY;11720.00;;10.47;-0.19%;Communication Services;Movies & Entertainment;;Los Angeles, California;30/9/94
+PSX;72764.00;0.11%;181.49;1.90%;Energy;Oil & Gas Refining & Marketing;Phillips 66;Houston, Texas;1/5/12
+PTC;13259.00;0.02%;114.71;-3.11%;Information Technology;Application Software;PTC Inc.;Boston, Massachusetts;20/4/21
+PWR;105378.00;0.15%;702.24;2.77%;Industrials;Construction & Engineering;Quanta Services, Inc.;Houston, Texas;1/7/09
+PYPL;36389.00;0.05%;41.22;-0.05%;Financials;Transaction & Payment Processing Services;PayPal Holdings, Inc.;San Jose, California;20/7/15
+Q;31540.00;;150.65;1.03%;Information Technology;Semiconductor Materials & Equipment;;Wilmington, Delaware;3/11/25
+QCOM;224202.00;0.33%;212.22;4.56%;Information Technology;Semiconductors;Qualcomm Incorporated;San Diego, California;22/7/99
+RCL;77599.00;0.11%;289.33;0.48%;Consumer Discretionary;Hotels, Resorts & Cruise Lines;Royal Caribbean Cruises Ltd.;Miami, Florida;5/12/14
+REG;14769.00;0.02%;80.65;-0.05%;Real Estate;Retail REITs;Regency Centers Corporation;Jacksonville, Florida;2/3/17
+REGN;64836.00;0.09%;611.82;0.06%;Health Care;Biotechnology;Regeneron Pharmaceuticals, Inc.;Tarrytown, New York;1/5/13
+RF;24881.00;0.04%;29.16;0.92%;Financials;Regional Banks;Regions Financial Corporation;Birmingham, Alabama;28/8/98
+RJF;30281.00;0.04%;155.38;3.30%;Financials;Investment Banking & Brokerage;Raymond James Financial, Inc.;St. Petersburg, Florida;20/3/17
+RL;23927.00;0.04%;402.03;2.22%;Consumer Discretionary;Apparel, Accessories & Luxury Goods;Ralph Lauren Corporation;New York City, New York;2/2/07
+RMD;28153.00;0.04%;194.08;0.88%;Health Care;Health Care Equipment;ResMed Inc.;San Diego, California;26/7/17
+ROK;51056.00;0.07%;458.85;0.28%;Industrials;Electrical Components & Equipment;Rockwell Automation, Inc.;Milwaukee, Wisconsin;12/3/00
+ROL;22696.00;0.03%;47.14;0.19%;Industrials;Environmental & Facilities Services;Rollins, Inc.;Atlanta, Georgia;1/10/18
+ROP;33856.00;0.05%;335.48;0.83%;Information Technology;Electronic Equipment & Instruments;Roper Technologies, Inc.;Sarasota, Florida;23/12/09
+ROST;77717.00;0.11%;242.06;1.23%;Consumer Discretionary;Apparel Retail;Ross Stores, Inc.;Dublin, California;21/12/09
+RSG;64431.00;0.09%;209.42;0.66%;Industrials;Environmental & Facilities Services;Republic Services, Inc.;Phoenix, Arizona;5/12/08
+RTX;247723.00;0.36%;183.95;-0.14%;Industrials;Aerospace & Defense;RTX Corporation;Waltham, Massachusetts;4/3/57
+RVTY;11094.00;0.02%;99.45;-2.04%;Health Care;Health Care Equipment;Revvity Inc.;Waltham, Massachusetts;31/5/85
+SATS;33060.00;;114.08;-10.97%;Communication Services;Wireless Telecommunication Services;;Englewood, Colorado;23/3/26
+SBAC;21920.00;0.03%;206.50;1.40%;Real Estate;Telecom Tower REITs;SBA Communications Corporation;Boca Raton, Florida;1/9/17
+SBUX;116735.00;0.17%;102.37;0.09%;Consumer Discretionary;Restaurants;Starbucks Corporation;Seattle, Washington;7/6/00
+SCHW;159606.00;0.23%;91.77;3.46%;Financials;Investment Banking & Brokerage;The Charles Schwab Corporation;Westlake, Texas;2/6/97
+SHW;78825.00;0.12%;319.60;0.85%;Materials;Specialty Chemicals;The Sherwin-Williams Company;Cleveland, Ohio;30/6/64
+SJM;12339.00;0.02%;115.69;-0.98%;Consumer Staples;Packaged Foods & Meats;The J. M. Smucker Company;Orrville, Ohio;6/11/08
+SLB;84734.00;0.12%;56.68;1.21%;Energy;Oil & Gas Equipment & Services;SLB Limited;Houston, Texas;4/3/57
+SMCI;18363.00;0.03%;30.39;-4.95%;Information Technology;Technology Hardware, Storage & Peripherals;Super Micro Computer, Inc.;San Jose, California;18/3/24
+SNA;20055.00;0.03%;387.16;0.65%;Industrials;Industrial Machinery & Supplies & Components;Snap-On Incorporated;Kenosha, Wisconsin;30/9/82
+SNDK;293230.00;;1980.10;5.24%;Information Technology;Technology Hardware, Storage & Peripherals;;Milpitas, California;28/11/25
+SNPS;87203.00;0.13%;454.70;-0.35%;Information Technology;Application Software;Synopsys, Inc.;Sunnyvale, California;16/3/17
+SO;105965.00;0.15%;94.00;0.78%;Utilities;Electric Utilities;Southern Company (The);Atlanta, Georgia;4/3/57
+SOLV;13562.00;0.02%;78.31;-1.15%;Health Care;Health Care Technology;Solventum Corporation;Saint Paul, Minnesota;1/4/24
+SPG;71387.00;0.10%;220.13;2.45%;Real Estate;Retail REITs;Simon Property Group, Inc.;Indianapolis, Indiana;26/6/02
+SPGI;123358.00;0.18%;416.75;0.82%;Financials;Financial Exchanges & Data;S&P Global Inc.;New York City, New York;4/3/57
+SRE;60634.00;0.09%;92.75;1.33%;Utilities;Multi-Utilities;Sempra Energy;San Diego, California;17/3/17
+STE;20321.00;0.03%;208.21;0.48%;Health Care;Health Care Equipment;STERIS plc;Dublin, Ireland;23/12/19
+STLD;41059.00;0.06%;283.32;1.35%;Materials;Steel;Steel Dynamics, Inc.;Fort Wayne, Indiana;22/12/22
+STT;46375.00;0.07%;167.56;1.64%;Financials;Asset Management & Custody Banks;State Street Corporation;Boston, Massachusetts;14/3/03
+STX;206743.00;0.30%;920.11;5.99%;Information Technology;Technology Hardware, Storage & Peripherals;Seagate Technology Holdings PLC;Dublin, Ireland;2/7/12
+STZ;25181.00;0.04%;146.23;2.18%;Consumer Staples;Distillers & Vintners;Constellation Brands Inc;Rochester, New York;1/7/05
+SW;22690.00;;43.32;1.48%;Materials;Paper & Plastic Packaging Products & Materials;;Dublin, Ireland;8/7/24
+SWK;12900.00;0.02%;82.98;-0.18%;Industrials;Industrial Machinery & Supplies & Components;Stanley Black & Decker, Inc.;New Britain, Connecticut;30/9/82
+SWKS;11068.00;0.02%;73.43;0.96%;Information Technology;Semiconductors;Skyworks Solutions, Inc.;Irvine, California;12/3/15
+SYF;24751.00;0.04%;73.58;1.73%;Financials;Consumer Finance;Synchrony Financial;Stamford, Connecticut;18/11/15
+SYK;118968.00;0.17%;310.33;1.53%;Health Care;Health Care Equipment;Stryker Corporation;Kalamazoo, Michigan;12/12/00
+SYY;38026.00;0.06%;79.52;-0.15%;Consumer Staples;Food Distributors;Sysco Corporation;Houston, Texas;31/12/86
+T;162973.00;0.24%;23.46;1.98%;Communication Services;Integrated Telecommunication Services;AT&T Inc.;Dallas, Texas;30/11/83
+TAP;7720.00;0.01%;41.16;0.57%;Consumer Staples;Brewers;Molson Coors Beverage Company;Chicago, Illinois;30/6/76
+TDG;70374.00;0.10%;1258.25;0.05%;Industrials;Aerospace & Defense;Transdigm Group Incorporated;Cleveland, Ohio;3/6/16
+TDY;28866.00;0.04%;623.06;-0.11%;Information Technology;Electronic Equipment & Instruments;Teledyne Technologies Incorporated;Thousand Oaks, California;22/6/20
+TECH;8479.00;0.01%;54.05;0.05%;Health Care;Life Sciences Tools & Services;Bio-Techne Corp;Minneapolis, Minnesota;30/8/21
+TEL;61442.00;0.09%;210.49;1.32%;Information Technology;Electronic Manufacturing Services;TE Connectivity Ltd.;Galway, Ireland;17/10/11
+TER;62840.00;0.09%;400.19;4.93%;Information Technology;Semiconductor Materials & Equipment;Teradyne, Inc.;North Reading, Massachusetts;21/9/20
+TFC;64091.00;0.09%;51.44;1.50%;Financials;Diversified Banks;Truist Financial Corporation;Charlotte, North Carolina;4/12/97
+TGT;61479.00;0.09%;135.36;2.05%;Consumer Staples;Consumer Staples Merchandise Retail;Target Corporation;Minneapolis, Minnesota;31/12/76
+TJX;185626.00;0.27%;168.03;-0.18%;Consumer Discretionary;Apparel Retail;The TJX Companies, Inc.;Framingham, Massachusetts;30/9/85
+TKO;38870.00;;203.36;-4.84%;Communication Services;Movies & Entertainment;;New York City, New York;24/3/25
+TMO;175764.00;0.26%;472.97;-0.57%;Health Care;Life Sciences Tools & Services;Thermo Fisher Scientific Inc.;Waltham, Massachusetts;3/8/04
+TMUS;203712.00;0.30%;188.20;1.28%;Communication Services;Wireless Telecommunication Services;T-Mobile US, Inc.;Bellevue, Washington;15/7/19
+TPL;26140.00;;378.91;2.53%;Energy;Oil & Gas Exploration & Production;Texas Pacific Land Corp;Dallas, Texas;26/11/24
+TPR;29730.00;0.04%;147.15;1.21%;Consumer Discretionary;Apparel, Accessories & Luxury Goods;Tapestry, Inc.;New York City, New York;1/9/04
+TRGP;58744.00;0.09%;273.68;1.60%;Energy;Oil & Gas Storage & Transportation;Targa Resources, Inc.;Houston, Texas;12/10/22
+TRMB;11682.00;0.02%;50.01;0.02%;Information Technology;Application Software;Trimble Inc.;Westminster, Colorado;21/1/21
+TROW;23507.00;0.03%;109.64;1.26%;Financials;Asset Management & Custody Banks;T. Rowe Price Group, Inc.;Baltimore, Maryland;29/7/19
+TRV;64730.00;0.09%;304.40;0.16%;Financials;Property & Casualty Insurance;The Travelers Companies, Inc.;New York City, New York;21/8/02
+TSCO;16382.00;0.02%;31.24;-0.08%;Consumer Discretionary;Other Specialty Retail;Tractor Supply Company;Brentwood, Tennessee;24/1/14
+TSLA;1477200.00;2.15%;392.46;-1.68%;Consumer Discretionary;Automobile Manufacturers;Tesla, Inc.;Austin, Texas;21/12/20
+TSN;20315.00;0.03%;57.69;3.69%;Consumer Staples;Packaged Foods & Meats;Tyson Foods, Inc.;Springdale, Arkansas;10/8/05
+TT;100530.00;0.15%;454.78;-1.16%;Industrials;Building Products;Trane Technologies plc;Dublin, Ireland;17/11/10
+TTD;9060.00;;19.28;2.01%;Communication Services;Advertising;;Ventura, California;18/7/25
+TTWO;39144.00;0.06%;210.45;-0.77%;Communication Services;Interactive Home Entertainment;Take-Two Interactive Software, Inc.;New York City, New York;19/3/18
+TXN;273031.00;0.40%;299.45;0.79%;Information Technology;Semiconductors;Texas Instruments Incorporated;Dallas, Texas;12/3/01
+TXT;16062.00;0.02%;92.37;-1.48%;Industrials;Aerospace & Defense;Textron Inc.;Providence, Rhode Island;31/12/78
+TYL;12283.00;0.02%;291.29;-1.42%;Information Technology;Application Software;Tyler Technologies, Inc.;Plano, Texas;22/6/20
+UAL;37215.00;0.05%;114.51;1.68%;Industrials;Passenger Airlines;United Airlines Holdings Inc;Chicago, Illinois;3/9/15
+UBER;138470.00;0.20%;68.02;-2.19%;Industrials;Passenger Ground Transportation;Uber Technologies, Inc.;San Francisco, California;18/12/23
+UDR;12807.00;0.02%;39.42;0.78%;Real Estate;Multi-Family Residential REITs;United Dominion Realty Trust, Inc.;Highlands Ranch, Colorado;7/3/16
+UHS;8852.00;0.01%;146.21;0.11%;Health Care;Health Care Facilities;Universal Health Services, Inc.;King of Prussia, Pennsylvania;20/9/14
+ULTA;20068.00;0.03%;466.36;-2.11%;Consumer Discretionary;Other Specialty Retail;Ulta Beauty Inc.;Bolingbrook, Illinois;18/4/16
+UNH;370576.00;0.54%;408.06;0.62%;Health Care;Managed Health Care;UnitedHealth Group Incorporated;Eden Prairie, Minnesota;1/7/94
+UNP;162305.00;0.24%;273.37;1.90%;Industrials;Rail Transportation;Union Pacific Corporation;Omaha, Nebraska;4/3/57
+UPS;91829.00;0.13%;108.03;-0.57%;Industrials;Air Freight & Logistics;United Parcel Service, Inc.;Sandy Springs, Georgia;22/7/02
+URI;67467.00;0.10%;1076.89;0.79%;Industrials;Trading Companies & Distributors;United Rentals, Inc.;Stamford, Connecticut;20/9/14
+USB;91351.00;0.13%;58.89;2.19%;Financials;Diversified Banks;U.S. Bancorp;Minneapolis, Minnesota;1/11/99
+V;582428.00;0.85%;324.70;1.77%;Financials;Transaction & Payment Processing Services;Visa Inc.;San Francisco, California;21/12/09
+VEEV;25920.00;;159.54;-1.24%;Health Care;Health Care Technology;Veeva Systems Inc.;Pleasanton, California;7/5/26
+VICI;30334.00;0.04%;28.38;1.01%;Real Estate;Hotel & Resort REITs;VICI Properties Inc.;New York City, New York;8/6/22
+VLO;77735.00;0.11%;261.80;2.42%;Energy;Oil & Gas Refining & Marketing;Valero Energy Corporation;San Antonio, Texas;20/12/02
+VLTO;20500.00;0.03%;83.47;1.00%;Industrials;Environmental & Facilities Services;Veralto Corporation;Waltham, Massachusetts;2/10/23
+VMC;37114.00;0.05%;286.02;2.08%;Materials;Construction Materials;Vulcan Materials Company;Birmingham, Alabama;30/6/99
+VRSK;23904.00;0.04%;182.44;0.24%;Industrials;Research & Consulting Services;Verisk Analytics, Inc.;Jersey City, New Jersey;8/10/15
+VRSN;25529.00;0.04%;280.44;0.31%;Information Technology;Internet Services & Infrastructure;VeriSign, Inc.;Reston, Virginia;1/2/06
+VRT;116340.00;;302.87;1.68%;Industrials;Electrical Components & Equipment;;Westerville, Ohio;23/3/26
+VRTX;112549.00;0.16%;442.93;-0.47%;Health Care;Biotechnology;Vertex Pharmaceuticals Incorporated;Boston, Massachusetts;23/9/13
+VST;49910.00;;148.02;1.12%;Utilities;Electric Utilities;;Irving, Texas;8/5/24
+VTR;40973.00;0.06%;84.28;0.46%;Real Estate;Health Care REITs;Ventas, Inc.;Chicago, Illinois;4/3/09
+VTRS;19081.00;0.03%;16.38;0.40%;Health Care;Pharmaceuticals;Viatris Inc.;Pittsburgh, Pennsylvania;23/4/04
+VZ;200844.00;0.29%;48.10;2.47%;Communication Services;Integrated Telecommunication Services;Verizon Communications Inc.;New York City, New York;30/11/83
+WAB;44563.00;0.07%;262.63;0.20%;Industrials;Construction Machinery & Heavy Transportation Equipment;Wabtec;Pittsburgh, Pennsylvania;27/2/19
+WAT;35040.00;0.05%;356.86;-0.80%;Health Care;Life Sciences Tools & Services;Waters Corporation;Milford, Massachusetts;2/1/02
+WBD;67279.00;0.10%;26.82;-0.17%;Communication Services;Broadcasting;Warner Bros. Discovery, Inc.;New York City, New York;11/4/22
+WDAY;32300.00;;130.80;0.21%;Information Technology;Application Software;;Pleasanton, California;23/12/24
+WDC;192199.00;0.28%;556.30;5.10%;Information Technology;Technology Hardware, Storage & Peripherals;Western Digital Corporation;San Jose, California;1/7/09
+WEC;36929.00;0.05%;113.37;0.27%;Utilities;Electric Utilities;WEC Energy Group, Inc.;Milwaukee, Wisconsin;31/10/08
+WELL;150440.00;0.22%;213.12;1.16%;Real Estate;Health Care REITs;Welltower Inc.;Toledo, Ohio;30/1/09
+WFC;256184.00;0.37%;83.72;1.60%;Financials;Diversified Banks;Wells Fargo & Company;San Francisco, California;30/6/76
+WM;88389.00;0.13%;220.11;0.60%;Industrials;Environmental & Facilities Services;Waste Management, Inc.;Houston, Texas;31/8/98
+WMB;88801.00;0.13%;72.70;1.50%;Energy;Oil & Gas Storage & Transportation;Williams Companies, Inc. (The);Tulsa, Oklahoma;31/3/75
+WMT;954484.00;1.39%;119.91;-0.49%;Consumer Staples;Consumer Staples Merchandise Retail;Walmart Inc.;Bentonville, Arkansas;31/8/82
+WRB;25322.00;0.04%;68.02;0.71%;Financials;Property & Casualty Insurance;W.R. Berkley Corporation;Greenwich, Connecticut;5/12/19
+WSM;26320.00;;223.54;2.19%;Consumer Discretionary;Homefurnishing Retail;;San Francisco, California;24/3/25
+WST;23241.00;0.03%;328.97;-0.42%;Health Care;Health Care Supplies;West Pharmaceutical Services, Inc.;Exton, Pennsylvania;22/5/20
+WTW;24970.00;0.04%;264.22;1.32%;Financials;Insurance Brokers;Willis Towers Watson Public Limited Company;London, United Kingdom;5/1/16
+WY;18078.00;0.03%;25.07;3.05%;Real Estate;Timber REITs;Weyerhaeuser Company;Seattle, Washington;1/10/79
+WYNN;11224.00;0.02%;108.11;0.33%;Consumer Discretionary;Casinos & Gaming;Wynn Resorts, Limited;Paradise, Nevada;14/11/08
+XEL;49164.00;0.07%;78.75;0.61%;Utilities;Multi-Utilities;Xcel Energy Inc.;Minneapolis, Minnesota;4/3/57
+XOM;615160.00;0.89%;148.41;1.24%;Energy;Integrated Oil & Gas;ExxonMobil Corporation;Irving, Texas;4/3/57
+XYL;25919.00;0.04%;109.05;0.00%;Industrials;Industrial Machinery & Supplies & Components;Xylem Inc.;White Plains, New York;1/11/11
+YUM;42709.00;0.06%;154.96;1.10%;Consumer Discretionary;Restaurants;Yum! Brands, Inc.;Louisville, Kentucky;6/10/97
+ZBH;17077.00;0.03%;88.27;1.30%;Health Care;Health Care Equipment;Zimmer Biomet Holdings, Inc.;Warsaw, Indiana;7/8/01
+ZBRA;10690.00;0.02%;224.61;0.97%;Information Technology;Electronic Equipment & Instruments;Zebra Technologies Corporation;Lincolnshire, Illinois;23/12/19
+ZTS;33802.00;0.05%;80.63;-0.95%;Health Care;Pharmaceuticals;Zoetis Inc.;Parsippany, New Jersey;21/6/13

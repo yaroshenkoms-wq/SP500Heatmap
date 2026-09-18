@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: sp500-heatmap-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MOCK_MODE
+        value: "true"
+      - key: FINNHUB_API_KEY
+        sync: false
+      - key: FINNHUB_WEBSOCKET_URL
+        value: wss://ws.finnhub.io

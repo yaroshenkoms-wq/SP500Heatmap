@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: sp500_postgres
+    environment:
+      POSTGRES_USER: heatmap_user
+      POSTGRES_PASSWORD: heatmap_pass
+      POSTGRES_DB: sp500_heatmap
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sp500_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: sp500_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - sp500_network
+
+volumes:
+  postgres_data:
+
+networks:
+  sp500_network:
+    driver: bridge  

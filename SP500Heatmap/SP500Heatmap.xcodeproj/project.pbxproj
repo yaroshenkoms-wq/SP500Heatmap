@@ -1,0 +1,582 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		3917BDEA2FDAC3A9006A9826 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3917BDD42FDAC3A7006A9826 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3917BDDB2FDAC3A7006A9826;
+			remoteInfo = SP500Heatmap;
+		};
+		3917BDF42FDAC3A9006A9826 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3917BDD42FDAC3A7006A9826 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3917BDDB2FDAC3A7006A9826;
+			remoteInfo = SP500Heatmap;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3917BDDC2FDAC3A7006A9826 /* SP500Heatmap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SP500Heatmap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3917BDE92FDAC3A9006A9826 /* SP500HeatmapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SP500HeatmapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3917BDF32FDAC3A9006A9826 /* SP500HeatmapUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SP500HeatmapUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3917BE162FDACF67006A9826 /* Exceptions for "SP500Heatmap" folder in "SP500Heatmap" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3917BDDB2FDAC3A7006A9826 /* SP500Heatmap */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		3917BDDE2FDAC3A7006A9826 /* SP500Heatmap */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3917BE162FDACF67006A9826 /* Exceptions for "SP500Heatmap" folder in "SP500Heatmap" target */,
+			);
+			path = SP500Heatmap;
+			sourceTree = "<group>";
+		};
+		3917BDEC2FDAC3A9006A9826 /* SP500HeatmapTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SP500HeatmapTests;
+			sourceTree = "<group>";
+		};
+		3917BDF62FDAC3A9006A9826 /* SP500HeatmapUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SP500HeatmapUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3917BDD92FDAC3A7006A9826 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3917BDE62FDAC3A9006A9826 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3917BDF02FDAC3A9006A9826 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3917BDD32FDAC3A7006A9826 = {
+			isa = PBXGroup;
+			children = (
+				3917BDDE2FDAC3A7006A9826 /* SP500Heatmap */,
+				3917BDEC2FDAC3A9006A9826 /* SP500HeatmapTests */,
+				3917BDF62FDAC3A9006A9826 /* SP500HeatmapUITests */,
+				3917BDDD2FDAC3A7006A9826 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3917BDDD2FDAC3A7006A9826 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3917BDDC2FDAC3A7006A9826 /* SP500Heatmap.app */,
+				3917BDE92FDAC3A9006A9826 /* SP500HeatmapTests.xctest */,
+				3917BDF32FDAC3A9006A9826 /* SP500HeatmapUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3917BDDB2FDAC3A7006A9826 /* SP500Heatmap */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3917BDFD2FDAC3A9006A9826 /* Build configuration list for PBXNativeTarget "SP500Heatmap" */;
+			buildPhases = (
+				3917BDD82FDAC3A7006A9826 /* Sources */,
+				3917BDD92FDAC3A7006A9826 /* Frameworks */,
+				3917BDDA2FDAC3A7006A9826 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				3917BDDE2FDAC3A7006A9826 /* SP500Heatmap */,
+			);
+			name = SP500Heatmap;
+			packageProductDependencies = (
+			);
+			productName = SP500Heatmap;
+			productReference = 3917BDDC2FDAC3A7006A9826 /* SP500Heatmap.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3917BDE82FDAC3A9006A9826 /* SP500HeatmapTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3917BE002FDAC3A9006A9826 /* Build configuration list for PBXNativeTarget "SP500HeatmapTests" */;
+			buildPhases = (
+				3917BDE52FDAC3A9006A9826 /* Sources */,
+				3917BDE62FDAC3A9006A9826 /* Frameworks */,
+				3917BDE72FDAC3A9006A9826 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3917BDEB2FDAC3A9006A9826 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				3917BDEC2FDAC3A9006A9826 /* SP500HeatmapTests */,
+			);
+			name = SP500HeatmapTests;
+			packageProductDependencies = (
+			);
+			productName = SP500HeatmapTests;
+			productReference = 3917BDE92FDAC3A9006A9826 /* SP500HeatmapTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		3917BDF22FDAC3A9006A9826 /* SP500HeatmapUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3917BE032FDAC3A9006A9826 /* Build configuration list for PBXNativeTarget "SP500HeatmapUITests" */;
+			buildPhases = (
+				3917BDEF2FDAC3A9006A9826 /* Sources */,
+				3917BDF02FDAC3A9006A9826 /* Frameworks */,
+				3917BDF12FDAC3A9006A9826 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3917BDF52FDAC3A9006A9826 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				3917BDF62FDAC3A9006A9826 /* SP500HeatmapUITests */,
+			);
+			name = SP500HeatmapUITests;
+			packageProductDependencies = (
+			);
+			productName = SP500HeatmapUITests;
+			productReference = 3917BDF32FDAC3A9006A9826 /* SP500HeatmapUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3917BDD42FDAC3A7006A9826 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					3917BDDB2FDAC3A7006A9826 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					3917BDE82FDAC3A9006A9826 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 3917BDDB2FDAC3A7006A9826;
+					};
+					3917BDF22FDAC3A9006A9826 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 3917BDDB2FDAC3A7006A9826;
+					};
+				};
+			};
+			buildConfigurationList = 3917BDD72FDAC3A7006A9826 /* Build configuration list for PBXProject "SP500Heatmap" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3917BDD32FDAC3A7006A9826;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 3917BDDD2FDAC3A7006A9826 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3917BDDB2FDAC3A7006A9826 /* SP500Heatmap */,
+				3917BDE82FDAC3A9006A9826 /* SP500HeatmapTests */,
+				3917BDF22FDAC3A9006A9826 /* SP500HeatmapUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3917BDDA2FDAC3A7006A9826 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3917BDE72FDAC3A9006A9826 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3917BDF12FDAC3A9006A9826 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3917BDD82FDAC3A7006A9826 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3917BDE52FDAC3A9006A9826 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3917BDEF2FDAC3A9006A9826 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3917BDEB2FDAC3A9006A9826 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3917BDDB2FDAC3A7006A9826 /* SP500Heatmap */;
+			targetProxy = 3917BDEA2FDAC3A9006A9826 /* PBXContainerItemProxy */;
+		};
+		3917BDF52FDAC3A9006A9826 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3917BDDB2FDAC3A7006A9826 /* SP500Heatmap */;
+			targetProxy = 3917BDF42FDAC3A9006A9826 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3917BDFB2FDAC3A9006A9826 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3917BDFC2FDAC3A9006A9826 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3917BDFE2FDAC3A9006A9826 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "http://127.0.0.1:8000";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SP500Heatmap/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maximyaroshenko.SP500Heatmap;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WEBSOCKET_URL = "ws://127.0.0.1:8000/ws";
+			};
+			name = Debug;
+		};
+		3917BDFF2FDAC3A9006A9826 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "https://api.myheatmapapp.com";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SP500Heatmap/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maximyaroshenko.SP500Heatmap;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WEBSOCKET_URL = "wss://api.myheatmapapp.com/ws";
+			};
+			name = Release;
+		};
+		3917BE012FDAC3A9006A9826 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maximyaroshenko.SP500HeatmapTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SP500Heatmap.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SP500Heatmap";
+			};
+			name = Debug;
+		};
+		3917BE022FDAC3A9006A9826 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maximyaroshenko.SP500HeatmapTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SP500Heatmap.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SP500Heatmap";
+			};
+			name = Release;
+		};
+		3917BE042FDAC3A9006A9826 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maximyaroshenko.SP500HeatmapUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SP500Heatmap;
+			};
+			name = Debug;
+		};
+		3917BE052FDAC3A9006A9826 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maximyaroshenko.SP500HeatmapUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SP500Heatmap;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3917BDD72FDAC3A7006A9826 /* Build configuration list for PBXProject "SP500Heatmap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3917BDFB2FDAC3A9006A9826 /* Debug */,
+				3917BDFC2FDAC3A9006A9826 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3917BDFD2FDAC3A9006A9826 /* Build configuration list for PBXNativeTarget "SP500Heatmap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3917BDFE2FDAC3A9006A9826 /* Debug */,
+				3917BDFF2FDAC3A9006A9826 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3917BE002FDAC3A9006A9826 /* Build configuration list for PBXNativeTarget "SP500HeatmapTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3917BE012FDAC3A9006A9826 /* Debug */,
+				3917BE022FDAC3A9006A9826 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3917BE032FDAC3A9006A9826 /* Build configuration list for PBXNativeTarget "SP500HeatmapUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3917BE042FDAC3A9006A9826 /* Debug */,
+				3917BE052FDAC3A9006A9826 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3917BDD42FDAC3A7006A9826 /* Project object */;
+}
