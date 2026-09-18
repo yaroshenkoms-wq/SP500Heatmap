@@ -64,21 +64,13 @@ struct CompaniesHeatmapView: View {
 struct CompanyTile: View {
     let company: Company
     let changePercent: Double?
-    
-    var tileColor: Color {
-        guard let change = changePercent else { return Color.gray }
-        if change > 3.0 { return .green }
-        if change > 0.5 { return Color(red: 0.55, green: 0.76, blue: 0.29) }
-        if change < -3.0 { return .red }
-        if change < -0.5 { return Color(red: 1.0, green: 0.54, blue: 0.40) }
-        return .gray
-    }
-    
+
     var body: some View {
         VStack(spacing: 4) {
             Text(company.ticker)
                 .font(.caption)
                 .fontWeight(.medium)
+                .foregroundColor(.white)
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
             if let change = changePercent {
@@ -88,7 +80,7 @@ struct CompanyTile: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(tileColor)
+        .background(HeatmapColor.color(for: changePercent))
         .cornerRadius(6)
         .padding(1)
     }

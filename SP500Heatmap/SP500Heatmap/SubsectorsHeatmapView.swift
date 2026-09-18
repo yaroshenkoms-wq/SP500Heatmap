@@ -81,28 +81,20 @@ struct SubsectorStat: Identifiable {
 
 struct SubsectorTile: View {
     let stat: SubsectorStat
-    
+
     var body: some View {
         VStack {
             Text(stat.name)
                 .font(.headline)
+                .foregroundColor(.white)
                 .multilineTextAlignment(.center)
             Text(String(format: "%.2f%%", stat.changePercent))
                 .font(.caption)
+                .foregroundColor(.white.opacity(0.9))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(stat.tileColor)
+        .background(HeatmapColor.color(for: stat.changePercent))
         .cornerRadius(8)
         .padding(1)
-    }
-}
-
-extension SubsectorStat {
-    var tileColor: Color {
-        if changePercent > 3.0 { return .green }
-        if changePercent > 0.5 { return Color(red: 0.55, green: 0.76, blue: 0.29) }
-        if changePercent < -3.0 { return .red }
-        if changePercent < -0.5 { return Color(red: 1.0, green: 0.54, blue: 0.40) }
-        return .gray
     }
 }
