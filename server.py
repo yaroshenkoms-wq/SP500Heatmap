@@ -6,6 +6,8 @@ import csv
 import sqlite3
 import websockets
 from contextlib import asynccontextmanager
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,6 +18,19 @@ load_dotenv()
 MOCK_MODE = os.getenv("MOCK_MODE", "true").strip().lower() in ("1", "true", "yes")
 FINNHUB_API_KEY = os.getenv("FINNHUB_API_KEY")
 FINNHUB_WEBSOCKET_URL = os.getenv("FINNHUB_WEBSOCKET_URL", "wss://ws.finnhub.io")
+
+MARKET_TZ = ZoneInfo("America/New_York")
+
+
+def is_regular_market_hours() -> bool:
+    """9:30-16:00 America/New_York, будни. Не учитывает биржевые праздники."""
+    now = datetime.now(MARKET_TZ)
+    if now.weekday() >= 5:  # 5=суббота, 6=воскресенье
+        return False
+    open_time = now.replace(hour=9, minute=30, second=0, microsecond=0)
+    close_time = now.replace(hour=16, minute=0, second=0, microsecond=0)
+    return open_time <= now <= close_time
+
 
 app = FastAPI()
 
@@ -297,17 +312,36 @@ async def get_history(ticker: str):
     return history_cache.get(ticker.upper(), [])
 
 
+# Дополнительные периоды для переключателя SC/1d/3d/7d/30d/180d/1y на heatmap-экранах.
+# 30d/180d/1y уже покрыты return1M/return6M/return1Y (тот же trading-days-back).
+EXTRA_PERIOD_TRADING_DAYS = {"1d": 1, "3d": 3, "7d": 5}
+
+
 @app.get("/api/v1/performance")
 async def get_performance():
-    """Доходность за 1M/6M/YTD/1Y по всем тикерам, посчитанная из реальных цен закрытия"""
+    """Доходность по всем тикерам, посчитанная из реальных цен закрытия.
+
+    return1M/return6M/returnYTD/return1Y — для экрана "All Stocks".
+    1d/3d/7d/30d/180d/1y — для переключателя периода на heatmap-экранах
+    (30d/180d/1y дублируют return1M/return6M/return1Y под ключами, которые
+    совпадают с кнопками в UI)."""
     result = {}
     for ticker, series in history_cache.items():
-        result[ticker] = {
-            "return1M": compute_return(series, 21),
-            "return6M": compute_return(series, 126),
+        return1M = compute_return(series, 21)
+        return6M = compute_return(series, 126)
+        return1Y = compute_return(series, 252)
+        entry = {
+            "return1M": return1M,
+            "return6M": return6M,
             "returnYTD": compute_ytd_return(series),
-            "return1Y": compute_return(series, 252),
+            "return1Y": return1Y,
+            "30d": return1M,
+            "180d": return6M,
+            "1y": return1Y,
         }
+        for period, days in EXTRA_PERIOD_TRADING_DAYS.items():
+            entry[period] = compute_return(series, days)
+        result[ticker] = entry
     return result
 
 
@@ -335,6 +369,11 @@ async def finnhub_listener():
                 async for message in ws:
                     msg = json.loads(message)
                     if msg.get("type") != "trade":
+                        continue
+                    if not is_regular_market_hours():
+                        # Игнорируем пре-/постмаркет сделки — цена замирает на
+                        # последней цене regular session вместо хаотичных скачков
+                        # на низкой ликвидности вне основной сессии.
                         continue
                     for trade in msg.get("data", []):
                         ticker = trade.get("s")
