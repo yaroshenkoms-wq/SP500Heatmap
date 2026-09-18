@@ -439,7 +439,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				BASE_URL = "https://api.myheatmapapp.com";
+				BASE_URL = "https://sp500-heatmap-api.onrender.com";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
@@ -461,7 +461,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				WEBSOCKET_URL = "wss://api.myheatmapapp.com/ws";
+				WEBSOCKET_URL = "wss://sp500-heatmap-api.onrender.com/ws";
 			};
 			name = Release;
 		};
