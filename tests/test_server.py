@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from server import compute_return, compute_ytd_return
+from server import compute_return, compute_ytd_return, history_last_date, live_previous_close
 
 
 def series(*closes):
@@ -58,3 +58,21 @@ class TestComputeYtdReturn:
             {"date": "2025-06-15", "close": 110},
         ]
         assert compute_ytd_return(s) is None
+
+
+class TestLivePreviousClose:
+    ENTRY = {"anchor": 110, "previous_close": 100, "last_close_date": "2025-01-02"}
+
+    def test_uses_last_close_when_history_ends_before_today(self):
+        assert live_previous_close(self.ENTRY, "2025-01-03") == 110
+
+    def test_uses_prior_close_when_history_already_has_today(self):
+        assert live_previous_close(self.ENTRY, "2025-01-02") == 100
+
+    def test_csv_fallback_entry_without_date_keeps_previous_close(self):
+        assert live_previous_close({"anchor": 110, "previous_close": 100}, "2025-01-03") == 100
+
+
+def test_history_last_date():
+    assert history_last_date({}) == ""
+    assert history_last_date({"A": series(1, 2), "B": series(1, 2, 3)}) == "2025-01-03"

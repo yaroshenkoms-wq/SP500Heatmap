@@ -4,6 +4,8 @@ import os
 import random
 import csv
 import sqlite3
+import urllib.error
+import urllib.request
 import websockets
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -19,7 +21,22 @@ MOCK_MODE = os.getenv("MOCK_MODE", "true").strip().lower() in ("1", "true", "yes
 FINNHUB_API_KEY = os.getenv("FINNHUB_API_KEY")
 FINNHUB_WEBSOCKET_URL = os.getenv("FINNHUB_WEBSOCKET_URL", "wss://ws.finnhub.io")
 
+# Откуда сервер сам подтягивает свежий history.db (его каждый день обновляет GitHub Action),
+# чтобы данные не зависели от того, пересобрал ли Render сервис после пуша.
+# Пустая строка отключает автообновление — тогда используется только файл из образа.
+HISTORY_DB_URL = os.getenv(
+    "HISTORY_DB_URL",
+    "https://raw.githubusercontent.com/yaroshenkoms-wq/SP500Heatmap/main/history.db",
+).strip()
+HISTORY_REFRESH_SECONDS = int(os.getenv("HISTORY_REFRESH_SECONDS", "3600"))
+DB_PATH = "history.db"
+
 MARKET_TZ = ZoneInfo("America/New_York")
+
+
+def market_today() -> str:
+    """Сегодняшняя дата по Нью-Йорку в формате YYYY-MM-DD (как в history.db)."""
+    return datetime.now(MARKET_TZ).strftime("%Y-%m-%d")
 
 
 def is_regular_market_hours() -> bool:
@@ -45,19 +62,83 @@ price_cache = {}
 history_cache = {}  # ticker -> [{"date": "YYYY-MM-DD", "close": float}, ...] по возрастанию даты
 
 
+def read_history(db_path):
+    """Читает дневные цены закрытия из файла SQLite: ticker -> [{"date", "close"}, ...]"""
+    result = {}
+    conn = sqlite3.connect(db_path)
+    try:
+        cur = conn.execute("SELECT ticker, date, close FROM daily_closes ORDER BY ticker, date")
+        for ticker, date, close in cur.fetchall():
+            result.setdefault(ticker, []).append({"date": date, "close": close})
+    finally:
+        conn.close()
+    return result
+
+
+def history_last_date(history) -> str:
+    """Самая свежая дата закрытия среди всех тикеров ('' если истории нет)."""
+    return max((series[-1]["date"] for series in history.values() if series), default="")
+
+
 def load_history():
-    """Загружает дневные цены закрытия из history.db (см. fetch_history.py)"""
-    db_path = 'history.db'
-    if not os.path.exists(db_path):
+    """Загружает дневные цены закрытия из history.db (см. fetch_history.py).
+
+    Вызывается при старте и после каждого автообновления файла — кэш заменяется целиком."""
+    if not os.path.exists(DB_PATH):
         print("⚠️ history.db не найден — запустите fetch_history.py для загрузки истории цен")
         return
 
-    conn = sqlite3.connect(db_path)
-    cur = conn.execute("SELECT ticker, date, close FROM daily_closes ORDER BY ticker, date")
-    for ticker, date, close in cur.fetchall():
-        history_cache.setdefault(ticker, []).append({"date": date, "close": close})
-    conn.close()
-    print(f"✅ Загружена история цен для {len(history_cache)} тикеров")
+    fresh = read_history(DB_PATH)
+    history_cache.clear()
+    history_cache.update(fresh)
+    print(f"✅ Загружена история цен для {len(history_cache)} тикеров (по {history_last_date(history_cache)})")
+
+
+def download_history_db(etag):
+    """Скачивает history.db по HISTORY_DB_URL и подменяет локальный файл.
+
+    Возвращает новый ETag, либо None, если файл на сервере не менялся (HTTP 304).
+    Скачанный файл проверяется до подмены: он должен читаться и быть не старее текущего."""
+    request = urllib.request.Request(HISTORY_DB_URL, headers={"If-None-Match": etag} if etag else {})
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            data = response.read()
+            new_etag = response.headers.get("ETag") or ""
+    except urllib.error.HTTPError as e:
+        if e.code == 304:
+            return None
+        raise
+
+    tmp_path = DB_PATH + ".download"
+    with open(tmp_path, "wb") as f:
+        f.write(data)
+    try:
+        downloaded_date = history_last_date(read_history(tmp_path))
+        if not downloaded_date:
+            raise ValueError("в скачанном history.db нет данных")
+        if downloaded_date < history_last_date(history_cache):
+            raise ValueError(f"скачанный history.db старее текущего ({downloaded_date})")
+        os.replace(tmp_path, DB_PATH)
+    finally:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+    return new_etag
+
+
+async def history_refresher():
+    """Фоновая задача: сразу после старта и далее раз в HISTORY_REFRESH_SECONDS проверяет,
+    не появился ли новый history.db, и перечитывает историю и цены закрытия."""
+    etag = ""
+    while True:
+        try:
+            new_etag = await asyncio.to_thread(download_history_db, etag)
+            if new_etag is not None:
+                etag = new_etag
+                load_history()
+                seed_prices_from_history()
+        except Exception as e:
+            print(f"⚠️ Не удалось обновить history.db: {e}")
+        await asyncio.sleep(HISTORY_REFRESH_SECONDS)
 
 
 def compute_return(series, trading_days_back):
@@ -83,13 +164,28 @@ def compute_ytd_return(series):
     return (series[-1]["close"] - start_of_year["close"]) / start_of_year["close"] * 100
 
 
+def live_previous_close(entry, today):
+    """Закрытие предыдущей сессии для живой сделки, пришедшей в день today.
+
+    Если последняя дата в истории раньше today, то база — последнее закрытие (anchor);
+    если история уже содержит today — предпоследнее (previous_close)."""
+    last_close_date = entry.get('last_close_date')
+    if last_close_date and last_close_date < today:
+        return entry['anchor']
+    return entry['previous_close']
+
+
 def seed_prices_from_history():
     """Инициализирует price_cache реальными ценами закрытия из history_cache.
 
     'anchor' — последняя реальная цена закрытия, вокруг которой WebSocket
     будет создавать небольшое живое дрожание цены (см. websocket_endpoint).
     'previous_close' — предыдущая реальная цена закрытия, от неё считается % изменения.
+
+    Вызывается и при автообновлении истории: если по тикеру сегодня уже шли живые
+    сделки, живая цена сохраняется, а % пересчитывается от нового закрытия.
     """
+    today = market_today()
     count = 0
     for ticker, series in history_cache.items():
         if len(series) < 2:
@@ -98,13 +194,21 @@ def seed_prices_from_history():
         previous_close = series[-2]["close"]
         if anchor <= 0 or previous_close <= 0:
             continue
-        price_cache[ticker] = {
+        entry = {
             'price': anchor,
             'anchor': anchor,
             'previous_close': previous_close,
+            'last_close_date': series[-1]["date"],
             'change_percent': (anchor - previous_close) / previous_close * 100,
             'timestamp': time.time()
         }
+        old = price_cache.get(ticker)
+        if old and old.get('live_date') == today:
+            base = live_previous_close(entry, today)
+            entry['price'] = old['price']
+            entry['live_date'] = today
+            entry['change_percent'] = (old['price'] - base) / base * 100
+        price_cache[ticker] = entry
         count += 1
     if count > 0:
         print(f"✅ Инициализированы цены для {count} тикеров из реальной истории (history.db)")
@@ -194,7 +298,7 @@ def load_initial_prices():
 async def health():
     """Лёгкий эндпоинт для keep-alive пингов (UptimeRobot/cron-job.org), чтобы бесплатный
     инстанс на Render не засыпал — ничего не парсит и не трогает price_cache."""
-    return {"status": "ok"}
+    return {"status": "ok", "history_through": history_last_date(history_cache)}
 
 
 @app.get("/api/v1/market-hierarchy")
@@ -381,8 +485,10 @@ async def finnhub_listener():
                         entry = price_cache.get(ticker)
                         if not entry or price is None:
                             continue
-                        previous_close = entry.get("previous_close", price)
+                        today = market_today()
+                        previous_close = live_previous_close(entry, today)
                         entry["price"] = price
+                        entry["live_date"] = today
                         entry["change_percent"] = (price - previous_close) / previous_close * 100 if previous_close > 0 else 0
                         entry["timestamp"] = time.time()
         except Exception as e:
@@ -441,6 +547,9 @@ async def lifespan(_: FastAPI):
     else:
         print("📡 MOCK_MODE=false — подключаемся к Finnhub за реальными live-котировками")
         asyncio.create_task(finnhub_listener())
+
+    if HISTORY_DB_URL:
+        asyncio.create_task(history_refresher())
 
     yield
 

@@ -5,6 +5,9 @@ on:
     # 22:00 UTC, Mon-Fri - after the US market close (16:00 ET) with margin
     # for both EST and EDT.
     - cron: "0 22 * * 1-5"
+    # 10:00 UTC, Tue-Sat - a second pass the next morning: right after the close
+    # Yahoo often does not return the just-finished session yet.
+    - cron: "0 10 * * 2-6"
   workflow_dispatch: {}
 
 permissions:

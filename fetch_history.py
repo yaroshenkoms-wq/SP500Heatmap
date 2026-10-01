@@ -58,9 +58,11 @@ def main():
 
     for chunk in chunked(tickers, CHUNK_SIZE):
         print(f"Загружаю чанк из {len(chunk)} тикеров: {chunk[0]}..{chunk[-1]}")
+        # Yahoo пишет классы акций через дефис (BRK-B), а в CSV и в базе они через точку (BRK.B)
+        yahoo_symbols = [ticker.replace(".", "-") for ticker in chunk]
         try:
             data = yf.download(
-                chunk,
+                yahoo_symbols,
                 period="1y",
                 interval="1d",
                 group_by="ticker",
@@ -74,12 +76,12 @@ def main():
             continue
 
         rows = []
-        for ticker in chunk:
+        for ticker, yahoo_symbol in zip(chunk, yahoo_symbols):
             try:
                 if len(chunk) == 1:
                     series = data["Close"]
                 else:
-                    series = data[ticker]["Close"]
+                    series = data[yahoo_symbol]["Close"]
                 series = series.dropna()
                 if series.empty:
                     failed.append(ticker)
