@@ -3,6 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import server
 from server import compute_return, compute_ytd_return, history_last_date, live_previous_close
 
 
@@ -76,3 +77,25 @@ class TestLivePreviousClose:
 def test_history_last_date():
     assert history_last_date({}) == ""
     assert history_last_date({"A": series(1, 2), "B": series(1, 2, 3)}) == "2025-01-03"
+
+
+class TestSeedPricesFromHistory:
+    def setup_method(self):
+        server.price_cache.clear()
+        server.history_cache.clear()
+
+    def test_official_close_replaces_stale_live_price(self, monkeypatch):
+        monkeypatch.setattr(server, "market_today", lambda: "2025-01-03")
+        server.price_cache["X"] = {"price": 95, "live_date": "2025-01-03"}
+        server.history_cache["X"] = [{"date": "2025-01-02", "close": 100}, {"date": "2025-01-03", "close": 110}]
+        server.seed_prices_from_history()
+        assert server.price_cache["X"]["price"] == 110
+        assert round(server.price_cache["X"]["change_percent"], 6) == 10
+
+    def test_live_price_kept_while_today_close_not_in_history(self, monkeypatch):
+        monkeypatch.setattr(server, "market_today", lambda: "2025-01-03")
+        server.price_cache["X"] = {"price": 121, "live_date": "2025-01-03"}
+        server.history_cache["X"] = [{"date": "2025-01-01", "close": 100}, {"date": "2025-01-02", "close": 110}]
+        server.seed_prices_from_history()
+        assert server.price_cache["X"]["price"] == 121
+        assert round(server.price_cache["X"]["change_percent"], 6) == 10

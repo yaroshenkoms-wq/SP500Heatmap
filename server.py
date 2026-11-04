@@ -203,7 +203,10 @@ def seed_prices_from_history():
             'timestamp': time.time()
         }
         old = price_cache.get(ticker)
-        if old and old.get('live_date') == today:
+        # Живую цену оставляем, только пока в истории ещё нет закрытия этого дня.
+        # Как только закрытие пришло — показываем его: живая цена могла застрять
+        # на последней сделке перед обрывом связи с Finnhub.
+        if old and old.get('live_date') == today and entry['last_close_date'] < today:
             base = live_previous_close(entry, today)
             entry['price'] = old['price']
             entry['live_date'] = today
