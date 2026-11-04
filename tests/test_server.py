@@ -99,3 +99,16 @@ class TestSeedPricesFromHistory:
         server.seed_prices_from_history()
         assert server.price_cache["X"]["price"] == 121
         assert round(server.price_cache["X"]["change_percent"], 6) == 10
+
+
+def test_is_delisted(monkeypatch):
+    server.history_cache.clear()
+    server.history_cache.update({
+        "LIVE": [{"date": "2025-03-20", "close": 1}],
+        "LAG": [{"date": "2025-03-14", "close": 1}],
+        "GONE": [{"date": "2025-03-01", "close": 1}],
+    })
+    assert not server.is_delisted("LIVE")
+    assert not server.is_delisted("LAG")
+    assert server.is_delisted("GONE")
+    assert not server.is_delisted("NOHISTORY")

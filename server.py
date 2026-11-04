@@ -297,6 +297,23 @@ def load_initial_prices():
     
     print("⚠️ Не удалось загрузить ни один CSV файл")
 
+DELISTED_AFTER_DAYS = 7
+
+
+def is_delisted(ticker) -> bool:
+    """Тикер перестал торговаться (поглощение, выход из индекса): его последнее закрытие
+    старше общего на DELISTED_AFTER_DAYS календарных дней. Такие компании не показываем,
+    иначе на карте висит замёрзшая цена. Тикеры без истории не трогаем."""
+    series = history_cache.get(ticker)
+    if not series:
+        return False
+    latest = history_last_date(history_cache)
+    if not latest:
+        return False
+    gap = datetime.strptime(latest, "%Y-%m-%d") - datetime.strptime(series[-1]["date"], "%Y-%m-%d")
+    return gap.days > DELISTED_AFTER_DAYS
+
+
 @app.get("/health")
 async def health():
     """Лёгкий эндпоинт для keep-alive пингов (UptimeRobot/cron-job.org), чтобы бесплатный
@@ -322,6 +339,8 @@ async def get_market_hierarchy():
                 reader.fieldnames = [name.replace('\xa0', ' ') for name in reader.fieldnames]
                 for row in reader:
                     ticker = row['Symbol'].strip()
+                    if is_delisted(ticker):
+                        continue
                     name = row['Security'].strip()
                     sector = row['GICS Sector'].strip()
                     subsector = row['GICS Sub-Industry'].strip()
