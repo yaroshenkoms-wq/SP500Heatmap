@@ -5,8 +5,13 @@ on:
     # 22:00 UTC, Mon-Fri - after the US market close (16:00 ET) with margin
     # for both EST and EDT.
     - cron: "0 22 * * 1-5"
-    # 10:00 UTC, Tue-Sat - a second pass the next morning: right after the close
-    # Yahoo often does not return the just-finished session yet.
+    # Extra passes the next morning, Tue-Sat. Right after the close Yahoo often
+    # returns the last trade instead of the official close (on 2026-11-04 the
+    # night run stored MSFT 517.01 instead of 520.99), and GitHub starts
+    # scheduled runs hours late, so several morning passes overwrite the
+    # preliminary closes well before the next session opens.
+    - cron: "0 4 * * 2-6"
+    - cron: "0 7 * * 2-6"
     - cron: "0 10 * * 2-6"
   workflow_dispatch: {}
 
