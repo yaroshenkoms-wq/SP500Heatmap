@@ -8,12 +8,30 @@ import csv
 import sqlite3
 import sys
 import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import yfinance as yf
 
 DB_PATH = "history.db"
 CSV_PATH = "SP500_with_market_cap.csv"
 CHUNK_SIZE = 80
+MARKET_TZ = ZoneInfo("America/New_York")
+
+
+def unfinished_session_date(now=None):
+    """Дата сегодняшней сессии (YYYY-MM-DD по Нью-Йорку), если она ещё не закончилась, иначе None.
+
+    GitHub запускает плановые проходы с опозданием до 8 часов, и проход может попасть
+    на время торгов. Тогда Yahoo отдаёт за сегодня текущую цену, а не закрытие
+    (11.11.2026: проход 17:42 UTC записал AAPL 354.33 как «закрытие» 11.11).
+    Такую строку в базу писать нельзя. Закрытие считаем готовым с 16:30 по Нью-Йорку."""
+    now = now or datetime.now(MARKET_TZ)
+    if now.weekday() >= 5:
+        return None
+    if (now.hour, now.minute) >= (16, 30):
+        return None
+    return now.strftime("%Y-%m-%d")
 
 
 def load_tickers():
@@ -53,6 +71,12 @@ def main():
     conn = sqlite3.connect(DB_PATH)
     init_db(conn)
 
+    skip_date = unfinished_session_date()
+    if skip_date:
+        removed = conn.execute("DELETE FROM daily_closes WHERE date = ?", (skip_date,)).rowcount
+        conn.commit()
+        print(f"Сессия {skip_date} ещё идёт: её цены не пишем (удалено прежних строк: {removed})")
+
     ok_count = 0
     failed = []
 
@@ -87,7 +111,10 @@ def main():
                     failed.append(ticker)
                     continue
                 for date, close in series.items():
-                    rows.append((ticker, date.strftime("%Y-%m-%d"), float(close)))
+                    day = date.strftime("%Y-%m-%d")
+                    if day == skip_date:
+                        continue
+                    rows.append((ticker, day, float(close)))
                 ok_count += 1
             except Exception:
                 failed.append(ticker)
