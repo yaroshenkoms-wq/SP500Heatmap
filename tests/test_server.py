@@ -112,3 +112,165 @@ def test_is_delisted(monkeypatch):
     assert not server.is_delisted("LAG")
     assert server.is_delisted("GONE")
     assert not server.is_delisted("NOHISTORY")
+
+
+# ------------------------------------------------------------ world indices
+
+import json
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+import pytest
+from fastapi.testclient import TestClient
+
+
+def day(i):
+    return f"2025-03-{i:02d}"
+
+
+def mk_series(*closes, start=10):
+    return [{"date": day(start + i), "close": c} for i, c in enumerate(closes)]
+
+
+@pytest.fixture
+def world(tmp_path, monkeypatch):
+    (tmp_path / "indices").mkdir()
+    registry = [
+        {"id": "sp500", "name": "S&P 500", "region": "americas", "country": "US",
+         "exchange_tz": "America/New_York", "close": "16:00", "currency": "USD",
+         "live": True, "constituents": "SP500_with_market_cap.csv", "history": "history.db"},
+        {"id": "ibex35", "name": "IBEX 35", "region": "europe", "country": "ES",
+         "exchange_tz": "Europe/Madrid", "close": "17:35", "currency": "EUR",
+         "live": False, "constituents": "indices/ibex35.csv", "history": "history_world.db"},
+    ]
+    (tmp_path / "indices" / "registry.json").write_text(json.dumps(registry))
+    (tmp_path / "indices" / "ibex35.csv").write_text(
+        "Symbol,Security,Sector,Subsector,MarketCap,Currency\n"
+        "SAN.MC,Santander,Financial Services,Banks,80000000000,EUR\n"
+        "BBVA.MC,BBVA,Financial Services,Banks,90000000000,EUR\n"
+        "ITX.MC,Inditex,Consumer Cyclical,Apparel,150000000000,EUR\n"
+        "OLD.MC,Old Co,,,1000,EUR\n"
+        "NOHIST.MC,No History,Utilities,Power,5,EUR\n")
+    (tmp_path / "SP500_with_market_cap.csv").write_text(
+        "Symbol,Security,GICS Sector,GICS Sub-Industry,Market Cap\n"
+        "AAPL,Apple,Tech,Hardware,3T\n")
+    monkeypatch.setattr(server, "BASE_DIR", str(tmp_path))
+    monkeypatch.setattr(server, "REGISTRY_PATH", str(tmp_path / "indices" / "registry.json"))
+    server._registry_cache.update(mtime=None, data=server.DEFAULT_REGISTRY)
+    server._index_rows_cache.clear()
+    server.history_cache.clear()
+    server.world_history_cache.clear()
+    server.price_cache.clear()
+    server.history_cache["AAPL"] = mk_series(100, 110)
+    server.world_history_cache.update({
+        "SAN.MC": mk_series(10, 11),
+        "BBVA.MC": mk_series(20, 22),
+        "ITX.MC": mk_series(50, 45),
+        "OLD.MC": mk_series(1, 1, start=1),  # last close 2025-03-02, > 7 days before latest
+    })
+    yield tmp_path
+    server._registry_cache.update(mtime=None, data=server.DEFAULT_REGISTRY)
+    server._index_rows_cache.clear()
+    server.history_cache.clear()
+    server.world_history_cache.clear()
+
+
+@pytest.fixture
+def client():
+    # без `with`: lifespan (сеть, Finnhub, планировщик) не запускаем
+    return TestClient(server.app)
+
+
+class TestIndicesEndpoint:
+    def test_list(self, world, client):
+        data = client.get("/api/v1/indices").json()
+        assert [i["id"] for i in data] == ["sp500", "ibex35"]
+        ibex = data[1]
+        assert ibex == {"id": "ibex35", "name": "IBEX 35", "region": "europe", "country": "ES",
+                        "currency": "EUR", "live": False, "count": 5, "historyThrough": day(11)}
+        assert data[0]["live"] is True and data[0]["count"] == 1
+
+    def test_missing_registry_means_sp500_only(self, world, client):
+        os.remove(server.REGISTRY_PATH)
+        data = client.get("/api/v1/indices").json()
+        assert [i["id"] for i in data] == ["sp500"]
+        assert client.get("/api/v1/market-hierarchy?index=ibex35").status_code == 404
+
+
+class TestHierarchyIndex:
+    def test_world_hierarchy(self, world, client):
+        data = client.get("/api/v1/market-hierarchy?index=ibex35").json()
+        names = {s["name"]: s for s in data}
+        assert set(names) == {"Financial Services", "Consumer Cyclical"}  # OLD/NOHIST skipped
+        banks = names["Financial Services"]["subsectors"][0]
+        assert banks["name"] == "Banks"
+        assert [c["ticker"] for c in banks["companies"]] == ["BBVA.MC", "SAN.MC"]  # by cap desc
+        assert banks["companies"][0] == {"ticker": "BBVA.MC", "name": "BBVA", "marketCap": 90000000000.0}
+
+    def test_default_and_sp500_are_legacy(self, world, client):
+        a = client.get("/api/v1/market-hierarchy")
+        b = client.get("/api/v1/market-hierarchy?index=sp500")
+        assert a.json() == b.json()
+        first = a.json()[0]["subsectors"][0]["companies"][0]
+        assert set(first) == {"ticker", "name", "marketCap"}  # legacy shape (reads cwd CSV as before)
+
+    def test_unknown_index_404(self, world, client):
+        assert client.get("/api/v1/market-hierarchy?index=nope").status_code == 404
+        assert client.get("/api/v1/performance?index=nope").status_code == 404
+
+
+class TestPerformanceIndex:
+    def test_world_performance_only_index_tickers(self, world, client):
+        data = client.get("/api/v1/performance?index=ibex35").json()
+        assert set(data) == {"SAN.MC", "BBVA.MC", "ITX.MC", "OLD.MC"}
+        assert data["BBVA.MC"]["1d"] == 10.0
+        assert set(data["BBVA.MC"]) == {"return1M", "return6M", "returnYTD", "return1Y", "30d", "180d", "1y", "1d", "3d", "7d"}
+
+    def test_default_is_history_db_only(self, world, client):
+        data = client.get("/api/v1/performance").json()
+        assert set(data) == {"AAPL"}
+        assert data == client.get("/api/v1/performance?index=sp500").json()
+
+
+def test_history_looks_in_both_caches(world, client):
+    assert client.get("/api/v1/history/aapl").json() == mk_series(100, 110)
+    assert client.get("/api/v1/history/san.mc").json() == mk_series(10, 11)
+    assert client.get("/api/v1/history/ZZZ").json() == []
+
+
+class TestSchedulerDue:
+    REG = [
+        {"id": "sp500", "exchange_tz": "America/New_York", "close": "16:00", "history": "history.db"},
+        {"id": "ibex35", "exchange_tz": "Europe/Madrid", "close": "17:35", "history": "history_world.db"},
+        {"id": "n225", "exchange_tz": "Asia/Tokyo", "close": "15:30", "history": "history_world.db"},
+    ]
+
+    @staticmethod
+    def utc(y, m, d, h, mi):
+        return datetime(y, m, d, h, mi, tzinfo=ZoneInfo("UTC"))
+
+    def test_before_and_after_close_plus_30(self):
+        # Tue 2025-03-11, Madrid = UTC+1: 17:35+30m = 18:05 local = 17:05 UTC
+        assert "ibex35" not in server.indices_due(self.REG, self.utc(2025, 3, 11, 17, 4), {})
+        assert "ibex35" in server.indices_due(self.REG, self.utc(2025, 3, 11, 17, 5), {})
+
+    def test_only_world_db_indices(self):
+        assert server.indices_due(self.REG, self.utc(2025, 3, 11, 17, 5), {}) == ["ibex35"]
+        assert server.indices_due(self.REG, self.utc(2025, 3, 11, 7, 0), {}) == ["n225"]  # no sp500: GitHub Action
+
+    def test_already_refreshed_session_skipped(self):
+        now = self.utc(2025, 3, 11, 17, 5)
+        assert server.indices_due(self.REG, now, {"ibex35": "2025-03-11"}) == []
+        assert server.indices_due(self.REG, now, {"ibex35": "2025-03-10"}) == ["ibex35"]
+
+    def test_weekend_none(self):
+        assert server.indices_due(self.REG, self.utc(2025, 3, 15, 23, 0), {}) == []
+
+    def test_uses_exchange_local_date(self):
+        # Mon 2025-03-10 16:00 UTC: Tokyo is already Tue 01:00 local, before 15:30 -> not due; Madrid Mon 17:00 -> not due
+        assert server.indices_due(self.REG, self.utc(2025, 3, 10, 16, 0), {}) == []
+
+
+def test_run_world_refresh_without_module(monkeypatch):
+    monkeypatch.setitem(sys.modules, "fetch_world", None)  # import -> ImportError
+    assert server.run_world_refresh(["ibex35"]) is None
