@@ -116,9 +116,12 @@ struct SubsectorTile: View {
                 .font(.headline)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.7)
             Text(formatPercent(stat.changePercent))
                 .font(.caption)
                 .foregroundColor(.white.opacity(0.9))
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(HeatmapColor.color(for: stat.changePercent))

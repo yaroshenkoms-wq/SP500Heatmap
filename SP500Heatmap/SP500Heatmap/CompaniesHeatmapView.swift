@@ -102,6 +102,8 @@ struct CompanyTile: View {
                 Text(formatPercent(change))
                     .font(.caption2)
                     .foregroundColor(.white.opacity(0.9))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
