@@ -4,12 +4,12 @@ import Foundation
 
 /// Percent value given in percent units (1.23 = 1.23%), always 2 decimals.
 func formatPercent(_ value: Double) -> String {
-    (value / 100).formatted(.percent.precision(.fractionLength(2)))
+    (value / 100).formatted(.percent.precision(.fractionLength(2)).locale(AppLanguage.locale))
 }
 
 /// Plain decimal with fixed fraction digits in the current locale.
 func formatDecimal(_ value: Double, fractionDigits: Int = 2) -> String {
-    value.formatted(.number.precision(.fractionLength(fractionDigits)).grouping(.never))
+    value.formatted(.number.precision(.fractionLength(fractionDigits)).grouping(.never).locale(AppLanguage.locale))
 }
 
 /// Compact amount with international T / B / M suffixes (digits localized).
@@ -23,5 +23,5 @@ func formatCompact(_ value: Double) -> String {
 /// Sector / industry names arrive from the server in English; show them
 /// localized (table "Sectors"). Unknown names fall back to the English text.
 func localizedSectorName(_ name: String) -> String {
-    String(localized: String.LocalizationValue(name), table: "Sectors")
+    AppLanguage.string(name, table: "Sectors")
 }

@@ -89,7 +89,7 @@ final class IndexStore: ObservableObject {
     func formatPrice(_ value: Double) -> String {
         let code = current.currency ?? "USD"
         if code == "USD" { return "$" + formatDecimal(value) }
-        return value.formatted(.currency(code: code))
+        return value.formatted(.currency(code: code).locale(AppLanguage.locale))
     }
 
     // Region sections in display order.
@@ -104,5 +104,5 @@ func localizedShortDate(_ iso: String?) -> String? {
     parser.timeZone = TimeZone(identifier: "UTC")
     parser.locale = Locale(identifier: "en_US_POSIX")
     guard let date = parser.date(from: iso) else { return nil }
-    return date.formatted(.dateTime.day().month(.abbreviated).year().locale(.current))
+    return date.formatted(.dateTime.day().month(.abbreviated).year().locale(AppLanguage.locale))
 }

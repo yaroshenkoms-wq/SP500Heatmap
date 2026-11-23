@@ -82,13 +82,16 @@ struct WorldOverviewView: View {
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: 4) {
-                Text("World markets")
-                    .font(.largeTitle)
-                    .bold()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.6)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
+                HStack {
+                    Text("World markets")
+                        .font(.largeTitle)
+                        .bold()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    LanguageMenu()
+                }
+                .padding(.horizontal)
                 PeriodSwitchView(selectedPeriod: $period, availablePeriods: periods)
                 Group {
                     if let date = localizedShortDate(store.overview?.asOf) {

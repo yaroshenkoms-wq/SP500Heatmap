@@ -130,7 +130,7 @@ struct CompanyDetailView: View {
             VStack(alignment: .leading) {
                 Text("Description")
                     .font(.headline)
-                Text(verbatim: (company.description?.isEmpty ?? true) ? String(localized: "No description available.") : (company.description ?? ""))
+                Text(verbatim: (company.description?.isEmpty ?? true) ? AppLanguage.string("No description available.") : (company.description ?? ""))
                     .font(.body)
                     .foregroundColor(.gray)
             }
@@ -144,9 +144,9 @@ struct CompanyDetailView: View {
                 HStack {
                     MetricItem(title: "Market Cap", value: formatMarketCap(company.marketCap))
                     Spacer()
-                    MetricItem(title: "P/E", value: company.peRatio != nil ? formatDecimal(company.peRatio!) : String(localized: "N/A"))
+                    MetricItem(title: "P/E", value: company.peRatio != nil ? formatDecimal(company.peRatio!) : AppLanguage.string("N/A"))
                     Spacer()
-                    MetricItem(title: "Volume", value: company.volume != nil ? formatVolume(company.volume!) : String(localized: "N/A"))
+                    MetricItem(title: "Volume", value: company.volume != nil ? formatVolume(company.volume!) : AppLanguage.string("N/A"))
                 }
             }
             .padding(.horizontal)
