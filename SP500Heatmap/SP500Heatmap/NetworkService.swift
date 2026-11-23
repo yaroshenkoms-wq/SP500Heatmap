@@ -36,6 +36,11 @@ class NetworkService: ObservableObject {
         return try JSONDecoder().decode([IndexInfo].self, from: data)
     }
 
+    func fetchWorldOverview() async throws -> WorldOverview {
+        let data = try await fetchData(try apiURL("/api/v1/world-overview", index: nil), timeout: 15)
+        return try JSONDecoder().decode(WorldOverview.self, from: data)
+    }
+
     func fetchMarketHierarchy(index: String? = nil) async throws -> [Sector] {
         let data = try await fetchData(try apiURL("/api/v1/market-hierarchy", index: index))
         let sectors = try JSONDecoder().decode([Sector].self, from: data)

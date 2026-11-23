@@ -67,10 +67,13 @@ struct SubsectorsHeatmapView: View {
                         }
                         .foregroundColor(.blue)
                     }
+                    HomeButton()
                     Spacer()
                     Text(verbatim: localizedSectorName(sector.name))
                         .font(.largeTitle)
                         .bold()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                     Spacer()
                     Text(formatPercent(sectorChange))
                         .font(.title2)
@@ -111,19 +114,22 @@ struct SubsectorTile: View {
     let stat: SubsectorStat
 
     var body: some View {
-        VStack {
-            Text(verbatim: localizedSectorName(stat.name))
-                .font(.headline)
-                .foregroundColor(.white)
-                .multilineTextAlignment(.center)
-                .minimumScaleFactor(0.7)
-            Text(formatPercent(stat.changePercent))
-                .font(.caption)
-                .foregroundColor(.white.opacity(0.9))
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
+        TileContainer {
+            VStack {
+                Text(verbatim: localizedSectorName(stat.name))
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.5)
+                Text(formatPercent(stat.changePercent))
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.9))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+            }
+            .padding(.horizontal, 3)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(HeatmapColor.color(for: stat.changePercent))
         .cornerRadius(8)
         .padding(1)

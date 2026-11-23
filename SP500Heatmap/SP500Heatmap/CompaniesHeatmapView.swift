@@ -54,10 +54,13 @@ struct CompaniesHeatmapView: View {
                         }
                         .foregroundColor(.blue)
                     }
+                    HomeButton()
                     Spacer()
                     Text(verbatim: localizedSectorName(subsector.name))
                         .font(.largeTitle)
                         .bold()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                     Spacer()
                     Text(formatPercent(subsectorChange))
                         .font(.title2)
@@ -91,22 +94,24 @@ struct CompanyTile: View {
     let changePercent: Double?
 
     var body: some View {
-        VStack(spacing: 4) {
-            Text(company.ticker)
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundColor(.white)
-                .lineLimit(1)
-                .minimumScaleFactor(0.5)
-            if let change = changePercent {
-                Text(formatPercent(change))
-                    .font(.caption2)
-                    .foregroundColor(.white.opacity(0.9))
+        TileContainer {
+            VStack(spacing: 4) {
+                Text(company.ticker)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundColor(.white)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.6)
+                    .minimumScaleFactor(0.5)
+                if let change = changePercent {
+                    Text(formatPercent(change))
+                        .font(.caption2)
+                        .foregroundColor(.white.opacity(0.9))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                }
             }
+            .padding(.horizontal, 2)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(HeatmapColor.color(for: changePercent))
         .cornerRadius(6)
         .padding(1)
