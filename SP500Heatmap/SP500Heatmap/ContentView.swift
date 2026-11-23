@@ -35,6 +35,13 @@ struct ContentView: View {
         .task {
             await indexStore.loadIfNeeded()
             await worldStore.load()
+            #if DEBUG
+            // Для проверки на симуляторе: `-openIndex ibex35` сразу открывает карту индекса.
+            if let id = UserDefaults.standard.string(forKey: "openIndex"), hasWorld {
+                indexStore.selectedId = id
+                path.append(id)
+            }
+            #endif
         }
         .task {
             webSocketManager.connect()

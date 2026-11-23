@@ -553,6 +553,26 @@ def run_world_refresh(index_ids):
     return fetch_world.refresh(WORLD_DB_PATH, index_ids=index_ids)
 
 
+US_SESSION_INDICES = {"nasdaq100", "dow30", "sp400", "sp600"}
+
+
+def run_sp500_refresh() -> bool:
+    """Запускает fetch_history.py (обновляет history.db S&P 500) отдельным процессом в папке сервера.
+
+    Скрипт сам не пишет незакрытую сессию. Скачанный позже с GitHub history.db той же даты
+    заменит локальный (download_history_db отвергает только более старый файл)."""
+    import subprocess
+    try:
+        done = subprocess.run([sys.executable, "fetch_history.py"], cwd=BASE_DIR,
+                              capture_output=True, text=True, timeout=1800)
+    except Exception as e:
+        print(f"⚠️ Обновление S&P 500 не удалось: {e}")
+        return False
+    tail = (done.stdout or "").strip().splitlines()[-1:] or [""]
+    print(f"📈 Обновление S&P 500: код {done.returncode}; {tail[0]}")
+    return done.returncode == 0
+
+
 async def world_refresher():
     """Фоновая задача: после закрытия бирж обновляет history_world.db; при старте — если файла нет
     или он старше суток. Не блокирует цикл событий (refresh идёт в потоке)."""
@@ -584,6 +604,12 @@ async def world_refresher():
                     for iid in due:
                         last_refreshed[iid] = dates[iid]
                     await asyncio.to_thread(load_world_history)
+                if any(iid in US_SESSION_INDICES for iid in due):
+                    # S&P 500 тоже обновляем сами сразу после закрытия США: GitHub Action опаздывает
+                    # на часы, и на главной карте S&P 500 стоял бы на день позади Nasdaq и Dow.
+                    if await asyncio.to_thread(run_sp500_refresh):
+                        load_history()
+                        seed_prices_from_history()
                 else:
                     for iid in due:  # без fetch_world не долбим каждые 5 минут
                         last_refreshed[iid] = dates[iid]

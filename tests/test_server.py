@@ -347,3 +347,17 @@ class TestWorldOverview:
     def test_legacy_endpoints_unchanged_by_fx(self, world, client):
         self.add_fx()
         assert set(client.get("/api/v1/performance?index=ibex35").json()) == {"SAN.MC", "BBVA.MC", "ITX.MC", "OLD.MC"}
+
+
+def test_run_sp500_refresh_reports_failure(monkeypatch):
+    import subprocess
+    import server
+
+    class Done:
+        returncode = 1
+        stdout = "boom\n"
+
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: Done())
+    assert server.run_sp500_refresh() is False
+    Done.returncode = 0
+    assert server.run_sp500_refresh() is True
