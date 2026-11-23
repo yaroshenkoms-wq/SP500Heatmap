@@ -12,3 +12,6 @@ services:
         sync: false
       - key: FINNHUB_WEBSOCKET_URL
         value: wss://ws.finnhub.io
+      # Старый сервер только для версии 1.0: мировые индексы он не собирает
+      - key: WORLD_REFRESH
+        value: "0"

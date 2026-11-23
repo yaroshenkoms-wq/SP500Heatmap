@@ -11,7 +11,9 @@ struct CompaniesHeatmapView: View {
     private func changePercent(for ticker: String) -> Double? {
         let period = indexStore.effectivePeriod(selectedPeriod)
         if period == "SC" {
+            // Нет живой цены (например, ASML в Nasdaq-100 вне подписки Finnhub) — берём изменение за день.
             return webSocketManager.priceUpdates[ticker]?.changePercent
+                ?? performanceStore.changePercent(for: ticker, period: "1d")
         }
         return performanceStore.changePercent(for: ticker, period: period)
     }
