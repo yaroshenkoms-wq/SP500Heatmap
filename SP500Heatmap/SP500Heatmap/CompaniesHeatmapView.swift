@@ -52,26 +52,30 @@ struct CompaniesHeatmapView: View {
                             Image(systemName: "chevron.backward")
                             Text("Back")
                         }
-                        .foregroundColor(.blue)
+                        .font(Theme.ui(.subheadline, weight: .medium))
+                        .padding(.horizontal, 10)
+                        .frame(height: 34)
+                        .outlinedControl()
                     }
+                    .buttonStyle(.plain)
                     HomeButton()
                     Spacer()
                     Text(verbatim: localizedSectorName(subsector.name))
-                        .font(.largeTitle)
-                        .bold()
+                        .font(Theme.serif(.title))
+                        .foregroundColor(Theme.text)
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                     Spacer()
                     Text(formatPercent(subsectorChange))
-                        .font(.title2)
-                        .foregroundColor(subsectorChange >= 0 ? .green : .red)
+                        .font(Theme.ui(.title2, weight: .medium))
+                        .foregroundColor(Theme.changeColor(subsectorChange))
                 }
                 .padding(.horizontal)
                 PeriodSwitchView(selectedPeriod: $selectedPeriod)
                 ClosingPricesNote()
             }
             .padding(.top, 8)
-            .background(Color(.systemBackground))
+            .background(Theme.bg)
             
             GeometryReader { geometry in
                 TreemapLayout(weights: sortedCompaniesWithChanges.map { $0.company.marketCap }) {
@@ -84,6 +88,7 @@ struct CompaniesHeatmapView: View {
                 .frame(width: geometry.size.width, height: geometry.size.height)
             }
         }
+        .themeScreen()
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.bottom)
     }
@@ -97,15 +102,14 @@ struct CompanyTile: View {
         TileContainer {
             VStack(spacing: 4) {
                 Text(company.ticker)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(.white)
+                    .font(Theme.ui(.caption, weight: .medium))
+                    .foregroundColor(HeatmapColor.tileText)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                 if let change = changePercent {
                     Text(formatPercent(change))
-                        .font(.caption2)
-                        .foregroundColor(.white.opacity(0.9))
+                        .font(Theme.ui(.caption2))
+                        .foregroundColor(HeatmapColor.tileText.opacity(0.9))
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                 }
@@ -113,7 +117,7 @@ struct CompanyTile: View {
             .padding(.horizontal, 2)
         }
         .background(HeatmapColor.color(for: changePercent))
-        .cornerRadius(6)
+        .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(1)
     }
 }

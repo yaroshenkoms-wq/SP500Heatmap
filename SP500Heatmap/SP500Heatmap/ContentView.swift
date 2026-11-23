@@ -15,6 +15,10 @@ struct ContentView: View {
             Group {
                 if !worldStore.didFinishFirstLoad {
                     ProgressView("Loading data...")
+                        .font(Theme.ui(.footnote))
+                        .foregroundColor(Theme.muted)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .themeScreen()
                 } else if hasWorld {
                     WorldOverviewView(store: worldStore) { index in
                         indexStore.selectedId = index.id
@@ -30,6 +34,7 @@ struct ContentView: View {
             }
         }
         .id(stackToken)
+        .background(Theme.bg.ignoresSafeArea())
         .environment(\.goHome, hasWorld ? { goHome() } : nil)
         .environmentObject(indexStore)
         .task {
@@ -82,8 +87,11 @@ struct IndexFlowView: View {
                         .padding(.horizontal)
                         .padding(.top, 8)
                     ProgressView("Loading data...")
+                        .font(Theme.ui(.footnote))
+                        .foregroundColor(Theme.muted)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                .themeScreen()
                 .navigationBarHidden(true)
             } else if let error = errorMessage {
                 VStack {
@@ -91,16 +99,18 @@ struct IndexFlowView: View {
                         .padding(.horizontal)
                     Spacer()
                     Text("Error")
-                        .font(.headline)
+                        .font(Theme.serif(.title2))
+                        .foregroundColor(Theme.text)
                     Text(error)
-                        .font(.caption)
-                        .foregroundColor(.gray)
+                        .font(Theme.ui(.caption))
+                        .foregroundColor(Theme.muted)
                     Button("Retry") {
                         Task { await loadData() }
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(OutlinedButtonStyle())
                     Spacer()
                 }
+                .themeScreen()
                 .navigationBarHidden(true)
             } else {
                 SectorsHeatmapView(sectors: sectors, webSocketManager: webSocketManager, performanceStore: performanceStore)

@@ -1,0 +1,13 @@
+Fonts bundled with this app are licensed under the SIL Open Font License, Version 1.1
+(https://openfontlicense.org).
+
+Geist - Copyright (c) 2023 Vercel, in collaboration with basement.studio
+  (Geist-Regular/Medium/SemiBold.ttf are static instances of the variable font,
+  Latin + Cyrillic subsets merged).
+
+Instrument Serif - Copyright (c) 2022 The Instrument Serif Project Authors
+  (Instrument Sans/Serif by Instrument) - Latin subset.
+
+Per the OFL these fonts may be used, embedded, modified and redistributed with software,
+provided the copyright notices and this license are kept and the fonts are not sold on their own.
+The full license text is available at https://openfontlicense.org/open-font-license-official-text/

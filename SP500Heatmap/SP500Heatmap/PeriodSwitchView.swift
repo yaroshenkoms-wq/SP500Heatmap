@@ -21,13 +21,9 @@ struct PeriodSwitchView: View {
                         selectedPeriod = period
                     }) {
                         Text(LocalizedStringKey(period))
-                            .font(.caption)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .background(active == period ? Color.blue : Color.gray.opacity(0.3))
-                            .foregroundColor(active == period ? .white : .primary)
-                            .cornerRadius(8)
+                            .themeChip(selected: active == period)
                     }
+                    .buttonStyle(.plain)
                 }
             }
             .padding(.horizontal)
@@ -49,8 +45,8 @@ struct ClosingPricesNote: View {
                     Text("Closing prices")
                 }
             }
-            .font(.caption2)
-            .foregroundColor(.secondary)
+            .font(Theme.ui(.caption2))
+            .foregroundColor(Theme.muted)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
         }

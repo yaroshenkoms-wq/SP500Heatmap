@@ -18,6 +18,8 @@ struct SP500HeatmapApp: App {
                 .environment(\.locale, AppLanguage.locale)
                 .environment(\.layoutDirection, AppLanguage.isRightToLeft ? .rightToLeft : .leftToRight)
                 .id(language)
+                .preferredColorScheme(.dark)
+                .tint(Theme.gold)
         }
     }
 }

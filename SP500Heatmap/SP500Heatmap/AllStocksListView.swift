@@ -60,18 +60,14 @@ struct AllStocksListView: View {
         VStack(spacing: 0) {
             // Вкладки
             HStack {
-                Button("Overview") { selectedTab = "Overview" }
-                    .font(.headline)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 16)
-                    .background(selectedTab == "Overview" ? Color.blue.opacity(0.2) : Color.clear)
-                    .cornerRadius(8)
-                Button("Performance") { selectedTab = "Performance" }
-                    .font(.headline)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 16)
-                    .background(selectedTab == "Performance" ? Color.blue.opacity(0.2) : Color.clear)
-                    .cornerRadius(8)
+                Button { selectedTab = "Overview" } label: {
+                    Text("Overview").themeChip(selected: selectedTab == "Overview")
+                }
+                .buttonStyle(.plain)
+                Button { selectedTab = "Performance" } label: {
+                    Text("Performance").themeChip(selected: selectedTab == "Performance")
+                }
+                .buttonStyle(.plain)
                 Spacer()
             }
             .padding(.horizontal)
@@ -83,8 +79,16 @@ struct AllStocksListView: View {
                 PerformanceTableView(rows: performanceData, sortColumn: $sortColumn, sortAscending: $sortAscending)
             }
         }
-        .navigationTitle("All Stocks")
+        .themeScreen()
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("All Stocks")
+                    .font(Theme.serif(.title3))
+                    .foregroundColor(Theme.text)
+            }
+        }
+        .themeNavBar()
         .task(id: indexStore.selectedId) {
             await loadPerformance()
         }
@@ -153,10 +157,11 @@ struct OverviewTableView: View {
                     SortableHeader(title: "% Change", column: "% Change", sortColumn: $sortColumn, sortAscending: $sortAscending)
                         .frame(width: 65, alignment: .trailing)
                 }
-                .font(.caption.bold())
+                .font(Theme.ui(.caption, weight: .semibold))
                 .padding(.horizontal, 6)
                 .padding(.vertical, 10)
-                .background(Color.gray.opacity(0.2))
+                .background(Theme.bg3)
+                .overlay(alignment: .bottom) { Rectangle().fill(Theme.goldLine).frame(height: 1) }
                 
                 // Строки
                 ForEach(sortedRows) { row in
@@ -173,33 +178,37 @@ struct OverviewTableView: View {
                     )) {
                         HStack(spacing: 4) {
                             Text(row.ticker)
-                                .font(.caption)
+                                .font(Theme.ui(.caption, weight: .semibold))
+                                .foregroundColor(Theme.text)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.6)
                                 .frame(width: 60, alignment: .leading)
                             Text(verbatim: row.name)
-                                .font(.caption)
+                                .font(Theme.ui(.caption))
+                                .foregroundColor(Theme.muted)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
                                 .frame(minWidth: 70, maxWidth: 80, alignment: .leading)
                             Text(formatMarketCap(row.marketCap))
-                                .font(.caption)
+                                .font(Theme.ui(.caption))
+                                .foregroundColor(Theme.text)
                                 .frame(width: 75, alignment: .trailing)
                             Text(row.price.map { indexStore.formatPrice($0) } ?? "—")
-                                .font(.caption)
+                                .font(Theme.ui(.caption))
+                                .foregroundColor(Theme.text)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.6)
                                 .frame(width: 70, alignment: .trailing)
                             Text(formatPercent(row.changePercent))
-                                .font(.caption)
-                                .foregroundColor(row.changePercent >= 0 ? .green : .red)
+                                .font(Theme.ui(.caption))
+                                .foregroundColor(Theme.changeColor(row.changePercent))
                                 .frame(width: 65, alignment: .trailing)
                         }
                         .padding(.horizontal, 6)
                         .padding(.vertical, 14)
                     }
                     .buttonStyle(PlainButtonStyle())
-                    Divider().padding(.leading, 6)
+                    Rectangle().fill(Theme.line).frame(height: 1).padding(.leading, 6)
                 }
             }
         }
@@ -255,10 +264,11 @@ struct PerformanceTableView: View {
                     SortableHeader(title: "1Y", column: "1Y", sortColumn: $sortColumn, sortAscending: $sortAscending)
                         .frame(width: 55, alignment: .trailing)
                 }
-                .font(.caption.bold())
+                .font(Theme.ui(.caption, weight: .semibold))
                 .padding(.horizontal, 6)
                 .padding(.vertical, 10)
-                .background(Color.gray.opacity(0.2))
+                .background(Theme.bg3)
+                .overlay(alignment: .bottom) { Rectangle().fill(Theme.goldLine).frame(height: 1) }
                 
                 // Строки
                 ForEach(sortedRows) { row in
@@ -275,12 +285,14 @@ struct PerformanceTableView: View {
                     )) {
                         HStack(spacing: 4) {
                             Text(row.ticker)
-                                .font(.caption)
+                                .font(Theme.ui(.caption, weight: .semibold))
+                                .foregroundColor(Theme.text)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.6)
                                 .frame(width: 60, alignment: .leading)
                             Text(verbatim: row.name)
-                                .font(.caption)
+                                .font(Theme.ui(.caption))
+                                .foregroundColor(Theme.muted)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
                                 .frame(minWidth: 70, maxWidth: 80, alignment: .leading)
@@ -293,7 +305,7 @@ struct PerformanceTableView: View {
                         .padding(.vertical, 14)
                     }
                     .buttonStyle(PlainButtonStyle())
-                    Divider().padding(.leading, 6)
+                    Rectangle().fill(Theme.line).frame(height: 1).padding(.leading, 6)
                 }
             }
         }
@@ -307,12 +319,12 @@ struct PerformanceCell: View {
     var body: some View {
         if let value {
             Text(formatPercent(value))
-                .font(.caption)
-                .foregroundColor(value >= 0 ? .green : .red)
+                .font(Theme.ui(.caption))
+                .foregroundColor(Theme.changeColor(value))
         } else {
             Text("N/A")
-                .font(.caption)
-                .foregroundColor(.gray)
+                .font(Theme.ui(.caption))
+                .foregroundColor(Theme.muted)
         }
     }
 }
@@ -340,7 +352,7 @@ struct SortableHeader: View {
                         .font(.caption2)
                 }
             }
-            .foregroundColor(.primary)
+            .foregroundColor(Theme.text)
         }
         .buttonStyle(PlainButtonStyle())
     }

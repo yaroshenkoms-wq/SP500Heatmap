@@ -76,27 +76,31 @@ struct CompanyDetailView: View {
                             Image(systemName: "chevron.backward")
                             Text("Back")
                         }
-                        .foregroundColor(.blue)
+                        .font(Theme.ui(.subheadline, weight: .medium))
+                        .padding(.horizontal, 10)
+                        .frame(height: 34)
+                        .outlinedControl()
                     }
+                    .buttonStyle(.plain)
                     Spacer()
                     VStack(alignment: .trailing) {
                         Text(company.ticker)
-                            .font(.title2)
-                            .bold()
+                            .font(Theme.serif(.title2))
+                            .foregroundColor(Theme.text)
                             .lineLimit(1)
                             .minimumScaleFactor(0.6)
                         Text(company.name)
-                            .font(.caption)
-                            .foregroundColor(.gray)
+                            .font(Theme.ui(.caption))
+                            .foregroundColor(Theme.muted)
                     }
                     Spacer()
                     VStack(alignment: .trailing) {
                         Text(indexStore.formatPrice(currentPrice))
-                            .font(.title2)
-                            .bold()
+                            .font(Theme.ui(.title2, weight: .semibold))
+                            .foregroundColor(Theme.text)
                         Text(formatPercent(periodChangePercent))
-                            .font(.headline)
-                            .foregroundColor(periodChangePercent >= 0 ? .green : .red)
+                            .font(Theme.ui(.headline, weight: .medium))
+                            .foregroundColor(Theme.changeColor(periodChangePercent))
                     }
                 }
                 .padding(.horizontal)
@@ -105,22 +109,33 @@ struct CompanyDetailView: View {
                 PeriodSwitchView(selectedPeriod: $selectedPeriod)
             }
             .padding(.top, 8)
-            .background(Color(.systemBackground))
+            .background(Theme.bg)
             
             // График
             VStack(alignment: .leading) {
                 if pricesForPeriod.isEmpty {
                     ProgressView()
                         .frame(height: 200)
+                        .frame(maxWidth: .infinity)
                 } else {
                     Chart(pricesForPeriod) { item in
                         LineMark(
                             x: .value("Date", item.date),
                             y: .value("Price", item.price)
                         )
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(Theme.gold)
                     }
+                    .chartXAxis { AxisMarks { _ in
+                        AxisGridLine().foregroundStyle(Theme.line)
+                        AxisValueLabel().foregroundStyle(Theme.muted)
+                    } }
+                    .chartYAxis { AxisMarks { _ in
+                        AxisGridLine().foregroundStyle(Theme.line)
+                        AxisValueLabel().foregroundStyle(Theme.muted)
+                    } }
                     .frame(height: 200)
+                    .padding(12)
+                    .panelCard()
                     .padding(.horizontal)
                 }
             }
@@ -129,10 +144,11 @@ struct CompanyDetailView: View {
             // Описание компании
             VStack(alignment: .leading) {
                 Text("Description")
-                    .font(.headline)
+                    .font(Theme.serif(.title3))
+                    .foregroundColor(Theme.text)
                 Text(verbatim: (company.description?.isEmpty ?? true) ? AppLanguage.string("No description available.") : (company.description ?? ""))
-                    .font(.body)
-                    .foregroundColor(.gray)
+                    .font(Theme.ui(.subheadline))
+                    .foregroundColor(Theme.muted)
             }
             .padding(.horizontal)
             .padding(.top, 8)
@@ -140,7 +156,8 @@ struct CompanyDetailView: View {
             // Метрики
             VStack(alignment: .leading) {
                 Text("Metrics")
-                    .font(.headline)
+                    .font(Theme.serif(.title3))
+                    .foregroundColor(Theme.text)
                 HStack {
                     MetricItem(title: "Market Cap", value: formatMarketCap(company.marketCap))
                     Spacer()
@@ -148,12 +165,15 @@ struct CompanyDetailView: View {
                     Spacer()
                     MetricItem(title: "Volume", value: company.volume != nil ? formatVolume(company.volume!) : AppLanguage.string("N/A"))
                 }
+                .padding(12)
+                .panelCard()
             }
             .padding(.horizontal)
             .padding(.top, 8)
             
             Spacer()
         }
+        .themeScreen()
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.bottom)
         .task {
@@ -183,11 +203,11 @@ struct MetricItem: View {
     var body: some View {
         VStack {
             Text(title)
-                .font(.caption)
-                .foregroundColor(.gray)
+                .font(Theme.ui(.caption))
+                .foregroundColor(Theme.muted)
             Text(value)
-                .font(.body)
-                .bold()
+                .font(Theme.ui(.body, weight: .semibold))
+                .foregroundColor(Theme.text)
         }
     }
 }

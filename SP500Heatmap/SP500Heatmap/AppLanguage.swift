@@ -15,19 +15,32 @@ enum AppLanguage {
         return name.prefix(1).uppercased() + name.dropFirst()
     }
 
+    /// Выбранный пользователем язык; "" — не выбирал (ничего не хранится до первого выбора).
     static var selected: String { UserDefaults.standard.string(forKey: storageKey) ?? "" }
+
+    /// Язык системы, если он один из 9, иначе английский.
+    static var systemDefault: String {
+        let sys = Bundle.main.preferredLocalizations.first ?? "en"
+        return codes.contains(sys) ? sys : "en"
+    }
 
     /// Код языка, на котором реально показывается интерфейс.
     static var effectiveCode: String {
-        if codes.contains(selected) { return selected }
-        return Bundle.main.preferredLocalizations.first ?? "en"
+        codes.contains(selected) ? selected : systemDefault
+    }
+
+    /// Короткий код для кнопки: EN, ES, ZH, AR, FR, BN, HI, RU, UK.
+    static func shortCode(_ code: String) -> String {
+        code == "zh-Hans" ? "ZH" : code.uppercased()
     }
 
     static var locale: Locale {
-        if codes.contains(selected) {
-            // Язык выбран в приложении, регион (формат дат, валюта) оставляем системный.
+        // Язык выбран в приложении (или системный не из девяти — тогда английский);
+        // регион (формат дат, валюта) оставляем системный.
+        let sys = Bundle.main.preferredLocalizations.first ?? "en"
+        if codes.contains(selected) || !codes.contains(sys) {
             var comps = Locale.Components(locale: .current)
-            comps.languageComponents = Locale.Language.Components(identifier: selected)
+            comps.languageComponents = Locale.Language.Components(identifier: effectiveCode)
             return Locale(components: comps)
         }
         return .current
@@ -49,26 +62,32 @@ enum AppLanguage {
     }
 }
 
-/// Кнопка выбора языка (глобус) для главного экрана.
+/// Кнопка выбора языка для главного экрана: контурная плашка с кодом текущего языка.
 struct LanguageMenu: View {
     @AppStorage(AppLanguage.storageKey) private var selected = ""
 
+    // Пока пользователь не выбирал, показываем язык системы (или английский) и ничего не пишем.
+    private var current: Binding<String> {
+        Binding(get: { AppLanguage.codes.contains(selected) ? selected : AppLanguage.systemDefault },
+                set: { selected = $0 })
+    }
+
     var body: some View {
         Menu {
-            Picker(selection: $selected) {
-                Text("System language").tag("")
+            Picker(selection: current) {
                 ForEach(AppLanguage.codes, id: \.self) { code in
-                    Text(verbatim: AppLanguage.nativeName(code)).tag(code)
+                    Text(verbatim: "\(AppLanguage.shortCode(code))  \(AppLanguage.nativeName(code))").tag(code)
                 }
             } label: {
                 Text("Language")
             }
         } label: {
-            Image(systemName: "globe")
-                .font(.body)
-                .foregroundColor(.blue)
-                .frame(width: 34, height: 34)
-                .background(Color.blue.opacity(0.12), in: Circle())
+            Text(verbatim: AppLanguage.shortCode(current.wrappedValue))
+                .font(Theme.ui(.footnote, weight: .semibold))
+                .tracking(0.8)
+                .padding(.horizontal, 10)
+                .frame(minWidth: 40, minHeight: 34)
+                .outlinedControl()
         }
         .accessibilityLabel(Text("Language"))
     }

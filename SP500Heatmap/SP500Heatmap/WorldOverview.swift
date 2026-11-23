@@ -84,8 +84,8 @@ struct WorldOverviewView: View {
             VStack(spacing: 4) {
                 HStack {
                     Text("World markets")
-                        .font(.largeTitle)
-                        .bold()
+                        .font(Theme.serif(.largeTitle))
+                        .foregroundColor(Theme.text)
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -100,13 +100,13 @@ struct WorldOverviewView: View {
                         Text("Closing prices")
                     }
                 }
-                .font(.caption2)
-                .foregroundColor(.secondary)
+                .font(Theme.ui(.caption2))
+                .foregroundColor(Theme.muted)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
             }
             .padding(.top, 8)
-            .background(Color(.systemBackground))
+            .background(Theme.bg)
 
             GeometryReader { geometry in
                 TreemapLayout(weights: store.regions.map { $0.totalCap }) {
@@ -117,6 +117,7 @@ struct WorldOverviewView: View {
                 .frame(width: geometry.size.width, height: geometry.size.height)
             }
         }
+        .themeScreen()
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.bottom)
     }
@@ -132,9 +133,10 @@ private struct RegionBlock: View {
             VStack(spacing: 0) {
                 if geo.size.height > 60 && geo.size.width > 70 {
                     Text(region.title)
-                        .font(.caption.weight(.semibold))
+                        .font(Theme.ui(.caption, weight: .semibold))
                         .textCase(.uppercase)
-                        .foregroundColor(.secondary)
+                        .tracking(0.6)
+                        .foregroundColor(Theme.muted)
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -163,14 +165,14 @@ struct WorldIndexTile: View {
         TileContainer {
             VStack(spacing: 2) {
                 Text(verbatim: "\(index.flag) \(index.name)")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundColor(.white)
+                    .font(Theme.ui(.subheadline, weight: .semibold))
+                    .foregroundColor(HeatmapColor.tileText)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                 if let change {
                     Text(formatPercent(change))
-                        .font(.caption)
-                        .foregroundColor(.white.opacity(0.9))
+                        .font(Theme.ui(.caption))
+                        .foregroundColor(HeatmapColor.tileText.opacity(0.9))
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                 }
@@ -178,7 +180,7 @@ struct WorldIndexTile: View {
             .padding(.horizontal, 3)
         }
         .background(HeatmapColor.color(for: change))
-        .cornerRadius(6)
+        .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(1)
     }
 }
@@ -215,11 +217,11 @@ struct HomeButton: View {
         if let goHome {
             Button(action: goHome) {
                 Image(systemName: "house.fill")
-                    .font(.body)
-                    .foregroundColor(.blue)
+                    .font(.subheadline)
                     .frame(width: 34, height: 34)
-                    .background(Color.blue.opacity(0.12), in: Circle())
+                    .outlinedControl()
             }
+            .buttonStyle(.plain)
             .accessibilityLabel(Text("Home"))
         }
     }

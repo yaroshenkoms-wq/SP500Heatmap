@@ -65,26 +65,30 @@ struct SubsectorsHeatmapView: View {
                             Image(systemName: "chevron.backward")
                             Text("Back")
                         }
-                        .foregroundColor(.blue)
+                        .font(Theme.ui(.subheadline, weight: .medium))
+                        .padding(.horizontal, 10)
+                        .frame(height: 34)
+                        .outlinedControl()
                     }
+                    .buttonStyle(.plain)
                     HomeButton()
                     Spacer()
                     Text(verbatim: localizedSectorName(sector.name))
-                        .font(.largeTitle)
-                        .bold()
+                        .font(Theme.serif(.title))
+                        .foregroundColor(Theme.text)
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                     Spacer()
                     Text(formatPercent(sectorChange))
-                        .font(.title2)
-                        .foregroundColor(sectorChange >= 0 ? .green : .red)
+                        .font(Theme.ui(.title2, weight: .medium))
+                        .foregroundColor(Theme.changeColor(sectorChange))
                 }
                 .padding(.horizontal)
                 PeriodSwitchView(selectedPeriod: $selectedPeriod)
                 ClosingPricesNote()
             }
             .padding(.top, 8)
-            .background(Color(.systemBackground))
+            .background(Theme.bg)
             
             GeometryReader { geometry in
                 TreemapLayout(weights: sortedSubsectorStats.map { $0.totalMarketCap }) {
@@ -97,6 +101,7 @@ struct SubsectorsHeatmapView: View {
                 .frame(width: geometry.size.width, height: geometry.size.height)
             }
         }
+        .themeScreen()
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.bottom)
     }
@@ -117,21 +122,21 @@ struct SubsectorTile: View {
         TileContainer {
             VStack {
                 Text(verbatim: localizedSectorName(stat.name))
-                    .font(.headline)
-                    .foregroundColor(.white)
+                    .font(Theme.ui(.headline, weight: .semibold))
+                    .foregroundColor(HeatmapColor.tileText)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.5)
                 Text(formatPercent(stat.changePercent))
-                    .font(.caption)
-                    .foregroundColor(.white.opacity(0.9))
+                    .font(Theme.ui(.caption))
+                    .foregroundColor(HeatmapColor.tileText.opacity(0.9))
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
             }
             .padding(.horizontal, 3)
         }
         .background(HeatmapColor.color(for: stat.changePercent))
-        .cornerRadius(8)
+        .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(1)
     }
 }

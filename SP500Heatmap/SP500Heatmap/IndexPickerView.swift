@@ -27,21 +27,38 @@ struct IndexPickerView: View {
                 ForEach(IndexStore.regionOrder, id: \.self) { region in
                     let items = indices(in: region)
                     if !items.isEmpty {
-                        Section(title(for: region)) { rows(items) }
+                        Section { rows(items) } header: { header(title(for: region)) }
                     }
                 }
                 if !otherIndices.isEmpty {
-                    Section("Other") { rows(otherIndices) }
+                    Section { rows(otherIndices) } header: { header("Other") }
                 }
             }
-            .navigationTitle("Select index")
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+            .background(Theme.bg)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Select index")
+                        .font(Theme.serif(.title3))
+                        .foregroundColor(Theme.text)
+                }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
+                        .font(Theme.ui(.subheadline, weight: .medium))
                 }
             }
+            .themeNavBar()
         }
+    }
+
+    private func header(_ title: LocalizedStringKey) -> some View {
+        Text(title)
+            .font(Theme.ui(.caption, weight: .semibold))
+            .textCase(.uppercase)
+            .tracking(0.6)
+            .foregroundColor(Theme.muted)
     }
 
     @ViewBuilder
@@ -53,13 +70,17 @@ struct IndexPickerView: View {
             } label: {
                 HStack(spacing: 12) {
                     Text(item.flag).font(.title2)
-                    Text(verbatim: item.name).foregroundColor(.primary)
+                    Text(verbatim: item.name)
+                        .font(Theme.ui(.body))
+                        .foregroundColor(Theme.text)
                     Spacer()
                     if item.id == indexStore.selectedId {
-                        Image(systemName: "checkmark").foregroundColor(.blue)
+                        Image(systemName: "checkmark").foregroundColor(Theme.gold)
                     }
                 }
             }
+            .listRowBackground(Theme.panel)
+            .listRowSeparatorTint(Theme.line)
         }
     }
 }

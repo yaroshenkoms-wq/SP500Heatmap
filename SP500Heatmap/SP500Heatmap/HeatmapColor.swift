@@ -6,9 +6,13 @@ enum HeatmapColor {
     // tiles land inside the gradient instead of clipping to flat gray.
     private static let cap = 3.0
 
-    private static let neutral = (r: 0.42, g: 0.42, b: 0.45)
-    private static let positive = (r: 0.20, g: 0.70, b: 0.32)
-    private static let negative = (r: 0.86, g: 0.24, b: 0.24)
+    // Палитра «чёрное с золотом»: нейтральный как чип, зелёный и красный приглушённые.
+    private static let neutral = (r: 0x2A / 255.0, g: 0x27 / 255.0, b: 0x30 / 255.0)
+    private static let positive = (r: 0x36 / 255.0, g: 0x8C / 255.0, b: 0x56 / 255.0)
+    private static let negative = (r: 0xB4 / 255.0, g: 0x4A / 255.0, b: 0x40 / 255.0)
+
+    /// Цвет текста на плитках.
+    static let tileText = Theme.text
 
     static func color(for changePercent: Double?) -> Color {
         guard let change = changePercent else {

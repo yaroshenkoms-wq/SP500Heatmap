@@ -66,48 +66,48 @@ struct SectorsHeatmapView: View {
                             HStack(spacing: 6) {
                                 Text(indexStore.current.flag)
                                 Text(verbatim: indexStore.current.name)
-                                    .font(.title2.weight(.bold))
+                                    .font(Theme.serif(.title2))
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.6)
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(Theme.text)
                                 Image(systemName: "chevron.up.chevron.down")
                                     .font(.caption.weight(.semibold))
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(Theme.gold)
                             }
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
-                            .background(Color.secondary.opacity(0.12), in: Capsule())
-                            .overlay(Capsule().strokeBorder(Color.secondary.opacity(0.35), lineWidth: 1))
+                            .outlinedControl()
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(Text("Select index"))
                         NavigationLink(destination: AllStocksListView(sectors: sectors, webSocketManager: webSocketManager)) {
                             Image(systemName: "list.bullet")
-                                .foregroundColor(.blue)
+                                .font(.subheadline)
                                 .frame(width: 34, height: 34)
+                                .outlinedControl()
                         }
+                        .buttonStyle(.plain)
                         .accessibilityLabel(Text("All Stocks"))
                     } else {
                         NavigationLink(destination: AllStocksListView(sectors: sectors, webSocketManager: webSocketManager)) {
                             Text(verbatim: indexStore.current.name)
-                                .font(.largeTitle)
-                                .bold()
+                                .font(Theme.serif(.largeTitle))
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.6)
-                                .foregroundColor(.primary)
+                                .foregroundColor(Theme.text)
                         }
                     }
                     Spacer()
                     Text(formatPercent(indexChange))
-                        .font(.title2)
-                        .foregroundColor(indexChange >= 0 ? .green : .red)
+                        .font(Theme.ui(.title2, weight: .medium))
+                        .foregroundColor(Theme.changeColor(indexChange))
                 }
                 .padding(.horizontal)
                 PeriodSwitchView(selectedPeriod: $selectedPeriod)
                 ClosingPricesNote()
             }
             .padding(.top, 8)
-            .background(Color(.systemBackground))
+            .background(Theme.bg)
             
             GeometryReader { geometry in
                 TreemapLayout(weights: sortedSectorStats.map { $0.totalMarketCap }) {
@@ -120,6 +120,7 @@ struct SectorsHeatmapView: View {
                 .frame(width: geometry.size.width, height: geometry.size.height)
             }
         }
+        .themeScreen()
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.bottom)
         .sheet(isPresented: $showIndexPicker) {
@@ -144,21 +145,21 @@ struct SectorTile: View {
         TileContainer {
             VStack {
                 Text(verbatim: localizedSectorName(stat.name))
-                    .font(.headline)
-                    .foregroundColor(.white)
+                    .font(Theme.ui(.headline, weight: .semibold))
+                    .foregroundColor(HeatmapColor.tileText)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.5)
                 Text(formatPercent(stat.changePercent))
-                    .font(.caption)
-                    .foregroundColor(.white.opacity(0.9))
+                    .font(Theme.ui(.caption))
+                    .foregroundColor(HeatmapColor.tileText.opacity(0.9))
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
             }
             .padding(.horizontal, 3)
         }
         .background(HeatmapColor.color(for: stat.changePercent))
-        .cornerRadius(8)
+        .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(1)
     }
 }
