@@ -57,25 +57,45 @@ struct SectorsHeatmapView: View {
         VStack(spacing: 0) {
             VStack(spacing: 4) {
                 HStack {
-                    NavigationLink(destination: AllStocksListView(sectors: sectors, webSocketManager: webSocketManager)) {
-                        Text(verbatim: indexStore.current.name)
-                            .font(.largeTitle)
-                            .bold()
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.6)
-                            .foregroundColor(.primary)
-                    }
+                    HomeButton()
                     if indexStore.pickerAvailable {
+                        // Pop-up-button look: name + flag + up/down chevrons in a capsule.
                         Button {
                             showIndexPicker = true
                         } label: {
-                            HStack(spacing: 4) {
+                            HStack(spacing: 6) {
                                 Text(indexStore.current.flag)
-                                Image(systemName: "chevron.down.circle.fill")
-                                    .foregroundColor(.blue)
+                                Text(verbatim: indexStore.current.name)
+                                    .font(.title2.weight(.bold))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.6)
+                                    .foregroundColor(.primary)
+                                Image(systemName: "chevron.up.chevron.down")
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundColor(.secondary)
                             }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.secondary.opacity(0.12), in: Capsule())
+                            .overlay(Capsule().strokeBorder(Color.secondary.opacity(0.35), lineWidth: 1))
                         }
+                        .buttonStyle(.plain)
                         .accessibilityLabel(Text("Select index"))
+                        NavigationLink(destination: AllStocksListView(sectors: sectors, webSocketManager: webSocketManager)) {
+                            Image(systemName: "list.bullet")
+                                .foregroundColor(.blue)
+                                .frame(width: 34, height: 34)
+                        }
+                        .accessibilityLabel(Text("All Stocks"))
+                    } else {
+                        NavigationLink(destination: AllStocksListView(sectors: sectors, webSocketManager: webSocketManager)) {
+                            Text(verbatim: indexStore.current.name)
+                                .font(.largeTitle)
+                                .bold()
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.6)
+                                .foregroundColor(.primary)
+                        }
                     }
                     Spacer()
                     Text(formatPercent(indexChange))
@@ -121,19 +141,22 @@ struct SectorTile: View {
     let stat: SectorStat
 
     var body: some View {
-        VStack {
-            Text(verbatim: localizedSectorName(stat.name))
-                .font(.headline)
-                .foregroundColor(.white)
-                .multilineTextAlignment(.center)
-                .minimumScaleFactor(0.7)
-            Text(formatPercent(stat.changePercent))
-                .font(.caption)
-                .foregroundColor(.white.opacity(0.9))
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
+        TileContainer {
+            VStack {
+                Text(verbatim: localizedSectorName(stat.name))
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.5)
+                Text(formatPercent(stat.changePercent))
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.9))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+            }
+            .padding(.horizontal, 3)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(HeatmapColor.color(for: stat.changePercent))
         .cornerRadius(8)
         .padding(1)

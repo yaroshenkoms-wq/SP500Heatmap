@@ -1,51 +1,110 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var networkService = NetworkService.shared
     @StateObject private var webSocketManager = WebSocketManager.shared
-    @StateObject private var performanceStore = PerformanceStore.shared
     @StateObject private var indexStore = IndexStore.shared
-    @State private var sectors: [Sector] = []
-    @State private var isLoading = true
-    @State private var errorMessage: String?
-    
+    @StateObject private var worldStore = WorldStore.shared
+    @State private var path: [String] = []
+    @State private var stackToken = UUID()
+    @Environment(\.scenePhase) private var scenePhase
+
+    private var hasWorld: Bool { !worldStore.regions.isEmpty }
+
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             Group {
-                if isLoading {
+                if !worldStore.didFinishFirstLoad {
                     ProgressView("Loading data...")
-                } else if let error = errorMessage {
-                    VStack {
-                        Text("Error")
-                            .font(.headline)
-                        Text(error)
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                        Button("Retry") {
-                            Task {
-                                await loadData()
-                            }
-                        }
-                        .buttonStyle(.borderedProminent)
+                } else if hasWorld {
+                    WorldOverviewView(store: worldStore) { index in
+                        indexStore.selectedId = index.id
+                        path.append(index.id)
                     }
                 } else {
-                    SectorsHeatmapView(sectors: sectors, webSocketManager: webSocketManager, performanceStore: performanceStore)
+                    // Old server without world-overview: open the S&P 500 map directly.
+                    IndexFlowView(webSocketManager: webSocketManager)
                 }
             }
+            .navigationDestination(for: String.self) { _ in
+                IndexFlowView(webSocketManager: webSocketManager)
+            }
         }
+        .id(stackToken)
+        .environment(\.goHome, hasWorld ? { goHome() } : nil)
         .environmentObject(indexStore)
-        .task(id: indexStore.selectedId) {
+        .task {
             await indexStore.loadIfNeeded()
-            await loadData()
+            await worldStore.load()
         }
         .task {
             webSocketManager.connect()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active && worldStore.didFinishFirstLoad {
+                Task { await worldStore.load() }
+            }
         }
         .onDisappear {
             webSocketManager.disconnect()
         }
     }
-    
+
+    // Rebuilding the stack drops every pushed level at once (pop to root).
+    private func goHome() {
+        path = []
+        stackToken = UUID()
+        Task { await worldStore.load() }
+    }
+}
+
+// The S&P-style flow of one index: loads its hierarchy and shows the sector map.
+struct IndexFlowView: View {
+    @ObservedObject var webSocketManager: WebSocketManager
+    @StateObject private var networkService = NetworkService.shared
+    @StateObject private var performanceStore = PerformanceStore.shared
+    @EnvironmentObject private var indexStore: IndexStore
+    @State private var sectors: [Sector] = []
+    @State private var isLoading = true
+    @State private var errorMessage: String?
+
+    var body: some View {
+        Group {
+            if isLoading {
+                VStack(spacing: 0) {
+                    HStack { HomeButton(); Spacer() }
+                        .padding(.horizontal)
+                        .padding(.top, 8)
+                    ProgressView("Loading data...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .navigationBarHidden(true)
+            } else if let error = errorMessage {
+                VStack {
+                    HStack { HomeButton(); Spacer() }
+                        .padding(.horizontal)
+                    Spacer()
+                    Text("Error")
+                        .font(.headline)
+                    Text(error)
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    Button("Retry") {
+                        Task { await loadData() }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    Spacer()
+                }
+                .navigationBarHidden(true)
+            } else {
+                SectorsHeatmapView(sectors: sectors, webSocketManager: webSocketManager, performanceStore: performanceStore)
+            }
+        }
+        .task(id: indexStore.selectedId) {
+            await indexStore.loadIfNeeded()
+            await loadData()
+        }
+    }
+
     private func loadData() async {
         isLoading = true
         errorMessage = nil

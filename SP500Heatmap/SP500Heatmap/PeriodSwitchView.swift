@@ -2,16 +2,18 @@ import SwiftUI
 
 struct PeriodSwitchView: View {
     @Binding var selectedPeriod: String
+    var availablePeriods: [String]? = nil
     @EnvironmentObject private var indexStore: IndexStore
 
     // "SC" (live session change) exists only for indices with live prices.
     private var periods: [String] {
+        if let availablePeriods { return availablePeriods }
         let all = ["SC", "1d", "3d", "7d", "30d", "180d", "1y"]
         return indexStore.isLive ? all : all.filter { $0 != "SC" }
     }
 
     var body: some View {
-        let active = indexStore.effectivePeriod(selectedPeriod)
+        let active = availablePeriods == nil ? indexStore.effectivePeriod(selectedPeriod) : selectedPeriod
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
                 ForEach(periods, id: \.self) { period in
