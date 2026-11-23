@@ -6,3 +6,6 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+.worktrees/
+history_world.db
+history_world.db.*
