@@ -1,0 +1,196 @@
+{
+ "app": "SP500Heatmap",
+ "ours": "SP500 Heatmap",
+ "summary": "Карта S&P 500 сильная (7 периодов бесплатно), но нет других индексов, виджетов, избранного и оповещений — это стандарт у конкурентов. Ниша для нас: IBEX 35 и Euro Stoxx — карт с ними в App Store не нашли.",
+ "rounds": [
+  {
+   "date": "2026-11-23",
+   "title": "Раунд 1: приложения-карты рынка (App Store и веб)",
+   "source": [
+    "docs/План улучшений.html",
+    "агент-исследование 23.11.2026"
+   ],
+   "scale": "0-10",
+   "apps": [
+    "SP500 Heatmap",
+    "Stock Map",
+    "Stock+",
+    "HeatMap",
+    "TradingView",
+    "Finviz"
+   ],
+   "groups": [
+    {
+     "name": "Функции",
+     "rows": [
+      {
+       "name": "Карта S&P 500 по секторам",
+       "values": {
+        "SP500 Heatmap": 9,
+        "Stock Map": 9,
+        "Stock+": 8,
+        "HeatMap": 8,
+        "TradingView": 9,
+        "Finviz": 10
+       }
+      },
+      {
+       "name": "Выбор периода (у нас 7)",
+       "values": {
+        "SP500 Heatmap": 9,
+        "Stock Map": 6,
+        "Stock+": 6,
+        "HeatMap": 8,
+        "TradingView": 4,
+        "Finviz": 5
+       }
+      },
+      {
+       "name": "Живые цены в сессию",
+       "values": {
+        "SP500 Heatmap": 7,
+        "Stock Map": 6,
+        "Stock+": 6,
+        "HeatMap": 7,
+        "TradingView": 9,
+        "Finviz": 8
+       }
+      },
+      {
+       "name": "Другие индексы (Nasdaq 100, Dow)",
+       "values": {
+        "SP500 Heatmap": 0,
+        "Stock Map": 9,
+        "Stock+": 9,
+        "HeatMap": 10,
+        "TradingView": 10,
+        "Finviz": 9
+       }
+      },
+      {
+       "name": "Мировые рынки (IBEX 35, DAX)",
+       "values": {
+        "SP500 Heatmap": 0,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": 8,
+        "TradingView": 9,
+        "Finviz": 4
+       }
+      },
+      {
+       "name": "Крипта и ETF",
+       "values": {
+        "SP500 Heatmap": 0,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": 8,
+        "TradingView": 10,
+        "Finviz": 5
+       }
+      },
+      {
+       "name": "Виджеты и экран блокировки",
+       "values": {
+        "SP500 Heatmap": 0,
+        "Stock Map": 9,
+        "Stock+": 3,
+        "HeatMap": 3,
+        "TradingView": 5,
+        "Finviz": 3
+       }
+      },
+      {
+       "name": "Избранное, списки",
+       "values": {
+        "SP500 Heatmap": 2,
+        "Stock Map": 9,
+        "Stock+": 8,
+        "HeatMap": 6,
+        "TradingView": 10,
+        "Finviz": 8
+       }
+      },
+      {
+       "name": "Цвет и размер по другим метрикам (P/E, объём)",
+       "values": {
+        "SP500 Heatmap": 1,
+        "Stock Map": 4,
+        "Stock+": 5,
+        "HeatMap": 6,
+        "TradingView": 9,
+        "Finviz": 9
+       }
+      },
+      {
+       "name": "Графики, технический анализ",
+       "values": {
+        "SP500 Heatmap": 3,
+        "Stock Map": 3,
+        "Stock+": 8,
+        "HeatMap": 5,
+        "TradingView": 10,
+        "Finviz": 9
+       }
+      },
+      {
+       "name": "Оповещения",
+       "values": {
+        "SP500 Heatmap": 0,
+        "Stock Map": 2,
+        "Stock+": 2,
+        "HeatMap": 8,
+        "TradingView": 10,
+        "Finviz": 8
+       }
+      },
+      {
+       "name": "Испанский язык",
+       "values": {
+        "SP500 Heatmap": 0,
+        "Stock Map": 5,
+        "Stock+": 4,
+        "HeatMap": 6,
+        "TradingView": 9,
+        "Finviz": 3
+       },
+       "note": "в приложении нет ни испанского, ни файлов перевода (проверено в коде)"
+      },
+      {
+       "name": "Цена для пользователя (10 = бесплатно)",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 6,
+        "Stock+": 5,
+        "HeatMap": 5,
+        "TradingView": 4,
+        "Finviz": 3
+       }
+      }
+     ]
+    }
+   ],
+   "totals": {
+    "SP500 Heatmap": 41,
+    "Stock Map": 68,
+    "Stock+": 64,
+    "HeatMap": 88,
+    "TradingView": 108,
+    "Finviz": 84
+   },
+   "totals_how": "сумма баллов 0–10 по 13 строкам; баллы — экспертная оценка по описаниям в App Store, не замеры",
+   "findings": [
+    "Nasdaq 100 и Dow есть у всех прямых конкурентов, у нас нет",
+    "Карты IBEX 35 нет ни у одного приложения — ниша для Испании",
+    "Конкуренты берут $3–5 в месяц или $15–39 в год; на платные периоды жалуются",
+    "Испанский у конкурентов слабый, а у нас его нет совсем — быстрый способ выделиться в Испании"
+   ],
+   "actions": [
+    "Nasdaq 100 + Dow (данные уже есть)",
+    "Избранное и виджет",
+    "Перевод интерфейса en/es/ru",
+    "IBEX 35 и Euro Stoxx 50"
+   ]
+  }
+ ]
+}
