@@ -57,6 +57,31 @@ def load_symbols(entry):
         return [r["Symbol"].strip() for r in csv.DictReader(f) if r["Symbol"].strip()]
 
 
+def fx_symbol(currency):
+    """Символ Yahoo курса валюты к доллару: EUR -> EURUSD=X (сколько долларов за 1 единицу)."""
+    return f"{currency}USD=X"
+
+
+def load_currencies(entries=None):
+    """Все валюты (кроме USD) из колонки Currency в CSV индексов + валюта индекса из реестра."""
+    import csv
+    entries = load_registry() if entries is None else entries
+    found = set()
+    for e in entries:
+        if e.get("currency"):
+            found.add(e["currency"])
+        path = BASE_DIR / e.get("constituents", "")
+        if not path.exists():
+            continue
+        with open(path, "r", encoding="utf-8-sig", newline="") as f:
+            for r in csv.DictReader(f):
+                c = (r.get("Currency") or "").strip().upper()
+                if c:
+                    found.add(c)
+    found.discard("USD")
+    return sorted(found)
+
+
 def init_db(conn):
     conn.execute(
         """
@@ -135,7 +160,8 @@ def refresh(db_path=DB_PATH, index_ids=None, now=None, downloader=None):
             owners.setdefault(s, []).append(iid)
     all_symbols = sorted(owners)
 
-    closes = download_all(all_symbols, downloader, notes)
+    fx_symbols = [fx_symbol(c) for c in load_currencies(registry)]
+    closes = download_all(all_symbols + fx_symbols, downloader, notes)
 
     summary = {"indices": {}, "rows_written": 0, "rows_removed": 0,
                "skipped_dates": {i: d for i, d in skip_of_index.items() if d}, "notes": notes}
@@ -168,6 +194,7 @@ def refresh(db_path=DB_PATH, index_ids=None, now=None, downloader=None):
             rows.append((sym, day, float(close)))
         conn.executemany("INSERT OR REPLACE INTO daily_closes (ticker, date, close) VALUES (?, ?, ?)", rows)
         summary["rows_written"] += len(rows)
+    summary["fx_written"] = write_fx(conn, closes, fx_symbols)
     # даже для символов без новых данных стираем незаконченную сессию, если она вдруг уже в базе
     for iid, d in skip_of_index.items():
         if d:
@@ -179,11 +206,43 @@ def refresh(db_path=DB_PATH, index_ids=None, now=None, downloader=None):
     return summary
 
 
+def write_fx(conn, closes, fx_symbols):
+    """Пишет курсы в ту же таблицу daily_closes (ticker = EURUSD=X). Сессию не отсекаем: курс — последний закрытый."""
+    n = 0
+    for sym in fx_symbols:
+        if sym not in closes:
+            continue
+        rows = [(sym, ts.strftime("%Y-%m-%d"), float(c)) for ts, c in closes[sym].items() if float(c) > 0]
+        conn.executemany("INSERT OR REPLACE INTO daily_closes (ticker, date, close) VALUES (?, ?, ?)", rows)
+        n += len(rows)
+    return n
+
+
+def refresh_fx(db_path=DB_PATH, currencies=None, downloader=None):
+    """Быстро (секунды): качает только курсы валют к USD. Возвращает {"currencies": [...], "rows_written": n, "missing": [...]}."""
+    downloader = downloader or default_download
+    currencies = currencies if currencies is not None else load_currencies()
+    symbols = [fx_symbol(c) for c in currencies]
+    notes = []
+    closes = download_all(symbols, downloader, notes)
+    conn = sqlite3.connect(db_path)
+    init_db(conn)
+    n = write_fx(conn, closes, symbols)
+    conn.commit()
+    conn.close()
+    return {"currencies": list(currencies), "rows_written": n,
+            "missing": [c for c in currencies if fx_symbol(c) not in closes], "notes": notes}
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("ids", nargs="*", help="id индексов (по умолчанию все)")
     ap.add_argument("--db", default=DB_PATH)
+    ap.add_argument("--fx-only", action="store_true", help="скачать только курсы валют")
     args = ap.parse_args(argv)
+    if args.fx_only:
+        print(refresh_fx(args.db))
+        return 0
     summary = refresh(args.db, args.ids or None)
     print(f"Записано строк: {summary['rows_written']}, стёрто незаконченных: {summary['rows_removed']}")
     for iid, s in summary["indices"].items():

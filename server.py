@@ -78,6 +78,7 @@ app.add_middleware(
 )
 
 price_cache = {}
+_overview_cache = {"version": 0, "key": None, "at": 0.0, "data": None}  # кэш /api/v1/world-overview
 world_history_cache = {}  # то же для history_world.db (все остальные индексы)
 history_cache = {}  # ticker -> [{"date": "YYYY-MM-DD", "close": float}, ...] по возрастанию даты
 
@@ -97,7 +98,8 @@ def read_history(db_path):
 
 def history_last_date(history) -> str:
     """Самая свежая дата закрытия среди всех тикеров ('' если истории нет)."""
-    return max((series[-1]["date"] for series in history.values() if series), default="")
+    # курсы валют (EURUSD=X) лежат в той же таблице, но не влияют на «последнюю дату» акций
+    return max((series[-1]["date"] for t, series in history.items() if series and not t.endswith("=X")), default="")
 
 
 def load_history():
@@ -111,6 +113,7 @@ def load_history():
     fresh = read_history(DB_PATH)
     history_cache.clear()
     history_cache.update(fresh)
+    _overview_cache["version"] += 1
     print(f"✅ Загружена история цен для {len(history_cache)} тикеров (по {history_last_date(history_cache)})")
 
 
@@ -410,12 +413,14 @@ def load_index_rows(entry):
                 if legacy:
                     sector, subsector = (row.get("GICS Sector") or "").strip(), (row.get("GICS Sub-Industry") or "").strip()
                     cap = _parse_cap(row.get("Market Cap"))
+                    currency = "USD"
                 else:
                     sector = (row.get("Sector") or "").strip() or "Other"
                     subsector = (row.get("Subsector") or "").strip() or "Other"
                     cap = _parse_cap(row.get("MarketCap"))
+                    currency = (row.get("Currency") or "").strip().upper() or entry.get("currency", "USD")
                 rows.append({"ticker": ticker, "name": (row.get("Security") or "").strip() or ticker,
-                             "sector": sector, "subsector": subsector, "cap": cap})
+                             "sector": sector, "subsector": subsector, "cap": cap, "currency": currency})
     except Exception as e:
         print(f"⚠️ CSV индекса {entry['id']} не прочитан: {e}")
         return []
@@ -449,6 +454,7 @@ def load_world_history():
     world_history_cache.clear()
     world_history_cache.update(fresh)
     _world_db_mtime["value"] = os.path.getmtime(WORLD_DB_PATH)
+    _overview_cache["version"] += 1
     print(f"✅ Загружена мировая история для {len(world_history_cache)} тикеров (по {history_last_date(world_history_cache)})")
     return True
 
@@ -603,6 +609,144 @@ async def get_indices():
             "historyThrough": index_history_through(entry) if entry["id"] != "sp500" else history_last_date(history_cache),
         })
     return result
+
+
+# ---------------------------------------------------------------- обзор мира (главный экран)
+
+OVERVIEW_REGIONS = ["americas", "europe", "asia_pacific"]
+OVERVIEW_PERIODS = {"1d": 1, "3d": 3, "7d": 5, "30d": 21, "180d": 126, "1y": 252}  # торговых дней назад
+OVERVIEW_TTL_SECONDS = int(os.getenv("OVERVIEW_TTL_SECONDS", "300"))
+FX_STARTUP_REFRESH = os.getenv("FX_STARTUP_REFRESH", "1").strip().lower() not in ("0", "false", "no", "")
+
+
+def fx_symbol_for(currency) -> str:
+    return f"{currency}USD=X"
+
+
+def fx_rate(currency):
+    """Сколько долларов за 1 единицу валюты (последнее закрытие курса); USD = 1; нет курса — None."""
+    if currency == "USD":
+        return 1.0
+    series = world_history_cache.get(fx_symbol_for(currency))
+    if not series:
+        return None
+    rate = series[-1]["close"]
+    return rate if rate and rate > 0 else None
+
+
+def needed_currencies():
+    """Все валюты (кроме USD), которые встречаются в индексах реестра."""
+    found = set()
+    for entry in get_registry():
+        if entry.get("currency"):
+            found.add(entry["currency"])
+        for row in load_index_rows(entry):
+            found.add(row["currency"])
+    found.discard("USD")
+    return found
+
+
+def missing_fx_currencies():
+    return sorted(c for c in needed_currencies() if fx_rate(c) is None)
+
+
+def _overview_row_shown(entry, row, latest) -> bool:
+    """Компания показана на карте: есть история и она не «замёрзла» (как в build_world_hierarchy / is_delisted).
+    latest — самая свежая дата нужного кэша, посчитанная один раз на индекс."""
+    if entry["id"] == "sp500":
+        series = history_cache.get(row["ticker"])
+    else:
+        series = lookup_series(row["ticker"])
+    if not series:
+        return False
+    if latest:
+        gap = datetime.strptime(latest, "%Y-%m-%d") - datetime.strptime(series[-1]["date"], "%Y-%m-%d")
+        if gap.days > DELISTED_AFTER_DAYS:
+            return False
+    return True
+
+
+def build_index_overview(entry):
+    """Сводка одного индекса. Компании без курса валюты исключаются и из капитализации, и из изменения;
+    если не осталось ни одной — capUSD = None и changes = None (плитку клиент не рисует)."""
+    total = 0.0
+    shown = 0
+    weighted = {p: [0.0, 0.0] for p in OVERVIEW_PERIODS}  # period -> [сумма cap*ret, сумма cap]
+    through = ""
+    latest = history_last_date(history_cache if entry["id"] == "sp500" else world_history_cache)
+    for row in load_index_rows(entry):
+        if not _overview_row_shown(entry, row, latest):
+            continue
+        rate = fx_rate(row["currency"])
+        if rate is None or row["cap"] <= 0:
+            continue
+        cap_usd = row["cap"] * rate
+        series = history_cache.get(row["ticker"]) if entry["id"] == "sp500" else lookup_series(row["ticker"])
+        total += cap_usd
+        shown += 1
+        if series and series[-1]["date"] > through:
+            through = series[-1]["date"]
+        for period, days in OVERVIEW_PERIODS.items():
+            ret = compute_return(series, days)
+            if ret is not None:
+                weighted[period][0] += cap_usd * ret
+                weighted[period][1] += cap_usd
+    ok = shown > 0 and total > 0
+    return {
+        "id": entry["id"], "name": entry.get("name", entry["id"]), "country": entry.get("country", ""),
+        "currency": entry.get("currency", ""), "live": bool(entry.get("live", False)), "count": shown,
+        "capUSD": total if ok else None, "historyThrough": through,
+        "changes": {p: (w[0] / w[1] if w[1] > 0 else None) for p, w in weighted.items()} if ok
+                   else {p: None for p in OVERVIEW_PERIODS},
+    }
+
+
+def build_world_overview():
+    regions = {r: [] for r in OVERVIEW_REGIONS}
+    for entry in get_registry():
+        region = entry.get("region")
+        if region in regions:
+            regions[region].append(build_index_overview(entry))
+    return {"asOf": market_today(), "regions": [{"id": r, "indices": regions[r]} for r in OVERVIEW_REGIONS]}
+
+
+def get_world_overview_cached():
+    """Пересчёт при перезагрузке истории или раз в OVERVIEW_TTL_SECONDS; иначе отдаём готовый результат."""
+    now = time.time()
+    c = _overview_cache
+    if c["data"] is None or c["key"] != c["version"] or now - c["at"] > OVERVIEW_TTL_SECONDS:
+        c["data"] = build_world_overview()
+        c["key"] = c["version"]
+        c["at"] = now
+    return c["data"]
+
+
+def run_fx_refresh():
+    try:
+        import fetch_world
+    except ImportError:
+        print("⚠️ fetch_world.py не найден — курсы валют не скачаны")
+        return None
+    return fetch_world.refresh_fx(WORLD_DB_PATH)
+
+
+async def fx_startup_refresher():
+    """При старте: если не хватает курса какой-то валюты — быстро качаем только курсы и перечитываем кэш."""
+    try:
+        if not os.path.exists(WORLD_DB_PATH) or not missing_fx_currencies():
+            return
+        print(f"💱 Нет курсов валют: {', '.join(missing_fx_currencies())} — скачиваем")
+        result = await asyncio.to_thread(run_fx_refresh)
+        if result is not None:
+            await asyncio.to_thread(load_world_history)
+    except Exception as e:
+        print(f"⚠️ Курсы валют не скачаны: {e}")
+
+
+@app.get("/api/v1/world-overview")
+async def get_world_overview():
+    """Все индексы по регионам: размер плитки = капитализация в USD, цвет = изменение за период."""
+    return get_world_overview_cached()
 
 
 def resolve_index(index):
@@ -880,6 +1024,8 @@ async def lifespan(_: FastAPI):
 
     if HISTORY_DB_URL:
         asyncio.create_task(history_refresher())
+    if FX_STARTUP_REFRESH:
+        asyncio.create_task(fx_startup_refresher())
     if WORLD_REFRESH:
         asyncio.create_task(world_refresher())
 

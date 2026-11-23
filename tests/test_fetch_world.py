@@ -229,4 +229,35 @@ def test_refresh_downloads_shared_symbols_once(world):
 
     fw.refresh(str(world / "h.db"), now=utc(2026, 11, 18, 12, 0), downloader=spy)
     flat = [s for c in calls for s in c]
-    assert sorted(flat) == ["A.MC", "B.MC", "C.T", "D.T"]  # B.MC один раз
+    assert sorted(flat) == ["A.MC", "B.MC", "C.T", "D.T", "EURUSD=X", "JPYUSD=X"]  # B.MC один раз, плюс курсы
+
+
+# ---------- курсы валют ----------
+
+def test_load_currencies_from_csv_and_registry(world):
+    # в фикстуре: EUR (CSV) и JPY (реестр); USD не нужен
+    assert fw.load_currencies() == ["EUR", "JPY"]
+    assert fw.fx_symbol("EUR") == "EURUSD=X"
+
+
+def test_refresh_downloads_and_stores_fx(world):
+    fx = pd.Series([1.05, 1.06], index=pd.to_datetime(["2025-03-10", "2025-03-11"]))
+    dl = make_download({"A.MC": series(["2025-03-10", "2025-03-11"]), "EURUSD=X": fx})
+    db = world / "w.db"
+    summary = fw.refresh(str(db), now=utc(2025, 3, 12, 12, 0), downloader=dl)
+    assert ("EURUSD=X", "2025-03-11", 1.06) in rows_of(db)
+    assert summary["fx_written"] == 2
+
+
+def test_refresh_fx_only_downloads_fx(world):
+    calls = []
+    inner = make_download({"EURUSD=X": pd.Series([1.1], index=pd.to_datetime(["2025-03-11"]))})
+
+    def dl(symbols):
+        calls.append(list(symbols))
+        return inner(symbols)
+    db = world / "w.db"
+    res = fw.refresh_fx(str(db), downloader=dl)
+    assert calls == [["EURUSD=X", "JPYUSD=X"]]
+    assert rows_of(db) == [("EURUSD=X", "2025-03-11", pytest.approx(1.1))]
+    assert res["missing"] == ["JPY"] and res["rows_written"] == 1

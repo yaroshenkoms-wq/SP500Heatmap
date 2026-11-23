@@ -161,6 +161,7 @@ def world(tmp_path, monkeypatch):
     server.history_cache.clear()
     server.world_history_cache.clear()
     server.price_cache.clear()
+    server._overview_cache.update(data=None, key=None)
     server.history_cache["AAPL"] = mk_series(100, 110)
     server.world_history_cache.update({
         "SAN.MC": mk_series(10, 11),
@@ -274,3 +275,75 @@ class TestSchedulerDue:
 def test_run_world_refresh_without_module(monkeypatch):
     monkeypatch.setitem(sys.modules, "fetch_world", None)  # import -> ImportError
     assert server.run_world_refresh(["ibex35"]) is None
+
+
+class TestWorldOverview:
+    @staticmethod
+    def add_fx(rate=1.10):
+        server.world_history_cache["EURUSD=X"] = [{"date": day(10), "close": 1.0}, {"date": day(11), "close": rate}]
+        server._overview_cache["version"] += 1
+
+    def test_fx_conversion_weighted_change_and_shape(self, world, client):
+        self.add_fx(1.10)
+        data = client.get("/api/v1/world-overview").json()
+        assert [r["id"] for r in data["regions"]] == ["americas", "europe", "asia_pacific"]
+        assert data["asOf"] == server.market_today()
+        americas, europe, asia = data["regions"]
+        assert [i["id"] for i in americas["indices"]] == ["sp500"] and asia["indices"] == []
+        spx = americas["indices"][0]
+        assert spx["capUSD"] == 3e12 and spx["count"] == 1 and spx["currency"] == "USD" and spx["live"] is True
+        assert spx["changes"]["1d"] == 10.0
+        ibex = europe["indices"][0]
+        assert set(ibex) == {"id", "name", "country", "currency", "live", "count", "capUSD", "historyThrough", "changes"}
+        assert set(ibex["changes"]) == {"1d", "3d", "7d", "30d", "180d", "1y"}
+        # SAN 80B, BBVA 90B, ITX 150B (EUR) * 1.10; OLD (stale) and NOHIST (no data) are not shown
+        assert ibex["count"] == 3
+        assert ibex["capUSD"] == pytest.approx(320e9 * 1.10)
+        # SAN +10%, BBVA +10%, ITX -10%, weights 80/90/150
+        assert ibex["changes"]["1d"] == pytest.approx((80 * 10 + 90 * 10 - 150 * 10) / 320)
+        assert ibex["historyThrough"] == day(11)
+
+    def test_row_currency_overrides_index_currency(self, world, client):
+        (world / "indices" / "ibex35.csv").write_text(
+            "Symbol,Security,Sector,Subsector,MarketCap,Currency\n"
+            "SAN.MC,Santander,F,B,100,EUR\nBBVA.MC,BBVA,F,B,100,USD\n")
+        self.add_fx(2.0)
+        server._index_rows_cache.clear()
+        server._overview_cache["version"] += 1
+        ibex = client.get("/api/v1/world-overview").json()["regions"][1]["indices"][0]
+        assert ibex["capUSD"] == 300.0  # 100 EUR * 2 + 100 USD
+
+    def test_missing_fx_excludes_index(self, world, client):
+        # курса EUR нет: у индекса capUSD = null, changes = null, но он остаётся в списке (клиент не рисует плитку)
+        ibex = client.get("/api/v1/world-overview").json()["regions"][1]["indices"][0]
+        assert ibex["capUSD"] is None and ibex["count"] == 0
+        assert all(v is None for v in ibex["changes"].values())
+        assert server.missing_fx_currencies() == ["EUR"]
+        assert client.get("/api/v1/world-overview").json()["regions"][0]["indices"][0]["capUSD"] == 3e12
+
+    def test_missing_fx_skips_only_that_company(self, world, client):
+        (world / "indices" / "ibex35.csv").write_text(
+            "Symbol,Security,Sector,Subsector,MarketCap,Currency\n"
+            "SAN.MC,Santander,F,B,100,USD\nBBVA.MC,BBVA,F,B,100,EUR\n")
+        server._index_rows_cache.clear()
+        server._overview_cache["version"] += 1
+        ibex = client.get("/api/v1/world-overview").json()["regions"][1]["indices"][0]
+        assert ibex["capUSD"] == 100.0 and ibex["count"] == 1 and ibex["changes"]["1d"] == 10.0
+
+    def test_cache_and_invalidation(self, world, client):
+        self.add_fx(1.0)
+        a = server.get_world_overview_cached()
+        assert server.get_world_overview_cached() is a
+        server._overview_cache["version"] += 1  # как после load_history / load_world_history
+        assert server.get_world_overview_cached() is not a
+        b = server.get_world_overview_cached()
+        server._overview_cache["at"] -= server.OVERVIEW_TTL_SECONDS + 1
+        assert server.get_world_overview_cached() is not b
+
+    def test_fx_series_do_not_move_latest_date(self):
+        h = {"A": mk_series(1, 2), "EURUSD=X": [{"date": "2030-01-01", "close": 1.0}]}
+        assert history_last_date(h) == day(11)
+
+    def test_legacy_endpoints_unchanged_by_fx(self, world, client):
+        self.add_fx()
+        assert set(client.get("/api/v1/performance?index=ibex35").json()) == {"SAN.MC", "BBVA.MC", "ITX.MC", "OLD.MC"}
