@@ -73,7 +73,7 @@ struct CompanyDetailView: View {
                         dismiss()
                     }) {
                         HStack {
-                            Image(systemName: "chevron.left")
+                            Image(systemName: "chevron.backward")
                             Text("Back")
                         }
                         .foregroundColor(.blue)
@@ -94,7 +94,7 @@ struct CompanyDetailView: View {
                         Text(indexStore.formatPrice(currentPrice))
                             .font(.title2)
                             .bold()
-                        Text(String(format: "%.2f%%", periodChangePercent))
+                        Text(formatPercent(periodChangePercent))
                             .font(.headline)
                             .foregroundColor(periodChangePercent >= 0 ? .green : .red)
                     }
@@ -144,7 +144,7 @@ struct CompanyDetailView: View {
                 HStack {
                     MetricItem(title: "Market Cap", value: formatMarketCap(company.marketCap))
                     Spacer()
-                    MetricItem(title: "P/E", value: company.peRatio != nil ? String(format: "%.2f", company.peRatio!) : String(localized: "N/A"))
+                    MetricItem(title: "P/E", value: company.peRatio != nil ? formatDecimal(company.peRatio!) : String(localized: "N/A"))
                     Spacer()
                     MetricItem(title: "Volume", value: company.volume != nil ? formatVolume(company.volume!) : String(localized: "N/A"))
                 }
@@ -162,25 +162,11 @@ struct CompanyDetailView: View {
     }
 
     private func formatMarketCap(_ value: Double) -> String {
-        if value >= 1_000_000_000_000 {
-            return String(format: "%.2fT", value / 1_000_000_000_000)
-        } else if value >= 1_000_000_000 {
-            return String(format: "%.2fB", value / 1_000_000_000)
-        } else if value >= 1_000_000 {
-            return String(format: "%.2fM", value / 1_000_000)
-        } else {
-            return String(format: "%.0f", value)
-        }
+        return formatCompact(value)
     }
     
     private func formatVolume(_ value: Double) -> String {
-        if value >= 1_000_000_000 {
-            return String(format: "%.2fB", value / 1_000_000_000)
-        } else if value >= 1_000_000 {
-            return String(format: "%.2fM", value / 1_000_000)
-        } else {
-            return String(format: "%.0f", value)
-        }
+        return formatCompact(value)
     }
 }
 

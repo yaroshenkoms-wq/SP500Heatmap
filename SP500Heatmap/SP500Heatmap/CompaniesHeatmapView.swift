@@ -49,17 +49,17 @@ struct CompaniesHeatmapView: View {
                 HStack {
                     Button(action: { dismiss() }) {
                         HStack {
-                            Image(systemName: "chevron.left")
+                            Image(systemName: "chevron.backward")
                             Text("Back")
                         }
                         .foregroundColor(.blue)
                     }
                     Spacer()
-                    Text(subsector.name)
+                    Text(verbatim: localizedSectorName(subsector.name))
                         .font(.largeTitle)
                         .bold()
                     Spacer()
-                    Text(String(format: "%.2f%%", subsectorChange))
+                    Text(formatPercent(subsectorChange))
                         .font(.title2)
                         .foregroundColor(subsectorChange >= 0 ? .green : .red)
                 }
@@ -99,7 +99,7 @@ struct CompanyTile: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
             if let change = changePercent {
-                Text(String(format: "%.2f%%", change))
+                Text(formatPercent(change))
                     .font(.caption2)
                     .foregroundColor(.white.opacity(0.9))
             }

@@ -88,7 +88,7 @@ final class IndexStore: ObservableObject {
 
     func formatPrice(_ value: Double) -> String {
         let code = current.currency ?? "USD"
-        if code == "USD" { return String(format: "$%.2f", value) }
+        if code == "USD" { return "$" + formatDecimal(value) }
         return value.formatted(.currency(code: code))
     }
 

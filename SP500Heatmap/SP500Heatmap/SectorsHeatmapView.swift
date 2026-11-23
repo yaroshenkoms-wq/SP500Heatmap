@@ -78,7 +78,7 @@ struct SectorsHeatmapView: View {
                         .accessibilityLabel(Text("Select index"))
                     }
                     Spacer()
-                    Text(String(format: "%.2f%%", indexChange))
+                    Text(formatPercent(indexChange))
                         .font(.title2)
                         .foregroundColor(indexChange >= 0 ? .green : .red)
                 }
@@ -122,11 +122,11 @@ struct SectorTile: View {
 
     var body: some View {
         VStack {
-            Text(stat.name)
+            Text(verbatim: localizedSectorName(stat.name))
                 .font(.headline)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
-            Text(String(format: "%.2f%%", stat.changePercent))
+            Text(formatPercent(stat.changePercent))
                 .font(.caption)
                 .foregroundColor(.white.opacity(0.9))
         }

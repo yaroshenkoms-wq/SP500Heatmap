@@ -190,7 +190,7 @@ struct OverviewTableView: View {
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.6)
                                 .frame(width: 70, alignment: .trailing)
-                            Text(String(format: "%.2f%%", row.changePercent))
+                            Text(formatPercent(row.changePercent))
                                 .font(.caption)
                                 .foregroundColor(row.changePercent >= 0 ? .green : .red)
                                 .frame(width: 65, alignment: .trailing)
@@ -206,15 +206,7 @@ struct OverviewTableView: View {
     }
     
     private func formatMarketCap(_ value: Double) -> String {
-        if value >= 1_000_000_000_000 {
-            return String(format: "%.2fT", value / 1_000_000_000_000)
-        } else if value >= 1_000_000_000 {
-            return String(format: "%.2fB", value / 1_000_000_000)
-        } else if value >= 1_000_000 {
-            return String(format: "%.2fM", value / 1_000_000)
-        } else {
-            return String(format: "%.0f", value)
-        }
+        return formatCompact(value)
     }
 }
 
@@ -314,7 +306,7 @@ struct PerformanceCell: View {
 
     var body: some View {
         if let value {
-            Text(String(format: "%.2f%%", value))
+            Text(formatPercent(value))
                 .font(.caption)
                 .foregroundColor(value >= 0 ? .green : .red)
         } else {

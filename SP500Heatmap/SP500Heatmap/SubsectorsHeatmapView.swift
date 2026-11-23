@@ -62,17 +62,17 @@ struct SubsectorsHeatmapView: View {
                 HStack {
                     Button(action: { dismiss() }) {
                         HStack {
-                            Image(systemName: "chevron.left")
+                            Image(systemName: "chevron.backward")
                             Text("Back")
                         }
                         .foregroundColor(.blue)
                     }
                     Spacer()
-                    Text(sector.name)
+                    Text(verbatim: localizedSectorName(sector.name))
                         .font(.largeTitle)
                         .bold()
                     Spacer()
-                    Text(String(format: "%.2f%%", sectorChange))
+                    Text(formatPercent(sectorChange))
                         .font(.title2)
                         .foregroundColor(sectorChange >= 0 ? .green : .red)
                 }
@@ -112,11 +112,11 @@ struct SubsectorTile: View {
 
     var body: some View {
         VStack {
-            Text(stat.name)
+            Text(verbatim: localizedSectorName(stat.name))
                 .font(.headline)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
-            Text(String(format: "%.2f%%", stat.changePercent))
+            Text(formatPercent(stat.changePercent))
                 .font(.caption)
                 .foregroundColor(.white.opacity(0.9))
         }

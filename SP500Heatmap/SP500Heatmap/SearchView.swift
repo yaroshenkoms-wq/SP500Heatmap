@@ -31,7 +31,7 @@ struct SearchView: View {
                             .lineLimit(1)
                         Spacer()
                         if let change = webSocketManager.priceUpdates[company.ticker]?.changePercent {
-                            Text(String(format: "%.2f%%", change))
+                            Text(formatPercent(change))
                                 .font(.caption)
                                 .foregroundColor(change >= 0 ? .green : .red)
                         }
