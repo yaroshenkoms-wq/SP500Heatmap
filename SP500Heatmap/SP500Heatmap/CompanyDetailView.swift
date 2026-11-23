@@ -6,11 +6,16 @@ struct CompanyDetailView: View {
     @ObservedObject var webSocketManager: WebSocketManager
     @State private var selectedPeriod = "SC"
     @State private var history: [DailyClose] = []
+    @EnvironmentObject private var indexStore: IndexStore
     @Environment(\.dismiss) private var dismiss
 
     // Текущая цена (последняя известная)
     var currentPrice: Double {
-        webSocketManager.priceUpdates[company.ticker]?.price ?? 0
+        if indexStore.isLive {
+            return webSocketManager.priceUpdates[company.ticker]?.price ?? 0
+        }
+        // No live feed: the last close from history is the current price.
+        return history.last?.close ?? 0
     }
 
     // Изменение за текущую сессию (SC)
@@ -33,7 +38,7 @@ struct CompanyDetailView: View {
     // Реальные цены закрытия за выбранный период (из истории с бэкенда)
     var pricesForPeriod: [StockPrice] {
         guard !history.isEmpty else { return [] }
-        let daysBack = Self.periodTradingDaysBack[selectedPeriod] ?? history.count
+        let daysBack = Self.periodTradingDaysBack[indexStore.effectivePeriod(selectedPeriod)] ?? history.count
         let startIndex = max(0, history.count - 1 - daysBack)
         return history[startIndex...].compactMap { point in
             guard let date = Self.dateFormatter.date(from: point.date) else { return nil }
@@ -78,13 +83,15 @@ struct CompanyDetailView: View {
                         Text(company.ticker)
                             .font(.title2)
                             .bold()
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
                         Text(company.name)
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
                     Spacer()
                     VStack(alignment: .trailing) {
-                        Text(String(format: "$%.2f", currentPrice))
+                        Text(indexStore.formatPrice(currentPrice))
                             .font(.title2)
                             .bold()
                         Text(String(format: "%.2f%%", periodChangePercent))
@@ -123,7 +130,7 @@ struct CompanyDetailView: View {
             VStack(alignment: .leading) {
                 Text("Description")
                     .font(.headline)
-                Text(company.description?.isEmpty == true ? "No description available." : company.description ?? "No description available.")
+                Text(verbatim: (company.description?.isEmpty ?? true) ? String(localized: "No description available.") : (company.description ?? ""))
                     .font(.body)
                     .foregroundColor(.gray)
             }
@@ -137,9 +144,9 @@ struct CompanyDetailView: View {
                 HStack {
                     MetricItem(title: "Market Cap", value: formatMarketCap(company.marketCap))
                     Spacer()
-                    MetricItem(title: "P/E", value: company.peRatio != nil ? String(format: "%.2f", company.peRatio!) : "N/A")
+                    MetricItem(title: "P/E", value: company.peRatio != nil ? String(format: "%.2f", company.peRatio!) : String(localized: "N/A"))
                     Spacer()
-                    MetricItem(title: "Volume", value: company.volume != nil ? formatVolume(company.volume!) : "N/A")
+                    MetricItem(title: "Volume", value: company.volume != nil ? formatVolume(company.volume!) : String(localized: "N/A"))
                 }
             }
             .padding(.horizontal)
@@ -184,7 +191,7 @@ struct StockPrice: Identifiable {
 }
 
 struct MetricItem: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
     
     var body: some View {

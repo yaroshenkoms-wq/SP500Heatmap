@@ -5,12 +5,15 @@ struct SectorsHeatmapView: View {
     @ObservedObject var webSocketManager: WebSocketManager
     @ObservedObject var performanceStore: PerformanceStore
     @State private var selectedPeriod = "SC"
+    @State private var showIndexPicker = false
+    @EnvironmentObject private var indexStore: IndexStore
 
     private func changePercent(for ticker: String) -> Double? {
-        if selectedPeriod == "SC" {
+        let period = indexStore.effectivePeriod(selectedPeriod)
+        if period == "SC" {
             return webSocketManager.priceUpdates[ticker]?.changePercent
         }
-        return performanceStore.changePercent(for: ticker, period: selectedPeriod)
+        return performanceStore.changePercent(for: ticker, period: period)
     }
 
     var indexChange: Double {
@@ -53,10 +56,24 @@ struct SectorsHeatmapView: View {
             VStack(spacing: 4) {
                 HStack {
                     NavigationLink(destination: AllStocksListView(sectors: sectors, webSocketManager: webSocketManager)) {
-                        Text("S&P 500")
+                        Text(verbatim: indexStore.current.name)
                             .font(.largeTitle)
                             .bold()
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
                             .foregroundColor(.primary)
+                    }
+                    if indexStore.pickerAvailable {
+                        Button {
+                            showIndexPicker = true
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text(indexStore.current.flag)
+                                Image(systemName: "chevron.down.circle.fill")
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                        .accessibilityLabel(Text("Select index"))
                     }
                     Spacer()
                     Text(String(format: "%.2f%%", indexChange))
@@ -65,6 +82,7 @@ struct SectorsHeatmapView: View {
                 }
                 .padding(.horizontal)
                 PeriodSwitchView(selectedPeriod: $selectedPeriod)
+                ClosingPricesNote()
             }
             .padding(.top, 8)
             .background(Color(.systemBackground))
@@ -82,6 +100,10 @@ struct SectorsHeatmapView: View {
         }
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.bottom)
+        .sheet(isPresented: $showIndexPicker) {
+            IndexPickerView(indexStore: indexStore)
+                .presentationDetents([.medium, .large])
+        }
     }
 }
 
