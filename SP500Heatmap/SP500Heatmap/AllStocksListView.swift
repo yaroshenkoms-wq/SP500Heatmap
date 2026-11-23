@@ -7,6 +7,7 @@ struct AllStocksListView: View {
     @State private var sortColumn = "Market Cap"
     @State private var sortAscending = false
     @State private var performance: [String: PerformanceMetrics] = [:]
+    @EnvironmentObject private var indexStore: IndexStore
 
     var allCompanies: [Company] {
         sectors.flatMap { $0.subsectors.flatMap { $0.companies } }
@@ -14,8 +15,12 @@ struct AllStocksListView: View {
 
     var overviewData: [OverviewRow] {
         allCompanies.map { company in
-            let price = webSocketManager.priceUpdates[company.ticker]?.price ?? 0
-            let change = webSocketManager.priceUpdates[company.ticker]?.changePercent ?? 0
+            // Non-live indices have no streaming price: show the last-day change, no price.
+            let live = indexStore.isLive
+            let price: Double? = live ? (webSocketManager.priceUpdates[company.ticker]?.price ?? 0) : nil
+            let change = live
+                ? (webSocketManager.priceUpdates[company.ticker]?.changePercent ?? 0)
+                : (performance[company.ticker]?.day1 ?? 0)
             return OverviewRow(
                 ticker: company.ticker,
                 name: company.name,
@@ -41,8 +46,11 @@ struct AllStocksListView: View {
     }
 
     private func loadPerformance() async {
+        performance = [:]
+        let requested = indexStore.selectedId
         do {
-            performance = try await NetworkService.shared.fetchPerformance()
+            let fetched = try await NetworkService.shared.fetchPerformance(index: indexStore.apiIndexId)
+            if requested == indexStore.selectedId { performance = fetched }
         } catch {
             print("Failed to load performance: \(error)")
         }
@@ -77,7 +85,7 @@ struct AllStocksListView: View {
         }
         .navigationTitle("All Stocks")
         .navigationBarTitleDisplayMode(.inline)
-        .task {
+        .task(id: indexStore.selectedId) {
             await loadPerformance()
         }
     }
@@ -89,7 +97,7 @@ struct OverviewRow: Identifiable {
     let ticker: String
     let name: String
     let marketCap: Double
-    let price: Double
+    let price: Double?
     let changePercent: Double
 }
 
@@ -105,6 +113,7 @@ struct PerformanceRow: Identifiable {
 
 // MARK: - Overview Table
 struct OverviewTableView: View {
+    @EnvironmentObject private var indexStore: IndexStore
     let rows: [OverviewRow]
     @Binding var sortColumn: String
     @Binding var sortAscending: Bool
@@ -119,7 +128,7 @@ struct OverviewTableView: View {
             case "Market Cap":
                 return sortAscending ? a.marketCap < b.marketCap : a.marketCap > b.marketCap
             case "Stock Price":
-                return sortAscending ? a.price < b.price : a.price > b.price
+                return sortAscending ? (a.price ?? 0) < (b.price ?? 0) : (a.price ?? 0) > (b.price ?? 0)
             case "% Change":
                 return sortAscending ? a.changePercent < b.changePercent : a.changePercent > b.changePercent
             default:
@@ -165,8 +174,10 @@ struct OverviewTableView: View {
                         HStack(spacing: 4) {
                             Text(row.ticker)
                                 .font(.caption)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.6)
                                 .frame(width: 60, alignment: .leading)
-                            Text(row.name)
+                            Text(verbatim: row.name)
                                 .font(.caption)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
@@ -174,8 +185,10 @@ struct OverviewTableView: View {
                             Text(formatMarketCap(row.marketCap))
                                 .font(.caption)
                                 .frame(width: 75, alignment: .trailing)
-                            Text(String(format: "$%.2f", row.price))
+                            Text(row.price.map { indexStore.formatPrice($0) } ?? "—")
                                 .font(.caption)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.6)
                                 .frame(width: 70, alignment: .trailing)
                             Text(String(format: "%.2f%%", row.changePercent))
                                 .font(.caption)
@@ -271,8 +284,10 @@ struct PerformanceTableView: View {
                         HStack(spacing: 4) {
                             Text(row.ticker)
                                 .font(.caption)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.6)
                                 .frame(width: 60, alignment: .leading)
-                            Text(row.name)
+                            Text(verbatim: row.name)
                                 .font(.caption)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
@@ -312,7 +327,7 @@ struct PerformanceCell: View {
 
 // MARK: - Сортируемый заголовок
 struct SortableHeader: View {
-    let title: String
+    let title: LocalizedStringKey
     let column: String
     @Binding var sortColumn: String
     @Binding var sortAscending: Bool

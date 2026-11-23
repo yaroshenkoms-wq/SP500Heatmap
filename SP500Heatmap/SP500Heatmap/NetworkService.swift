@@ -9,31 +9,52 @@ class NetworkService: ObservableObject {
         self.baseURL = Config.baseURL
     }
     
-    func fetchMarketHierarchy() async throws -> [Sector] {
-        guard let url = URL(string: "\(baseURL)/api/v1/market-hierarchy") else {
+    // Builds an API URL; `index` is added only for non-S&P indices (nil = legacy request).
+    private func apiURL(_ path: String, index: String?) throws -> URL {
+        guard var components = URLComponents(string: "\(baseURL)\(path)") else {
             throw NetworkError.invalidURL
         }
+        if let index {
+            components.queryItems = [URLQueryItem(name: "index", value: index)]
+        }
+        guard let url = components.url else { throw NetworkError.invalidURL }
+        return url
+    }
 
-        let (data, _) = try await URLSession.shared.data(from: url)
+    private func fetchData(_ url: URL, timeout: TimeInterval = 60) async throws -> Data {
+        var request = URLRequest(url: url)
+        request.timeoutInterval = timeout
+        let (data, response) = try await URLSession.shared.data(for: request)
+        if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
+            throw NetworkError.noData
+        }
+        return data
+    }
+
+    func fetchIndices() async throws -> [IndexInfo] {
+        let data = try await fetchData(try apiURL("/api/v1/indices", index: nil), timeout: 8)
+        return try JSONDecoder().decode([IndexInfo].self, from: data)
+    }
+
+    func fetchMarketHierarchy(index: String? = nil) async throws -> [Sector] {
+        let data = try await fetchData(try apiURL("/api/v1/market-hierarchy", index: index))
         let sectors = try JSONDecoder().decode([Sector].self, from: data)
         return sectors
     }
 
     func fetchHistory(ticker: String) async throws -> [DailyClose] {
-        guard let url = URL(string: "\(baseURL)/api/v1/history/\(ticker)") else {
+        // Tickers such as "SAN.MC" or "BRK-B" are safe, but encode anyway for symbols like "^X".
+        let encoded = ticker.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ticker
+        guard let url = URL(string: "\(baseURL)/api/v1/history/\(encoded)") else {
             throw NetworkError.invalidURL
         }
 
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let data = try await fetchData(url)
         return try JSONDecoder().decode([DailyClose].self, from: data)
     }
 
-    func fetchPerformance() async throws -> [String: PerformanceMetrics] {
-        guard let url = URL(string: "\(baseURL)/api/v1/performance") else {
-            throw NetworkError.invalidURL
-        }
-
-        let (data, _) = try await URLSession.shared.data(from: url)
+    func fetchPerformance(index: String? = nil) async throws -> [String: PerformanceMetrics] {
+        let data = try await fetchData(try apiURL("/api/v1/performance", index: index))
         return try JSONDecoder().decode([String: PerformanceMetrics].self, from: data)
     }
 }

@@ -7,11 +7,19 @@ class PerformanceStore: ObservableObject {
 
     private init() {}
 
-    func loadIfNeeded() {
-        guard metrics.isEmpty else { return }
-        Task {
-            guard let fetched = try? await NetworkService.shared.fetchPerformance() else { return }
-            await MainActor.run { self.metrics = fetched }
+    private var loadedIndex: String?
+
+    // Loads performance for an index (nil = S&P 500). Clears old numbers first so
+    // tiles never show another index's values, and ignores late replies.
+    func reload(index: String?) async {
+        await MainActor.run {
+            self.loadedIndex = index ?? "sp500"
+            self.metrics = [:]
+        }
+        let requested = index ?? "sp500"
+        guard let fetched = try? await NetworkService.shared.fetchPerformance(index: index) else { return }
+        await MainActor.run {
+            if self.loadedIndex == requested { self.metrics = fetched }
         }
     }
 

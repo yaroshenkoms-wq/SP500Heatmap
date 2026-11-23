@@ -4,6 +4,7 @@ struct ContentView: View {
     @StateObject private var networkService = NetworkService.shared
     @StateObject private var webSocketManager = WebSocketManager.shared
     @StateObject private var performanceStore = PerformanceStore.shared
+    @StateObject private var indexStore = IndexStore.shared
     @State private var sectors: [Sector] = []
     @State private var isLoading = true
     @State private var errorMessage: String?
@@ -12,15 +13,15 @@ struct ContentView: View {
         NavigationStack {
             Group {
                 if isLoading {
-                    ProgressView("Загрузка данных...")
+                    ProgressView("Loading data...")
                 } else if let error = errorMessage {
                     VStack {
-                        Text("Ошибка")
+                        Text("Error")
                             .font(.headline)
                         Text(error)
                             .font(.caption)
                             .foregroundColor(.gray)
-                        Button("Повторить") {
+                        Button("Retry") {
                             Task {
                                 await loadData()
                             }
@@ -32,10 +33,13 @@ struct ContentView: View {
                 }
             }
         }
-        .task {
+        .environmentObject(indexStore)
+        .task(id: indexStore.selectedId) {
+            await indexStore.loadIfNeeded()
             await loadData()
+        }
+        .task {
             webSocketManager.connect()
-            performanceStore.loadIfNeeded()
         }
         .onDisappear {
             webSocketManager.disconnect()
@@ -45,18 +49,21 @@ struct ContentView: View {
     private func loadData() async {
         isLoading = true
         errorMessage = nil
-        
+        sectors = []
+        let indexId = indexStore.apiIndexId
+
+        // Performance loads in parallel with the hierarchy.
+        Task { await performanceStore.reload(index: indexId) }
+
         do {
-            let fetchedSectors = try await networkService.fetchMarketHierarchy()
-            await MainActor.run {
-                self.sectors = fetchedSectors
-                self.isLoading = false
-            }
+            let fetchedSectors = try await networkService.fetchMarketHierarchy(index: indexId)
+            guard !Task.isCancelled, indexId == indexStore.apiIndexId else { return }
+            self.sectors = fetchedSectors
+            self.isLoading = false
         } catch {
-            await MainActor.run {
-                self.errorMessage = error.localizedDescription
-                self.isLoading = false
-            }
+            guard !Task.isCancelled, indexId == indexStore.apiIndexId else { return }
+            self.errorMessage = error.localizedDescription
+            self.isLoading = false
         }
     }
 }

@@ -23,7 +23,9 @@ struct SearchView: View {
                     HStack {
                         Text(company.ticker)
                             .font(.headline)
-                            .frame(width: 70, alignment: .leading)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
+                            .frame(width: 80, alignment: .leading)
                         Text(company.name)
                             .font(.caption)
                             .lineLimit(1)

@@ -5,13 +5,15 @@ struct SubsectorsHeatmapView: View {
     @ObservedObject var webSocketManager: WebSocketManager
     @ObservedObject var performanceStore: PerformanceStore
     @State private var selectedPeriod = "SC"
+    @EnvironmentObject private var indexStore: IndexStore
     @Environment(\.dismiss) private var dismiss
 
     private func changePercent(for ticker: String) -> Double? {
-        if selectedPeriod == "SC" {
+        let period = indexStore.effectivePeriod(selectedPeriod)
+        if period == "SC" {
             return webSocketManager.priceUpdates[ticker]?.changePercent
         }
-        return performanceStore.changePercent(for: ticker, period: selectedPeriod)
+        return performanceStore.changePercent(for: ticker, period: period)
     }
 
     // Пересчитывается от selectedPeriod, а не приходит статичным значением с
@@ -74,6 +76,7 @@ struct SubsectorsHeatmapView: View {
                 }
                 .padding(.horizontal)
                 PeriodSwitchView(selectedPeriod: $selectedPeriod)
+                ClosingPricesNote()
             }
             .padding(.top, 8)
             .background(Color(.systemBackground))
