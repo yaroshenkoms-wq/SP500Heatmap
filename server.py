@@ -13,9 +13,19 @@ from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
+import sys
 import time
+from datetime import timedelta
+from typing import Optional
+from fastapi import HTTPException
 
 load_dotenv()
+
+# Логи сразу, без буфера (иначе на Render их видно с задержкой)
+try:
+    sys.stdout.reconfigure(line_buffering=True)
+except Exception:
+    pass
 
 MOCK_MODE = os.getenv("MOCK_MODE", "true").strip().lower() in ("1", "true", "yes")
 FINNHUB_API_KEY = os.getenv("FINNHUB_API_KEY")
@@ -30,6 +40,15 @@ HISTORY_DB_URL = os.getenv(
 ).strip()
 HISTORY_REFRESH_SECONDS = int(os.getenv("HISTORY_REFRESH_SECONDS", "3600"))
 DB_PATH = "history.db"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+REGISTRY_PATH = os.path.join(BASE_DIR, "indices", "registry.json")
+WORLD_DB_PATH = os.path.join(BASE_DIR, "history_world.db")
+# Автообновление мировых данных внутри сервера (WORLD_REFRESH=0 выключает)
+WORLD_REFRESH = os.getenv("WORLD_REFRESH", "1").strip().lower() not in ("0", "false", "no", "")
+WORLD_REFRESH_CHECK_SECONDS = int(os.getenv("WORLD_REFRESH_CHECK_SECONDS", "300"))
+WORLD_REFRESH_DELAY_MINUTES = int(os.getenv("WORLD_REFRESH_DELAY_MINUTES", "30"))
+WORLD_DB_MAX_AGE_SECONDS = int(os.getenv("WORLD_DB_MAX_AGE_SECONDS", "86400"))
 
 MARKET_TZ = ZoneInfo("America/New_York")
 
@@ -59,6 +78,7 @@ app.add_middleware(
 )
 
 price_cache = {}
+world_history_cache = {}  # то же для history_world.db (все остальные индексы)
 history_cache = {}  # ticker -> [{"date": "YYYY-MM-DD", "close": float}, ...] по возрастанию даты
 
 
@@ -314,6 +334,286 @@ def is_delisted(ticker) -> bool:
     return gap.days > DELISTED_AFTER_DAYS
 
 
+# ---------------------------------------------------------------- мировые индексы
+
+DEFAULT_REGISTRY = [{
+    "id": "sp500", "name": "S&P 500", "region": "americas", "country": "US",
+    "exchange_tz": "America/New_York", "close": "16:00", "currency": "USD",
+    "live": True, "constituents": "SP500_with_market_cap.csv", "history": "history.db",
+}]
+
+_registry_cache = {"mtime": None, "data": DEFAULT_REGISTRY}
+_index_rows_cache = {}  # id -> (mtime, rows)
+_world_db_mtime = {"value": None}
+
+
+def get_registry():
+    """Список индексов из indices/registry.json; нет файла (или он битый) — только sp500."""
+    try:
+        mtime = os.path.getmtime(REGISTRY_PATH)
+    except OSError:
+        return DEFAULT_REGISTRY
+    if _registry_cache["mtime"] != mtime or _registry_cache.get("path") != REGISTRY_PATH:
+        try:
+            with open(REGISTRY_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if not isinstance(data, list) or not all(isinstance(e, dict) and e.get("id") for e in data):
+                raise ValueError("неверный формат registry.json")
+            if not any(e["id"] == "sp500" for e in data):
+                data = DEFAULT_REGISTRY + data
+        except Exception as e:
+            print(f"⚠️ registry.json не прочитан: {e}")
+            return DEFAULT_REGISTRY
+        _registry_cache.update(mtime=mtime, data=data, path=REGISTRY_PATH)
+    return _registry_cache["data"]
+
+
+def find_index(index_id):
+    for entry in get_registry():
+        if entry["id"] == index_id:
+            return entry
+    return None
+
+
+def _parse_cap(cap_str) -> float:
+    cap_str = (cap_str or "").strip()
+    try:
+        if cap_str.endswith("T"):
+            return float(cap_str[:-1]) * 1_000_000_000_000
+        if cap_str.endswith("B"):
+            return float(cap_str[:-1]) * 1_000_000_000
+        return float(cap_str)
+    except ValueError:
+        return 0.0
+
+
+def load_index_rows(entry):
+    """Строки CSV индекса: [{"ticker","name","sector","subsector","cap"}]. Перечитывается при смене mtime файла."""
+    path = os.path.join(BASE_DIR, entry.get("constituents", ""))
+    try:
+        mtime = os.path.getmtime(path)
+    except OSError:
+        return []
+    cached = _index_rows_cache.get(entry["id"])
+    if cached and cached[0] == (path, mtime):
+        return cached[1]
+    legacy = entry["id"] == "sp500"
+    rows = []
+    try:
+        with open(path, "r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f, delimiter=",")
+            reader.fieldnames = [n.replace("\xa0", " ") for n in reader.fieldnames or []]
+            for row in reader:
+                ticker = (row.get("Symbol") or "").strip()
+                if not ticker:
+                    continue
+                if legacy:
+                    sector, subsector = (row.get("GICS Sector") or "").strip(), (row.get("GICS Sub-Industry") or "").strip()
+                    cap = _parse_cap(row.get("Market Cap"))
+                else:
+                    sector = (row.get("Sector") or "").strip() or "Other"
+                    subsector = (row.get("Subsector") or "").strip() or "Other"
+                    cap = _parse_cap(row.get("MarketCap"))
+                rows.append({"ticker": ticker, "name": (row.get("Security") or "").strip() or ticker,
+                             "sector": sector, "subsector": subsector, "cap": cap})
+    except Exception as e:
+        print(f"⚠️ CSV индекса {entry['id']} не прочитан: {e}")
+        return []
+    _index_rows_cache[entry["id"]] = ((path, mtime), rows)
+    return rows
+
+
+def lookup_series(ticker):
+    return world_history_cache.get(ticker) or history_cache.get(ticker)
+
+
+def index_series(entry):
+    """Тикер -> ряд закрытий для индекса (только его тикеры)."""
+    out = {}
+    for row in load_index_rows(entry):
+        series = lookup_series(row["ticker"])
+        if series:
+            out[row["ticker"]] = series
+    return out
+
+
+def index_history_through(entry) -> str:
+    return max((s[-1]["date"] for s in index_series(entry).values()), default="")
+
+
+def load_world_history():
+    """Читает history_world.db в world_history_cache (кэш заменяется целиком)."""
+    if not os.path.exists(WORLD_DB_PATH):
+        return False
+    fresh = read_history(WORLD_DB_PATH)
+    world_history_cache.clear()
+    world_history_cache.update(fresh)
+    _world_db_mtime["value"] = os.path.getmtime(WORLD_DB_PATH)
+    print(f"✅ Загружена мировая история для {len(world_history_cache)} тикеров (по {history_last_date(world_history_cache)})")
+    return True
+
+
+def world_db_changed() -> bool:
+    try:
+        return os.path.getmtime(WORLD_DB_PATH) != _world_db_mtime["value"]
+    except OSError:
+        return False
+
+
+def build_world_hierarchy(entry):
+    """Иерархия сектор -> подсектор -> компании из CSV индекса (Sector/Subsector)."""
+    rows = load_index_rows(entry)
+    latest = history_last_date(world_history_cache)
+    sectors = {}
+    for row in rows:
+        series = lookup_series(row["ticker"])
+        if latest:
+            # нет закрытий за последние DELISTED_AFTER_DAYS дней — не показываем
+            if not series:
+                continue
+            gap = datetime.strptime(latest, "%Y-%m-%d") - datetime.strptime(series[-1]["date"], "%Y-%m-%d")
+            if gap.days > DELISTED_AFTER_DAYS:
+                continue
+        sectors.setdefault(row["sector"], {}).setdefault(row["subsector"], []).append(
+            {"ticker": row["ticker"], "name": row["name"], "marketCap": row["cap"]})
+    result = []
+    for sector_name, subsectors in sectors.items():
+        subs = []
+        for sub_name, companies in subsectors.items():
+            companies.sort(key=lambda c: c["marketCap"], reverse=True)
+            subs.append({"id": f"{sector_name}_{sub_name}", "name": sub_name, "companies": companies})
+        result.append({"id": sector_name, "name": sector_name, "subsectors": subs})
+    return result
+
+
+def performance_entry(series):
+    return_1m = compute_return(series, 21)
+    return_6m = compute_return(series, 126)
+    return_1y = compute_return(series, 252)
+    entry = {
+        "return1M": return_1m,
+        "return6M": return_6m,
+        "returnYTD": compute_ytd_return(series),
+        "return1Y": return_1y,
+        "30d": return_1m,
+        "180d": return_6m,
+        "1y": return_1y,
+    }
+    for period, days in EXTRA_PERIOD_TRADING_DAYS.items():
+        entry[period] = compute_return(series, days)
+    return entry
+
+
+def indices_due(registry, now, last_refreshed, delay_minutes=30):
+    """Какие индексы пора обновить: биржа закрылась ≥ delay_minutes назад (будний день по её
+    часовому поясу), и сессия этого дня ещё не обновлялась. Только индексы с history_world.db.
+    last_refreshed: id -> 'YYYY-MM-DD' (дата сессии, которую уже обновили). now — aware datetime."""
+    due = []
+    for entry in registry:
+        if entry.get("history") != "history_world.db":
+            continue
+        try:
+            local = now.astimezone(ZoneInfo(entry["exchange_tz"]))
+            hh, mm = entry["close"].split(":")
+        except Exception:
+            continue
+        if local.weekday() >= 5:
+            continue
+        ready_at = local.replace(hour=int(hh), minute=int(mm), second=0, microsecond=0) + timedelta(minutes=delay_minutes)
+        if local < ready_at:
+            continue
+        if last_refreshed.get(entry["id"]) == local.strftime("%Y-%m-%d"):
+            continue
+        due.append(entry["id"])
+    return due
+
+
+def session_dates(registry, now, delay_minutes=30):
+    """id -> дата сессии, закрытие которой (+ delay) уже прошло к моменту now."""
+    out = {}
+    for iid in indices_due(registry, now, {}, delay_minutes):
+        entry = next(e for e in registry if e["id"] == iid)
+        out[iid] = now.astimezone(ZoneInfo(entry["exchange_tz"])).strftime("%Y-%m-%d")
+    return out
+
+
+def run_world_refresh(index_ids):
+    """Синхронно (в потоке) запускает fetch_world.refresh. ImportError — мягко."""
+    try:
+        import fetch_world
+    except ImportError:
+        print("⚠️ fetch_world.py не найден — автообновление мировых данных пропущено")
+        return None
+    return fetch_world.refresh(WORLD_DB_PATH, index_ids=index_ids)
+
+
+async def world_refresher():
+    """Фоновая задача: после закрытия бирж обновляет history_world.db; при старте — если файла нет
+    или он старше суток. Не блокирует цикл событий (refresh идёт в потоке)."""
+    last_refreshed = {}
+    registry = get_registry()
+    startup_ids = [e["id"] for e in registry if e.get("history") == "history_world.db"]
+    stale = (not os.path.exists(WORLD_DB_PATH)
+             or time.time() - os.path.getmtime(WORLD_DB_PATH) > WORLD_DB_MAX_AGE_SECONDS)
+    if startup_ids and stale:
+        try:
+            print("🌍 Стартовое обновление мировых данных")
+            await asyncio.to_thread(run_world_refresh, None)
+            await asyncio.to_thread(load_world_history)
+        except Exception as e:
+            print(f"⚠️ Стартовое обновление мировых данных не удалось: {e}")
+    if os.path.exists(WORLD_DB_PATH):
+        # то, что файл уже покрывает, повторно не качаем
+        mtime = datetime.fromtimestamp(os.path.getmtime(WORLD_DB_PATH), ZoneInfo("UTC"))
+        last_refreshed.update(session_dates(registry, mtime, WORLD_REFRESH_DELAY_MINUTES))
+    while True:
+        try:
+            registry = get_registry()
+            due = indices_due(registry, datetime.now(ZoneInfo("UTC")), last_refreshed, WORLD_REFRESH_DELAY_MINUTES)
+            if due:
+                dates = session_dates(registry, datetime.now(ZoneInfo("UTC")), WORLD_REFRESH_DELAY_MINUTES)
+                print(f"🌍 Обновляем мировые данные: {', '.join(due)}")
+                result = await asyncio.to_thread(run_world_refresh, due)
+                if result is not None:
+                    for iid in due:
+                        last_refreshed[iid] = dates[iid]
+                    await asyncio.to_thread(load_world_history)
+                else:
+                    for iid in due:  # без fetch_world не долбим каждые 5 минут
+                        last_refreshed[iid] = dates[iid]
+            elif world_db_changed():
+                await asyncio.to_thread(load_world_history)
+        except Exception as e:
+            print(f"⚠️ Обновление мировых данных не удалось: {e}")
+        await asyncio.sleep(WORLD_REFRESH_CHECK_SECONDS)
+
+
+@app.get("/api/v1/indices")
+async def get_indices():
+    result = []
+    for entry in get_registry():
+        result.append({
+            "id": entry["id"],
+            "name": entry.get("name", entry["id"]),
+            "region": entry.get("region", ""),
+            "country": entry.get("country", ""),
+            "currency": entry.get("currency", ""),
+            "live": bool(entry.get("live", False)),
+            "count": len(load_index_rows(entry)),
+            "historyThrough": index_history_through(entry) if entry["id"] != "sp500" else history_last_date(history_cache),
+        })
+    return result
+
+
+def resolve_index(index):
+    if index is None or index == "sp500":
+        return None
+    entry = find_index(index)
+    if entry is None:
+        raise HTTPException(status_code=404, detail="unknown index")
+    return entry
+
+
 @app.get("/health")
 async def health():
     """Лёгкий эндпоинт для keep-alive пингов (UptimeRobot/cron-job.org), чтобы бесплатный
@@ -322,8 +622,11 @@ async def health():
 
 
 @app.get("/api/v1/market-hierarchy")
-async def get_market_hierarchy():
+async def get_market_hierarchy(index: Optional[str] = None):
     """Возвращает иерархию рынка с секторами, подсекторами и реальной капитализацией"""
+    entry = resolve_index(index)
+    if entry is not None:
+        return build_world_hierarchy(entry)
     
     # Загружаем данные с секторами из SP500_with_market_cap.csv
     sectors_data = {}  # sector_name -> {subsector_name -> [tickers]}
@@ -434,8 +737,9 @@ async def get_market_hierarchy():
 
 @app.get("/api/v1/history/{ticker}")
 async def get_history(ticker: str):
-    """Дневные цены закрытия за последний год для тикера"""
-    return history_cache.get(ticker.upper(), [])
+    """Дневные цены закрытия за последний год для тикера (history.db и history_world.db)"""
+    t = ticker.upper()
+    return history_cache.get(t) or world_history_cache.get(t) or []
 
 
 # Дополнительные периоды для переключателя SC/1d/3d/7d/30d/180d/1y на heatmap-экранах.
@@ -444,13 +748,16 @@ EXTRA_PERIOD_TRADING_DAYS = {"1d": 1, "3d": 3, "7d": 5}
 
 
 @app.get("/api/v1/performance")
-async def get_performance():
+async def get_performance(index: Optional[str] = None):
     """Доходность по всем тикерам, посчитанная из реальных цен закрытия.
 
     return1M/return6M/returnYTD/return1Y — для экрана "All Stocks".
     1d/3d/7d/30d/180d/1y — для переключателя периода на heatmap-экранах
     (30d/180d/1y дублируют return1M/return6M/return1Y под ключами, которые
     совпадают с кнопками в UI)."""
+    entry_ = resolve_index(index)
+    if entry_ is not None:
+        return {t: performance_entry(s) for t, s in index_series(entry_).items()}
     result = {}
     for ticker, series in history_cache.items():
         return1M = compute_return(series, 21)
@@ -552,6 +859,7 @@ async def websocket_endpoint(websocket: WebSocket):
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     load_history()
+    load_world_history()
     seed_prices_from_history()
     load_initial_prices()  # фоллбэк для тикеров без реальной истории
     if not price_cache:
@@ -572,6 +880,8 @@ async def lifespan(_: FastAPI):
 
     if HISTORY_DB_URL:
         asyncio.create_task(history_refresher())
+    if WORLD_REFRESH:
+        asyncio.create_task(world_refresher())
 
     yield
 
