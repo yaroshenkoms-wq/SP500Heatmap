@@ -1,0 +1,102 @@
+Symbol,Security,Sector,Subsector,MarketCap,Currency
+ADBE,Adobe Inc.,Technology,Software - Application,87029014528,USD
+AMD,Advanced Micro Devices,Technology,Semiconductors,748023447552,USD
+ABNB,Airbnb,Consumer Cyclical,Travel Services,104167317504,USD
+ALNY,Alnylam Pharmaceuticals,Healthcare,Biotechnology,20791130112,USD
+GOOGL,Alphabet Inc. (Class A),Communication Services,Internet Content & Information,3480924454912,USD
+GOOG,Alphabet Inc. (Class C),Communication Services,Internet Content & Information,3451171635200,USD
+AMZN,Amazon,Consumer Cyclical,Internet Retail,2786707898368,USD
+AEP,American Electric Power,Utilities,Utilities - Regulated Electric,69239242752,USD
+AMGN,Amgen,Healthcare,Drug Manufacturers - General,243150520320,USD
+ADI,Analog Devices,Technology,Semiconductors,182799892480,USD
+AAPL,Apple Inc.,Technology,Consumer Electronics,5080087527424,USD
+AMAT,Applied Materials,Technology,Semiconductor Equipment & Materials,272349167616,USD
+APP,AppLovin,Communication Services,Advertising Agencies,122685218816,USD
+ARM,Arm Holdings,Technology,Semiconductors,188437708800,USD
+ASML,ASML Holding,Technology,Semiconductor Equipment & Materials,531360022528,USD
+ALAB,Astera Labs,Technology,Semiconductors,37766037504,USD
+ADSK,Autodesk,Technology,Software - Application,53083910144,USD
+ADP,Automatic Data Processing,Technology,Software - Application,118700212224,USD
+AXON,Axon Enterprise,Industrials,Aerospace & Defense,24741294080,USD
+BKR,Baker Hughes,Energy,Oil & Gas Equipment & Services,45910016000,USD
+BKNG,Booking Holdings,Consumer Cyclical,Travel Services,108877856768,USD
+AVGO,Broadcom,Technology,Semiconductors,1482164273152,USD
+CDNS,Cadence Design Systems,Technology,Software - Application,83103916032,USD
+CTAS,Cintas,Industrials,Specialty Business Services,88396857344,USD
+CSCO,Cisco,Technology,Communication Equipment,379500068864,USD
+CCEP,Coca-Cola Europacific Partners,Consumer Defensive,Beverages - Non-Alcoholic,50556186624,USD
+CMCSA,Comcast,Communication Services,Telecom Services,87603322880,USD
+CEG,Constellation Energy,Utilities,Utilities - Independent Power Producers,87935533056,USD
+CPRT,Copart,Industrials,Specialty Business Services,29180907520,USD
+CRWV,CoreWeave,Technology,Software - Infrastructure,26377041920,USD
+COST,Costco,Consumer Defensive,Discount Stores,486567116800,USD
+CRWD,CrowdStrike,Technology,Software - Infrastructure,208218587136,USD
+CSX,CSX Corporation,Industrials,Railroads,91902623744,USD
+DDOG,Datadog,Technology,Software - Application,60557668352,USD
+DXCM,DexCom,Healthcare,Medical Devices,30453305344,USD
+FANG,Diamondback Energy,Energy,Oil & Gas E&P,48535085056,USD
+DASH,DoorDash,Consumer Cyclical,Internet Retail,70253223936,USD
+EXC,Exelon,Utilities,Utilities - Regulated Electric,47475888128,USD
+FAST,Fastenal,Industrials,Industrial Distribution,59774406656,USD
+FER,Ferrovial,Industrials,Engineering & Construction,42577395712,USD
+FTNT,Fortinet,Technology,Software - Infrastructure,95218393088,USD
+GEHC,GE HealthCare,Healthcare,Medical Devices,36506738688,USD
+GILD,Gilead Sciences,Healthcare,Drug Manufacturers - General,211700973568,USD
+HONA,Honeywell Aerospace,Industrials,Aerospace & Defense,49252478976,USD
+HON,Honeywell Technologies,Industrials,Conglomerates,70288564224,USD
+IDXX,Idexx Laboratories,Healthcare,Diagnostics & Research,54061559808,USD
+INTC,Intel,Technology,Semiconductors,307783139328,USD
+INTU,Intuit,Technology,Software - Application,74576216064,USD
+ISRG,Intuitive Surgical,Healthcare,Medical Instruments & Supplies,143409971200,USD
+KDP,Keurig Dr Pepper,Consumer Defensive,Beverages - Non-Alcoholic,50316288000,USD
+KLAC,KLA Corporation,Technology,Semiconductor Equipment & Materials,186897448960,USD
+LRCX,Lam Research,Technology,Semiconductor Equipment & Materials,259989962752,USD
+LIN,Linde plc,Basic Materials,Specialty Chemicals,235509972992,USD
+LITE,Lumentum,Technology,Communication Equipment,48894582784,USD
+MAR,Marriott International,Consumer Cyclical,Lodging,106935140352,USD
+MRVL,Marvell Technology,Technology,Semiconductors,129062502400,USD
+MELI,Mercado Libre,Consumer Cyclical,Internet Retail,71972470784,USD
+META,Meta Platforms,Communication Services,Internet Content & Information,1530728284160,USD
+MCHP,Microchip Technology,Technology,Semiconductors,32892874752,USD
+MU,Micron Technology,Technology,Semiconductors,801873592320,USD
+MSFT,Microsoft,Technology,Software - Infrastructure,3684951916544,USD
+MSTR,MicroStrategy,Technology,Software - Application,36061478912,USD
+MRNA,Moderna,Healthcare,Biotechnology,85455945728,USD
+MDLZ,Mondelez International,Consumer Defensive,Confectioners,83931414528,USD
+MPWR,Monolithic Power Systems,Technology,Semiconductors,64432766976,USD
+MNST,Monster Beverage,Consumer Defensive,Beverages - Non-Alcoholic,83908755456,USD
+NBIS,Nebius Group,Communication Services,Internet Content & Information,28742512640,USD
+NFLX,"Netflix, Inc.",Communication Services,Entertainment,238515945472,USD
+NVDA,Nvidia,Technology,Semiconductors,3980149915648,USD
+NXPI,NXP Semiconductors,Technology,Semiconductors,64301240320,USD
+ORLY,O'Reilly Automotive,Consumer Cyclical,Auto Parts,75007590400,USD
+ODFL,Old Dominion Freight Line,Industrials,Trucking,35368808448,USD
+PCAR,Paccar,Industrials,Farm & Heavy Construction Machinery,55298854912,USD
+PLTR,Palantir Technologies,Technology,Software - Infrastructure,380784967680,USD
+PANW,Palo Alto Networks,Technology,Software - Infrastructure,290231713792,USD
+PAYX,Paychex,Technology,Software - Application,39787937792,USD
+PYPL,PayPal,Financial Services,Credit Services,45628059648,USD
+PDD,PDD Holdings,Consumer Cyclical,Internet Retail,123849728000,USD
+PEP,PepsiCo,Consumer Defensive,Beverages - Non-Alcoholic,191233458176,USD
+QCOM,Qualcomm,Technology,Semiconductors,175314157568,USD
+REGN,Regeneron Pharmaceuticals,Healthcare,Biotechnology,97159266304,USD
+RKLB,Rocket Lab,Industrials,Aerospace & Defense,33332310016,USD
+ROP,Roper Technologies,Technology,Software - Application,45372067840,USD
+ROST,Ross Stores,Consumer Cyclical,Apparel Retail,69691891712,USD
+SNDK,Sandisk,Technology,Computer Hardware,102619086848,USD
+STX,Seagate Technology,Technology,Computer Hardware,119371776000,USD
+SHOP,Shopify,Technology,Software - Application,172947144704,USD
+SPCX,SpaceX,Industrials,Aerospace & Defense,1836159860736,USD
+SBUX,Starbucks,Consumer Cyclical,Restaurants,120907603968,USD
+SNPS,Synopsys,Technology,Software - Infrastructure,82296438784,USD
+TMUS,T-Mobile US,Communication Services,Telecom Services,174599897088,USD
+TTWO,Take-Two Interactive,Communication Services,Electronic Gaming & Multimedia,39421546496,USD
+TER,Teradyne,Technology,Semiconductor Equipment & Materials,36458643456,USD
+TSLA,"Tesla, Inc.",Consumer Cyclical,Auto Manufacturers,1530508345344,USD
+TXN,Texas Instruments,Technology,Semiconductors,264988819456,USD
+TRI,Thomson Reuters,Industrials,Specialty Business Services,44193300480,USD
+VRTX,Vertex Pharmaceuticals,Healthcare,Biotechnology,136490737664,USD
+WMT,Walmart,Consumer Defensive,Discount Stores,1024643301376,USD
+WDC,Western Digital,Technology,Computer Hardware,111945113600,USD
+WDAY,"Workday, Inc.",Technology,Software - Application,42378645504,USD
+XEL,Xcel Energy,Utilities,Utilities - Regulated Electric,51728658432,USD

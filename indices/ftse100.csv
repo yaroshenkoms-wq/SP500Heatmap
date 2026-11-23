@@ -1,0 +1,101 @@
+Symbol,Security,Sector,Subsector,MarketCap,Currency
+III.L,3i,Financial Services,Asset Management,26193467392,GBP
+ABDN.L,Aberdeen Group,Financial Services,Asset Management,3932912896,GBP
+ADM.L,Admiral Group,Financial Services,Insurance - Property & Casualty,11679913984,GBP
+AAF.L,Airtel Africa,Communication Services,Telecom Services,9863147520,GBP
+ALW.L,Alliance Witan,Other,Other,4826082304,GBP
+AAL.L,Anglo American plc,Basic Materials,Other Industrial Metals & Mining,35701977088,GBP
+ANTO.L,Antofagasta plc,Basic Materials,Copper,27298373632,GBP
+ABF.L,Associated British Foods,Consumer Defensive,Packaged Foods,14089082880,GBP
+AZN.L,AstraZeneca,Healthcare,Drug Manufacturers - General,209994252288,GBP
+AUTO.L,Autotrader Group,Communication Services,Internet Content & Information,4100788480,GBP
+AV.L,Aviva,Financial Services,Insurance - Diversified,22265384960,GBP
+BAB.L,Babcock International,Industrials,Engineering & Construction,5066054656,GBP
+BA.L,BAE Systems,Industrials,Aerospace & Defense,53196484608,GBP
+BBY.L,Balfour Beatty,Industrials,Engineering & Construction,4047450368,GBP
+BARC.L,Barclays,Financial Services,Banks - Diversified,54677520384,GBP
+BTRW.L,Barratt Redrow,Consumer Cyclical,Residential Construction,4158428160,GBP
+BP.L,BP,Energy,Oil & Gas Integrated,84471087104,GBP
+BATS.L,British American Tobacco,Consumer Defensive,Tobacco,94099931136,GBP
+BLND.L,British Land,Real Estate,REIT - Diversified,4463933952,GBP
+BT-A.L,BT Group,Communication Services,Telecom Services,20485677056,GBP
+BNZL.L,Bunzl,Industrials,Specialty Business Services,9047911424,GBP
+BRBY.L,Burberry Group,Consumer Cyclical,Luxury Goods,4098744320,GBP
+CNA.L,Centrica,Utilities,Utilities - Independent Power Producers,6748477440,GBP
+CCEP.L,Coca-Cola Europacific Partners,Consumer Defensive,Beverages - Non-Alcoholic,38980444160,GBP
+CCH.L,Coca-Cola HBC,Consumer Defensive,Beverages - Non-Alcoholic,15642817536,GBP
+CPG.L,Compass Group,Consumer Cyclical,Restaurants,57487843328,USD
+CCC.L,Computacenter,Technology,Information Technology Services,4917892608,GBP
+CTEC.L,Convatec,Healthcare,Medical Instruments & Supplies,5134823936,GBP
+CRDA.L,Croda International,Basic Materials,Specialty Chemicals,5411121152,GBP
+DCC.L,DCC Energy,Energy,Oil & Gas Refining & Marketing,5528549376,GBP
+DGE.L,Diageo,Consumer Defensive,Beverages - Wineries & Distilleries,41589137408,GBP
+DPLM.L,Diploma,Industrials,Industrial Distribution,9111744512,GBP
+EZJ.L,EasyJet,Industrials,Airlines,5145970688,GBP
+EDV.L,Endeavour Mining,Basic Materials,Gold,7999644160,GBP
+EXPN.L,Experian,Industrials,Consulting Services,24730624000,GBP
+FCIT.L,F & C Investment Trust,Other,Other,6087351808,GBP
+FRES.L,Fresnillo plc,Basic Materials,Other Precious Metals & Mining,16624319488,GBP
+GAW.L,Games Workshop,Consumer Cyclical,Leisure,5494500864,GBP
+GLEN.L,Glencore,Basic Materials,Other Industrial Metals & Mining,54208909312,GBP
+GSK.L,GSK plc,Healthcare,Drug Manufacturers - General,74305683456,GBP
+HLN.L,Haleon,Healthcare,Drug Manufacturers - Specialty & Generic,30001457152,GBP
+HLMA.L,Halma plc,Industrials,Conglomerates,12886382592,GBP
+HSX.L,Hiscox,Financial Services,Insurance - Property & Casualty,6150636032,GBP
+HWDN.L,Howdens Joinery,Consumer Cyclical,"Furnishings, Fixtures & Appliances",4424951808,GBP
+HSBA.L,HSBC,Financial Services,Banks - Diversified,217658310656,GBP
+ICG.L,ICG,Financial Services,Asset Management,5149177856,GBP
+IGG.L,IG Group,Financial Services,Capital Markets,2999673088,GBP
+IHG.L,IHG Hotels & Resorts,Consumer Cyclical,Lodging,25419083776,USD
+IMI.L,IMI,Industrials,Specialty Industrial Machinery,6623402496,GBP
+IMB.L,Imperial Brands,Consumer Defensive,Tobacco,20910972928,GBP
+INF.L,Informa,Communication Services,Publishing,11368804352,GBP
+IAG.L,International Airlines Group,Industrials,Airlines,19700695040,GBP
+ITRK.L,Intertek,Industrials,Specialty Business Services,9125349376,GBP
+INVP.L,Investec,Financial Services,Capital Markets,3474590720,GBP
+ITH.L,Ithaca Energy,Energy,Oil & Gas E&P,3809584640,GBP
+JD.L,JD Sports,Consumer Cyclical,Apparel Retail,4125473536,GBP
+BGEO.L,Lion Finance Group,Financial Services,Banks - Regional,5411662848,GBP
+KGF.L,Kingfisher plc,Consumer Cyclical,Home Improvement Retail,6266272256,GBP
+LAND.L,Land Securities,Real Estate,REIT - Diversified,5758081024,GBP
+LGEN.L,Legal & General,Financial Services,Asset Management,15677760512,GBP
+LLOY.L,Lloyds Banking Group,Financial Services,Banks - Regional,54869655552,GBP
+LMP.L,LondonMetric Property,Real Estate,REIT - Industrial,4473165824,GBP
+LSEG.L,London Stock Exchange Group,Financial Services,Financial Data & Stock Exchanges,46481039360,GBP
+MNG.L,M&G,Financial Services,Asset Management,7400010752,GBP
+MKS.L,Marks & Spencer,Consumer Cyclical,Department Stores,9499020288,GBP
+MRO.L,Melrose Industries,Industrials,Specialty Industrial Machinery,6002451968,GBP
+MTLN.L,Metlen Energy & Metals,Utilities,Utilities - Diversified,6119074816,EUR
+NG.L,National Grid plc,Utilities,Utilities - Regulated Electric,62083026944,GBP
+NWG.L,NatWest Group,Financial Services,Banks - Regional,46631202816,GBP
+NXT.L,Next plc,Consumer Cyclical,Apparel Retail,18298574848,GBP
+PSON.L,Pearson plc,Communication Services,Publishing,7751061504,GBP
+PSH.L,Pershing Square Holdings,Financial Services,Asset Management,6656828928,GBP
+PCT.L,Polar Capital Technology Trust,Other,Other,6133007872,GBP
+PRU.L,Prudential plc,Financial Services,Insurance - Life,23237033984,GBP
+RKT.L,Reckitt,Consumer Defensive,Household & Personal Products,35409367040,GBP
+REL.L,RELX,Industrials,Specialty Business Services,50858700800,GBP
+RTO.L,Rentokil Initial,Industrials,Specialty Business Services,9313857536,GBP
+RIO.L,Rio Tinto,Basic Materials,Other Industrial Metals & Mining,93783826432,GBP
+RR.L,Rolls-Royce Holdings,Industrials,Aerospace & Defense,109305757696,GBP
+SGE.L,Sage Group,Technology,Software - Application,10100325376,GBP
+SBRY.L,Sainsbury's,Consumer Defensive,Grocery Stores,7506488832,GBP
+SMT.L,Scottish Mortgage Investment Trust,Other,Other,14914724864,GBP
+SGRO.L,Segro,Real Estate,REIT - Industrial,12312399872,GBP
+SVT.L,Severn Trent,Utilities,Utilities - Regulated Water,9733695488,GBP
+SHEL.L,Shell plc,Energy,Oil & Gas Integrated,201363128320,GBP
+SMIN.L,Smiths Group,Industrials,Specialty Industrial Machinery,6935621632,GBP
+SN.L,Smith & Nephew,Healthcare,Medical Devices,9583034368,GBP
+SPX.L,Spirax Group,Industrials,Specialty Industrial Machinery,5564209664,GBP
+SSE.L,SSE plc,Utilities,Utilities - Diversified,31413135360,GBP
+STAN.L,Standard Chartered,Financial Services,Banks - Diversified,43431714816,GBP
+SDLF.L,Standard Life,Financial Services,Insurance - Life,8855172096,GBP
+STJ.L,St. James's Place,Financial Services,Asset Management,5291826688,GBP
+TSCO.L,Tesco,Consumer Defensive,Grocery Stores,34215888896,GBP
+BBOX.L,Tritax Big Box REIT,Other,Other,4175202816,GBP
+ULVR.L,Unilever,Consumer Defensive,Household & Personal Products,104675172352,GBP
+UU.L,United Utilities,Utilities,Utilities - Regulated Water,11350962176,GBP
+VOD.L,Vodafone Group,Communication Services,Telecom Services,23828944896,GBP
+WEIR.L,Weir,Industrials,Specialty Industrial Machinery,5727041536,GBP
+WTB.L,Whitbread,Consumer Cyclical,Lodging,4707917312,GBP
+WPP.L,WPP,Communication Services,Advertising Agencies,4274196224,GBP

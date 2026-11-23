@@ -1,0 +1,51 @@
+Symbol,Security,Sector,Subsector,MarketCap,Currency
+ADS.DE,Adidas,Consumer Cyclical,Footwear & Accessories,28419471360,EUR
+ADYEN.AS,Adyen,Technology,Software - Infrastructure,25979373568,EUR
+AD.AS,Ahold Delhaize,Consumer Defensive,Grocery Stores,30171295744,EUR
+AI.PA,Air Liquide,Basic Materials,Specialty Chemicals,119758716928,EUR
+AIR.PA,Airbus,Industrials,Aerospace & Defense,154450706432,EUR
+ALV.DE,Allianz,Financial Services,Insurance - Diversified,170915364864,EUR
+ABI.BR,Anheuser-Busch InBev,Consumer Defensive,Beverages - Brewers,142998142976,EUR
+ARGX.BR,Argenx,Healthcare,Biotechnology,55100776448,EUR
+ASML.AS,ASML Holding,Technology,Semiconductor Equipment & Materials,490328424448,EUR
+CS.PA,Axa,Financial Services,Insurance - Diversified,91776753664,EUR
+BAS.DE,BASF,Basic Materials,Chemicals,44185309184,EUR
+BAYN.DE,Bayer,Healthcare,Drug Manufacturers - General,52048826368,EUR
+BBVA.MC,BBVA,Financial Services,Banks - Diversified,122735337472,EUR
+SAN.MC,Banco Santander,Financial Services,Banks - Diversified,152327864320,EUR
+BMW.DE,BMW,Consumer Cyclical,Auto Manufacturers,31613829120,EUR
+BNP.PA,BNP Paribas,Financial Services,Banks - Regional,100262084608,EUR
+BN.PA,Danone,Consumer Defensive,Packaged Foods,43708321792,EUR
+DBK.DE,Deutsche Bank,Financial Services,Banks - Regional,56596402176,EUR
+DB1.DE,Deutsche Börse,Financial Services,Financial Data & Stock Exchanges,55398543360,EUR
+DHL.DE,Deutsche Post,Industrials,Integrated Freight & Logistics,65050419200,EUR
+DTE.DE,Deutsche Telekom,Communication Services,Telecom Services,125543522304,EUR
+ENEL.MI,Enel,Utilities,Utilities - Diversified,94276067328,EUR
+ENGI.PA,Engie,Utilities,Utilities - Diversified,62168674304,EUR
+ENI.MI,Eni,Energy,Oil & Gas Integrated,67677597696,EUR
+EL.PA,EssilorLuxottica,Healthcare,Medical Instruments & Supplies,80215826432,EUR
+RACE.MI,Ferrari,Consumer Cyclical,Auto Manufacturers,64004509696,EUR
+RMS.PA,Hermès,Consumer Cyclical,Luxury Goods,130230714368,EUR
+IBE.MC,Iberdrola,Utilities,Utilities - Diversified,151548821504,EUR
+ITX.MC,Inditex,Consumer Cyclical,Apparel Retail,182788751360,EUR
+IFX.DE,Infineon Technologies,Technology,Semiconductors,62977728512,EUR
+INGA.AS,ING Group,Financial Services,Banks - Diversified,78801321984,EUR
+ISP.MI,Intesa Sanpaolo,Financial Services,Banks - Regional,101004214272,EUR
+OR.PA,L'Oréal,Consumer Defensive,Household & Personal Products,233725280256,EUR
+MC.PA,LVMH Moët Hennessy Louis Vuitton,Consumer Cyclical,Luxury Goods,190757011456,EUR
+MBG.DE,Mercedes-Benz Group,Consumer Cyclical,Auto Manufacturers,35714867200,EUR
+MUV2.DE,Munich Re,Financial Services,Insurance - Reinsurance,73274343424,EUR
+NOKIA.HE,Nokia,Technology,Communication Equipment,39714410496,EUR
+NDA-FI.HE,Nordea,Financial Services,Banks - Regional,56115716096,EUR
+PRX.AS,Prosus,Consumer Cyclical,Internet Retail,65770917888,EUR
+RHM.DE,Rheinmetall,Industrials,Aerospace & Defense,33843681280,EUR
+SAF.PA,Safran,Industrials,Aerospace & Defense,124979478528,EUR
+SGO.PA,Saint-Gobain,Industrials,Building Products & Equipment,35664539648,EUR
+SAN.PA,Sanofi,Healthcare,Drug Manufacturers - General,102363701248,EUR
+SAP.DE,SAP,Technology,Software - Application,215074422784,EUR
+SU.PA,Schneider Electric,Industrials,Specialty Industrial Machinery,138593288192,EUR
+SIE.DE,Siemens,Industrials,Specialty Industrial Machinery,202631544832,EUR
+ENR.DE,Siemens Energy,Industrials,Specialty Industrial Machinery,107598307328,EUR
+TTE.PA,TotalEnergies,Energy,Oil & Gas Integrated,169747595264,EUR
+DG.PA,Vinci SA,Industrials,Engineering & Construction,61830955008,EUR
+UCG.MI,UniCredit,Financial Services,Banks - Regional,115067707392,EUR

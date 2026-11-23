@@ -9,3 +9,4 @@ __pycache__/
 .worktrees/
 history_world.db
 history_world.db.*
+.cache_world/

@@ -1,0 +1,86 @@
+Symbol,Security,Sector,Subsector,MarketCap,Currency
+0005.HK,HSBC Holdings plc,Financial Services,Banks - Diversified,2214169411584,HKD
+0388.HK,HKEx Limited,Financial Services,Financial Data & Stock Exchanges,444169158656,HKD
+0939.HK,China Construction Bank,Financial Services,Banks - Diversified,2697100001280,HKD
+1299.HK,AIA Group Limited,Financial Services,Insurance - Life,762432323584,HKD
+1398.HK,Industrial and Commercial Bank of China,Financial Services,Banks - Diversified,2769276633088,HKD
+2318.HK,Ping An Insurance,Financial Services,Insurance - Life,899949789184,HKD
+2388.HK,BOC Hong Kong (Holdings) Ltd,Financial Services,Banks - Regional,485290639360,HKD
+2628.HK,China Life,Financial Services,Insurance - Life,609952333824,HKD
+3968.HK,China Merchants Bank,Financial Services,Banks - Regional,1346739765248,HKD
+3988.HK,Bank of China Ltd,Financial Services,Banks - Diversified,1973550972928,HKD
+0002.HK,CLP Holdings Limited,Utilities,Utilities - Regulated Electric,203505614848,HKD
+0003.HK,Hong Kong and China Gas Company Limited,Utilities,Utilities - Regulated Gas,135657259008,HKD
+0006.HK,Power Assets Holdings Limited,Utilities,Utilities - Independent Power Producers,141505380352,HKD
+0836.HK,China Resources Power,Utilities,Utilities - Independent Power Producers,100642004992,HKD
+1038.HK,Cheung Kong Infrastructure Holdings Limited,Utilities,Utilities - Regulated Electric,182545793024,HKD
+2688.HK,ENN Energy,Utilities,Utilities - Regulated Gas,54302986240,HKD
+0012.HK,Henderson Land Development Company Limited,Real Estate,Real Estate - Diversified,137785868288,HKD
+0016.HK,Sun Hung Kai Properties Limited,Real Estate,Real Estate - Development,315278491648,HKD
+0101.HK,Hang Lung Properties Limited,Real Estate,Real Estate Services,31920914432,HKD
+0688.HK,China Overseas Land & Investment Limited,Real Estate,Real Estate - Development,119518134272,HKD
+0823.HK,Link REIT,Real Estate,REIT - Retail,104750866432,HKD
+0960.HK,Longfor Properties,Real Estate,Real Estate - Development,23903481856,HKD
+1109.HK,China Resources Land Limited,Real Estate,Real Estate - Development,195672981504,HKD
+1113.HK,CK Asset Holdings,Real Estate,Real Estate - Development,174428946432,HKD
+1209.HK,China Resources Mixc Lifestyle,Real Estate,Real Estate Services,85593751552,HKD
+1997.HK,Wharf Real Estate Investment Company Limited,Real Estate,Real Estate Services,98920292352,HKD
+0001.HK,CK Hutchison Holdings Limited,Industrials,Conglomerates,248186896384,HKD
+0027.HK,Galaxy Entertainment Group Ltd.,Consumer Cyclical,Resorts & Casinos,144220094464,HKD
+0066.HK,MTR Corporation Ltd,Industrials,Railroads,198956695552,HKD
+0175.HK,Geely Auto,Consumer Cyclical,Auto Manufacturers,142700658688,HKD
+0241.HK,Alibaba Health,Healthcare,Pharmaceutical Retailers,42621915136,HKD
+0267.HK,CITIC Limited,Industrials,Conglomerates,354901196800,HKD
+0285.HK,BYD Electronics,Technology,Electronic Components,39845961728,HKD
+0288.HK,WH Group,Consumer Defensive,Packaged Foods,87437942784,HKD
+0291.HK,China Resources Beer,Consumer Defensive,Beverages - Brewers,67150802944,HKD
+0300.HK,Midea Group,Consumer Cyclical,"Furnishings, Fixtures & Appliances",785160208384,HKD
+0316.HK,Orient Overseas (International) Limited,Industrials,Marine Shipping,99055992832,HKD
+0322.HK,Tingyi,Consumer Defensive,Packaged Foods,76048343040,HKD
+0386.HK,Sinopec Corp,Energy,Oil & Gas Integrated,559361818624,HKD
+0669.HK,Techtronic Industries,Industrials,Tools & Accessories,246436806656,HKD
+0700.HK,Tencent Holdings Limited,Communication Services,Internet Content & Information,3097584992256,HKD
+0762.HK,China Unicom,Communication Services,Telecom Services,161404452864,HKD
+0857.HK,PetroChina Company Limited,Energy,Oil & Gas Integrated,1821058662400,HKD
+0868.HK,Xinyi Glass,Basic Materials,Building Materials,33139277824,HKD
+0881.HK,Zhongsheng Group,Consumer Cyclical,Auto & Truck Dealerships,3929209856,HKD
+0883.HK,CNOOC Limited,Energy,Oil & Gas E&P,1011437469696,HKD
+0941.HK,China Mobile Ltd,Communication Services,Telecom Services,1711927721984,HKD
+0968.HK,Xinyi Solar,Technology,Solar,15889755136,HKD
+0981.HK,Semiconductor Manufacturing International Corporation,Technology,Semiconductors,417333313536,HKD
+0992.HK,Lenovo,Technology,Computer Hardware,225610121216,HKD
+1024.HK,Kuaishou,Communication Services,Internet Content & Information,86434594816,HKD
+1044.HK,Hengan International Group Co. Ltd,Consumer Defensive,Household & Personal Products,24060669952,HKD
+1088.HK,China Shenhua Energy,Energy,Thermal Coal,909654818816,HKD
+1093.HK,CSPC Pharmaceutical Group,Healthcare,Drug Manufacturers - General,90331176960,HKD
+1099.HK,Sinopharm Group,Healthcare,Medical Distribution,52146159616,HKD
+1177.HK,Sino Biopharm,Healthcare,Biotechnology,92035063808,HKD
+1211.HK,BYD Company,Consumer Cyclical,Auto Manufacturers,557972455424,HKD
+1378.HK,China Hongqiao Group,Basic Materials,Aluminum,167328399360,HKD
+1810.HK,Xiaomi,Technology,Consumer Electronics,707995762688,HKD
+1876.HK,Budweiser Brewing Company APAC,Consumer Defensive,Beverages - Brewers,81032331264,HKD
+1928.HK,Sands China,Consumer Cyclical,Resorts & Casinos,84333019136,HKD
+1929.HK,Chow Tai Fook,Consumer Cyclical,Luxury Goods,112180183040,HKD
+2015.HK,Li Auto,Consumer Cyclical,Auto Manufacturers,81348329472,HKD
+2020.HK,Anta Sports,Consumer Cyclical,Leisure,223163744256,HKD
+2057.HK,ZTO Express,Industrials,Integrated Freight & Logistics,119536844800,HKD
+2269.HK,WuXi Biologics,Healthcare,Biotechnology,176343597056,HKD
+2313.HK,Shenzhou International,Consumer Cyclical,Textile Manufacturing,63269392384,HKD
+2319.HK,Mengniu Dairy,Consumer Defensive,Packaged Foods,86086090752,HKD
+2331.HK,Li-Ning,Consumer Cyclical,Leisure,32176850944,HKD
+2359.HK,WuXi AppTec,Healthcare,Diagnostics & Research,576024805376,HKD
+2382.HK,Sunny Optical,Technology,Electronic Components,67082219520,HKD
+2618.HK,JD Logistics,Industrials,Integrated Freight & Logistics,53824950272,HKD
+2899.HK,Zijin Mining,Basic Materials,Gold,638710972416,HKD
+3690.HK,Meituan,Consumer Cyclical,Internet Retail,409810239488,HKD
+3692.HK,Hansoh Pharmaceutical Group,Healthcare,Drug Manufacturers - Specialty & Generic,194007334912,HKD
+6618.HK,JD Health,Healthcare,Pharmaceutical Retailers,106147594240,HKD
+6690.HK,Haier,Consumer Cyclical,"Furnishings, Fixtures & Appliances",205311721472,HKD
+6862.HK,Haidilao,Consumer Cyclical,Restaurants,52123979776,HKD
+9618.HK,JD.com,Consumer Cyclical,Internet Retail,266471620608,HKD
+9633.HK,Nongfu Spring,Consumer Defensive,Beverages - Non-Alcoholic,514863202304,HKD
+9888.HK,Baidu,Communication Services,Internet Content & Information,173029588992,HKD
+9961.HK,Trip.com Group,Consumer Cyclical,Travel Services,200246263808,HKD
+9988.HK,Alibaba Group,Consumer Cyclical,Internet Retail,1652857896960,HKD
+9992.HK,Pop Mart,Consumer Cyclical,Leisure,183967645696,HKD
+9999.HK,NetEase,Communication Services,Electronic Gaming & Multimedia,510634491904,HKD

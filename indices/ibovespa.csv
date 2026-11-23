@@ -1,0 +1,74 @@
+Symbol,Security,Sector,Subsector,MarketCap,Currency
+ALOS3.SA,Allos,Real Estate,Real Estate Services,12618515456,BRL
+ABEV3.SA,Ambev S/A,Consumer Defensive,Beverages - Brewers,245391114240,BRL
+ASAI3.SA,Assai,Consumer Defensive,Grocery Stores,12555832320,BRL
+AURE3.SA,Auren,Utilities,Utilities - Renewable,12231695360,BRL
+AXIA3.SA,Axia Energia,Utilities,Utilities - Renewable,109820297216,BRL
+AZZA3.SA,Azzas 2154,Consumer Cyclical,Footwear & Accessories,2925500416,BRL
+B3SA3.SA,B3,Financial Services,Financial Data & Stock Exchanges,70577930240,BRL
+BBSE3.SA,Bbseguridade,Financial Services,Insurance - Diversified,70603202560,BRL
+BBDC4.SA,Bradesco,Financial Services,Banks - Regional,153412288512,BRL
+BRAP4.SA,Bradespar,Financial Services,Asset Management,6521473024,BRL
+BBAS3.SA,Brasil,Financial Services,Banks - Regional,82265579520,BRL
+BRAV3.SA,Brava,Energy,Oil & Gas E&P,5908988416,BRL
+BPAC11.SA,Btgp Banco,Financial Services,Capital Markets,167197573120,BRL
+CXSE3.SA,Caixa Seguri,Financial Services,Insurance - Diversified,61320003584,BRL
+CEAB3.SA,Cea Modas,Consumer Cyclical,Specialty Retail,2181985280,BRL
+CMIG4.SA,Cemig,Utilities,Utilities - Regulated Electric,30666512384,BRL
+COGN3.SA,Cogna On,Consumer Defensive,Education & Training Services,3148615168,BRL
+CSMG3.SA,Copasa,Utilities,Utilities - Regulated Water,21404792832,BRL
+CPLE3.SA,Copel,Utilities,Utilities - Regulated Electric,44603551744,BRL
+CSAN3.SA,Cosan,Energy,Oil & Gas Refining & Marketing,12349215744,BRL
+CPFE3.SA,Cpfl Energia,Utilities,Utilities - Regulated Electric,49904144384,BRL
+CMIN3.SA,Csnmineracao,Basic Materials,Steel,26032513024,BRL
+CURY3.SA,Cury S/A,Real Estate,Real Estate - Development,7787443200,BRL
+CYRE3.SA,Cyrela Realt,Consumer Cyclical,Residential Construction,6694749184,BRL
+DIRR3.SA,Direcional,Real Estate,Real Estate - Development,4623387136,BRL
+EMBJ3.SA,Embraer,Industrials,Aerospace & Defense,76671549440,BRL
+ENGI11.SA,Energisa,Utilities,Utilities - Regulated Electric,15007866880,BRL
+ENEV3.SA,Eneva,Utilities,Utilities - Diversified,49737498624,BRL
+EGIE3.SA,Engie Brasil,Utilities,Utilities - Renewable,35027116032,BRL
+EQTL3.SA,Equatorial,Utilities,Utilities - Regulated Electric,40729202688,BRL
+FLRY3.SA,Fleury,Healthcare,Diagnostics & Research,11758635008,BRL
+GGBR4.SA,Gerdau,Basic Materials,Steel,49486020608,BRL
+GOAU4.SA,Gerdau Met,Basic Materials,Steel,14902078464,BRL
+HAPV3.SA,Hapvida,Financial Services,Insurance - Life,2741769472,BRL
+HYPE3.SA,Hypera,Healthcare,Drug Manufacturers - Specialty & Generic,14981035008,BRL
+ISAE4.SA,Isa Energia,Utilities,Utilities - Independent Power Producers,18054422528,BRL
+ITSA4.SA,Itausa,Industrials,Conglomerates,145247256576,BRL
+ITUB4.SA,Itauunibanco,Financial Services,Banks - Regional,439668604928,BRL
+KLBN11.SA,Klabin S/A,Basic Materials,Paper & Paper Products,117605310464,BRL
+RENT3.SA,Localiza,Industrials,Rental & Leasing Services,31950768128,BRL
+LREN3.SA,Lojas Renner,Consumer Cyclical,Department Stores,8603617280,BRL
+MGLU3.SA,Magaz Luiza,Consumer Cyclical,Specialty Retail,6919199744,BRL
+POMO4.SA,Marcopolo,Industrials,Farm & Heavy Construction Machinery,4389992960,BRL
+MBRF3.SA,Marfrig,Consumer Defensive,Packaged Foods,24913240064,BRL
+BEEF3.SA,Minerva,Consumer Defensive,Packaged Foods,3619772672,BRL
+MOTV3.SA,Motiva Sa,Industrials,Infrastructure Operations,31649513472,BRL
+MRVE3.SA,Mrv,Real Estate,Real Estate - Development,2510241536,BRL
+MULT3.SA,Multiplan,Real Estate,Real Estate Services,12787734528,BRL
+NATU3.SA,Natura,Consumer Defensive,Household & Personal Products,6224150016,BRL
+PETR4.SA,Petrobras,Energy,Oil & Gas Integrated,567854497792,BRL
+PSSA3.SA,Porto Seguro,Financial Services,Insurance - Diversified,27646160896,BRL
+PRIO3.SA,Prio,Energy,Oil & Gas E&P,46498979840,BRL
+RADL3.SA,Raiadrogasil,Healthcare,Pharmaceutical Retailers,25755936768,BRL
+RDOR3.SA,Rede D Or,Healthcare,Medical Care Facilities,78951276544,BRL
+RAIL3.SA,Rumo S.A.,Industrials,Railroads,31173076992,BRL
+SBSP3.SA,Sabesp,Utilities,Utilities - Regulated Water,97753669632,BRL
+SANB11.SA,Santander Br,Financial Services,Banks - Regional,151317200896,BRL
+CSNA3.SA,Sid Nacional,Basic Materials,Steel,4415892992,BRL
+SMFT3.SA,Smart Fit,Consumer Cyclical,Leisure,10968586240,BRL
+SUZB3.SA,Suzano S.A.,Basic Materials,Paper & Paper Products,67950063616,BRL
+TAEE11.SA,Taesa,Utilities,Utilities - Regulated Electric,40647557120,BRL
+VIVT3.SA,Telef Brasil,Communication Services,Telecom Services,112037961728,BRL
+TEND3.SA,Tenda,Real Estate,Real Estate - Development,1827640192,BRL
+TIMS3.SA,Tim,Communication Services,Telecom Services,52527259648,BRL
+TOTS3.SA,Totvs,Technology,Software - Application,17502408704,BRL
+UGPA3.SA,Ultrapar,Energy,Oil & Gas Refining & Marketing,33363396608,BRL
+USIM5.SA,Usiminas,Basic Materials,Steel,6167023104,BRL
+VALE3.SA,Vale,Basic Materials,Other Industrial Metals & Mining,249600540672,BRL
+VAMO3.SA,Vamos,Industrials,Rental & Leasing Services,3152313088,BRL
+VBBR3.SA,Vibra,Consumer Cyclical,Specialty Retail,36447637504,BRL
+VIVA3.SA,Vivara S.A.,Consumer Cyclical,Luxury Goods,3700212480,BRL
+WEGE3.SA,Weg,Industrials,Electrical Equipment & Parts,210169118720,BRL
+YDUQ3.SA,Yduqs Part,Consumer Defensive,Education & Training Services,2397574400,BRL

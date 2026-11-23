@@ -1,0 +1,40 @@
+Symbol,Security,Sector,Subsector,MarketCap,Currency
+AC.PA,Accor,Consumer Cyclical,Lodging,11144639488,EUR
+AI.PA,Air Liquide,Basic Materials,Specialty Chemicals,119758716928,EUR
+AIR.PA,Airbus,Industrials,Aerospace & Defense,154450706432,EUR
+MT.AS,ArcelorMittal,Basic Materials,Steel,40905265152,EUR
+CS.PA,Axa,Financial Services,Insurance - Diversified,91776753664,EUR
+BNP.PA,BNP Paribas,Financial Services,Banks - Regional,100262084608,EUR
+EN.PA,Bouygues,Industrials,Engineering & Construction,16439938048,EUR
+BVI.PA,Bureau Veritas,Industrials,Consulting Services,13080357888,EUR
+CAP.PA,Capgemini,Technology,Information Technology Services,19139018752,EUR
+CA.PA,Carrefour,Consumer Defensive,Grocery Stores,9527510016,EUR
+ACA.PA,Crédit Agricole,Financial Services,Banks - Diversified,46650535936,EUR
+BN.PA,Danone,Consumer Defensive,Packaged Foods,43708321792,EUR
+DSY.PA,Dassault Systèmes,Technology,Software - Application,29097437184,EUR
+FGR.PA,Eiffage,Industrials,Engineering & Construction,10476199936,EUR
+ENGI.PA,Engie,Utilities,Utilities - Diversified,62168674304,EUR
+EL.PA,EssilorLuxottica,Healthcare,Medical Instruments & Supplies,80215826432,EUR
+ERF.PA,Eurofins Scientific,Healthcare,Diagnostics & Research,14678830080,EUR
+ENX.PA,Euronext,Financial Services,Financial Data & Stock Exchanges,16437171200,EUR
+RMS.PA,Hermès,Consumer Cyclical,Luxury Goods,130230714368,EUR
+KER.PA,Kering,Consumer Cyclical,Luxury Goods,21882914816,EUR
+OR.PA,L'Oréal,Consumer Defensive,Household & Personal Products,233725280256,EUR
+LR.PA,Legrand,Industrials,Electrical Equipment & Parts,34793336832,EUR
+MC.PA,LVMH,Consumer Cyclical,Luxury Goods,190757011456,EUR
+ORA.PA,Orange,Communication Services,Telecom Services,39453151232,EUR
+RI.PA,Pernod Ricard,Consumer Defensive,Beverages - Wineries & Distilleries,17934546944,EUR
+PUB.PA,Publicis,Communication Services,Advertising Agencies,24867225600,EUR
+RNO.PA,Renault,Consumer Cyclical,Auto Manufacturers,7868063232,EUR
+SAF.PA,Safran,Industrials,Aerospace & Defense,124979478528,EUR
+SGO.PA,Saint-Gobain,Industrials,Building Products & Equipment,35664539648,EUR
+SAN.PA,Sanofi,Healthcare,Drug Manufacturers - General,102363701248,EUR
+SU.PA,Schneider Electric,Industrials,Specialty Industrial Machinery,138593288192,EUR
+GLE.PA,Société Générale,Financial Services,Banks - Regional,45909880832,EUR
+STLAP.PA,Stellantis,Consumer Cyclical,Auto Manufacturers,9348443136,EUR
+STMPA.PA,STMicroelectronics,Technology,Semiconductors,35725762560,EUR
+HO.PA,Thales,Industrials,Aerospace & Defense,46617886720,EUR
+TTE.PA,TotalEnergies,Energy,Oil & Gas Integrated,169747595264,EUR
+URW.PA,Unibail-Rodamco-Westfield,Real Estate,REIT - Retail,13191605248,EUR
+VIE.PA,Veolia,Industrials,Waste Management,24953817088,EUR
+DG.PA,Vinci,Industrials,Engineering & Construction,61830955008,EUR
