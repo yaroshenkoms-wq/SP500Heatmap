@@ -59,6 +59,11 @@ def load_symbols(entry):
         return [r["Symbol"].strip() for r in csv.DictReader(f) if r["Symbol"].strip()]
 
 
+# Ряды самих индексов — для сравнения личного портфеля с индексом в приложении (24.11.2026).
+# Пишутся вместе с курсами валют: последний закрытый день, без отсечения сессии.
+BENCHMARK_SYMBOLS = ["^GSPC", "^NDX", "^DJI", "^GDAXI", "^FCHI", "^IBEX", "^FTSE", "^N225", "000300.SS", "^AXJO", "^STOXX50E"]
+
+
 def fx_symbol(currency):
     """Символ Yahoo курса валюты к доллару: EUR -> EURUSD=X (сколько долларов за 1 единицу)."""
     return f"{currency}USD=X"
@@ -167,7 +172,7 @@ def refresh(db_path=DB_PATH, index_ids=None, now=None, downloader=None):
             owners.setdefault(s, []).append(iid)
     all_symbols = sorted(owners)
 
-    fx_symbols = [fx_symbol(c) for c in load_currencies(registry)]
+    fx_symbols = [fx_symbol(c) for c in load_currencies(registry)] + BENCHMARK_SYMBOLS
     vol_series = {}
     closes = download_all(all_symbols + fx_symbols, downloader, notes, vol_series)
 
@@ -236,7 +241,7 @@ def refresh_fx(db_path=DB_PATH, currencies=None, downloader=None):
     """Быстро (секунды): качает только курсы валют к USD. Возвращает {"currencies": [...], "rows_written": n, "missing": [...]}."""
     downloader = downloader or default_download
     currencies = currencies if currencies is not None else load_currencies()
-    symbols = [fx_symbol(c) for c in currencies]
+    symbols = [fx_symbol(c) for c in currencies] + BENCHMARK_SYMBOLS
     notes = []
     closes = download_all(symbols, downloader, notes)
     conn = sqlite3.connect(db_path, timeout=30)

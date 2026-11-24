@@ -232,7 +232,7 @@ struct ScreenerView: View {
         case "divYield": return p(r.divYield)
         case "beta": return d(r.beta, 2)
         case "revGrowth": return p(r.revGrowth)
-        case "pos52w": return p(r.pos52w)
+        case "pos52w": return p(r.pos52w.map { $0 * 100 })  // сервер: 0…1
         case "relVolume": return d(r.relVolume, 2) + (r.relVolume == nil ? "" : "x")
         default: return "—"
         }

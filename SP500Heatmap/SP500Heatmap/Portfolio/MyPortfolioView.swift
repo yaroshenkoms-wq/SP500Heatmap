@@ -188,7 +188,7 @@ struct MyPortfolioView: View {
                     transactionsLink(p)
                 }
                 if !p.transactions.isEmpty {
-                    PortfolioInsightView(portfolio: p) // INSIGHT-CALL-SITE (AI agent view; stub in Stubs_PortfolioInsight.swift)
+                    PortfolioInsightView(holdings: r.holdings.map(PortfolioInsightHolding.init))
                 }
                 footer
             }

@@ -105,9 +105,9 @@ struct FinancialsSection: View {
             ("EV/EBITDA", r.evToEbitda.map { formatDecimal($0, fractionDigits: 1) }),
             ("PEG", r.peg.map { formatDecimal($0) }),
             ("P/FCF", r.priceToFcf.map { formatDecimal($0, fractionDigits: 1) }),
-            ("ROE", r.roe.map { formatPercent($0 * 100) }),
-            ("ROA", r.roa.map { formatPercent($0 * 100) }),
-            ("Debt/Equity", r.debtToEquity.map { formatDecimal($0 > 10 ? $0 / 100 : $0) }),
+            ("ROE", r.roe.map { formatPercent($0) }),
+            ("ROA", r.roa.map { formatPercent($0) }),
+            ("Debt/Equity", r.debtToEquity.map { formatDecimal($0) }),
             ("Current ratio", r.currentRatio.map { formatDecimal($0) })
         ]
         let shown = items.filter { $0.1 != nil }

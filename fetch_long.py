@@ -64,6 +64,12 @@ def all_symbols(registry=None, base_dir=None):
                 t = (r.get("Symbol") or "").strip()
                 if t and t not in seen:
                     seen[t] = yahoo_symbol(t, e["id"])
+    # курсы валют и ряды индексов — для графика личного портфеля дальше года
+    import fetch_world
+    for c in fetch_world.load_currencies(registry):
+        seen.setdefault(fetch_world.fx_symbol(c), fetch_world.fx_symbol(c))
+    for b in fetch_world.BENCHMARK_SYMBOLS:
+        seen.setdefault(b, b)
     return list(seen.items())
 
 

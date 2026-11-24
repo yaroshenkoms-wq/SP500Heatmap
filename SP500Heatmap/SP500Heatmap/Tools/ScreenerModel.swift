@@ -66,7 +66,7 @@ struct ScreenerFilters: Codable, Equatable {
         add("divMin", divMin); add("betaMax", betaMax); add("revGrowthMin", revGrowthMin)
         q.append(URLQueryItem(name: "period", value: period))
         add("chgMin", chgMin); add("chgMax", chgMax)
-        add("pos52Min", pos52Min); add("pos52Max", pos52Max); add("relVolMin", relVolMin)
+        add("pos52Min", pos52Min.map { $0 / 100 }); add("pos52Max", pos52Max.map { $0 / 100 }); add("relVolMin", relVolMin)  // pos52: в интерфейсе %, сервер ждёт 0…1
         q.append(URLQueryItem(name: "sort", value: sort))
         q.append(URLQueryItem(name: "order", value: ascending ? "asc" : "desc"))
         q.append(URLQueryItem(name: "limit", value: "100"))

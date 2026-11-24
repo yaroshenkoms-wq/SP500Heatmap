@@ -261,3 +261,18 @@ def test_refresh_fx_only_downloads_fx(world):
     assert calls == [["EURUSD=X", "JPYUSD=X"]]
     assert rows_of(db) == [("EURUSD=X", "2025-03-11", pytest.approx(1.1))]
     assert res["missing"] == ["JPY"] and res["rows_written"] == 1
+
+
+import pytest as _pt
+
+
+@_pt.mark.benchmarks
+def test_fx_refresh_includes_index_benchmarks(tmp_path):
+    import fetch_world
+    asked = []
+
+    def fake_download(symbols):
+        asked.extend(symbols)
+        return {}
+    fetch_world.refresh_fx(str(tmp_path / "w.db"), currencies=["EUR"], downloader=fake_download)
+    assert "EURUSD=X" in asked and "^GSPC" in asked and "^IBEX" in asked
