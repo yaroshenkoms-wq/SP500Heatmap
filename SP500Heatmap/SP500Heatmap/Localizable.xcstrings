@@ -1,6 +1,9 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "": {
+      "shouldTranslate": false
+    },
     "% Change": {
       "extractionState": "manual",
       "localizations": {
@@ -945,6 +948,9 @@
         }
       }
     },
+    "0": {
+      "shouldTranslate": false
+    },
     "10Y": {
       "extractionState": "manual",
       "localizations": {
@@ -1475,6 +1481,9 @@
           }
         }
       }
+    },
+    "30": {
+      "shouldTranslate": false
     },
     "30Y": {
       "extractionState": "manual",
@@ -2301,6 +2310,9 @@
           }
         }
       }
+    },
+    "70": {
+      "shouldTranslate": false
     },
     "7d": {
       "extractionState": "manual",
@@ -13040,6 +13052,58 @@
         }
       }
     },
+    "Kind": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النوع"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ধরন"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रकार"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тип"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тип"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "类型"
+          }
+        }
+      }
+    },
     "Language": {
       "localizations": {
         "ar": {
@@ -14088,6 +14152,9 @@
         }
       }
     },
+    "MACD": {
+      "shouldTranslate": false
+    },
     "Manage lists": {
       "extractionState": "manual",
       "localizations": {
@@ -14261,6 +14328,58 @@
           "stringUnit": {
             "state": "translated",
             "value": "地图"
+          }
+        }
+      }
+    },
+    "Margin": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الهامش"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "মার্জিন"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Margen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marge"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मार्जिन"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Маржа"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Маржа"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "利润率"
           }
         }
       }
@@ -21168,6 +21287,9 @@
         }
       }
     },
+    "RSI": {
+      "shouldTranslate": false
+    },
     "Rationale": {
       "extractionState": "manual",
       "localizations": {
@@ -22820,6 +22942,9 @@
         }
       }
     },
+    "S": {
+      "shouldTranslate": false
+    },
     "SC": {
       "extractionState": "manual",
       "localizations": {
@@ -23528,6 +23653,58 @@
         }
       }
     },
+    "Series": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السلسلة"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সিরিজ"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serie"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Série"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "श्रृंखला"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ряд"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ряд"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系列"
+          }
+        }
+      }
+    },
     "Settings": {
       "extractionState": "manual",
       "localizations": {
@@ -23878,6 +24055,58 @@
           "stringUnit": {
             "state": "translated",
             "value": "展开"
+          }
+        }
+      }
+    },
+    "Signal": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإشارة"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সিগন্যাল"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Señal"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signal"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सिग्नल"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сигнал"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сигнал"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "信号线"
           }
         }
       }
@@ -27776,6 +28005,58 @@
         }
       }
     },
+    "Year": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السنة"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "বছর"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Año"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Année"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "वर्ष"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Год"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Рік"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年份"
+          }
+        }
+      }
+    },
     "You only held %@ on that date.": {
       "extractionState": "manual",
       "localizations": {
@@ -28071,6 +28352,30 @@
         }
       }
     },
+    "base": {
+      "shouldTranslate": false
+    },
+    "c": {
+      "shouldTranslate": false
+    },
+    "h": {
+      "shouldTranslate": false
+    },
+    "hist": {
+      "shouldTranslate": false
+    },
+    "i": {
+      "shouldTranslate": false
+    },
+    "l": {
+      "shouldTranslate": false
+    },
+    "o": {
+      "shouldTranslate": false
+    },
+    "s": {
+      "shouldTranslate": false
+    },
     "today": {
       "extractionState": "manual",
       "localizations": {
@@ -28129,6 +28434,9 @@
           }
         }
       }
+    },
+    "v": {
+      "shouldTranslate": false
     },
     "vs": {
       "extractionState": "manual",
@@ -28190,5 +28498,5 @@
       }
     }
   },
-  "version": "1.0"
+  "version": "1.1"
 }

@@ -1,65 +1,77 @@
 {
-  "sourceLanguage": "en",
-  "version": "1.0",
-  "strings": {
-    "NSCalendarsWriteOnlyAccessUsageDescription": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lets you add earnings and dividend dates to your calendar."
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "SP500Heatmap"
+          }
+        }
+      }
+    },
+    "NSCalendarsWriteOnlyAccessUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السماح بإضافة مواعيد الأرباح والتوزيعات إلى تقويمك."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Permite añadir fechas de resultados y dividendos a tu calendario."
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "আপনার ক্যালেন্ডারে আয় প্রতিবেদন ও লভ্যাংশের তারিখ যোগ করার অনুমতি দেয়।"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "允许将财报和股息日期添加到你的日历。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lets you add earnings and dividend dates to your calendar."
           }
         },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "السماح بإضافة مواعيد الأرباح والتوزيعات إلى تقويمك."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite añadir fechas de resultados y dividendos a tu calendario."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Permet d'ajouter les dates de résultats et de dividendes à votre calendrier."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permet d'ajouter les dates de résultats et de dividendes à votre calendrier."
           }
         },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "আপনার ক্যালেন্ডারে আয় প্রতিবেদন ও লভ্যাংশের তারিখ যোগ করার অনুমতি দেয়।"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपके कैलेंडर में आय रिपोर्ट और डिविडेंड की तारीखें जोड़ने की अनुमति देता है।"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "आपके कैलेंडर में आय रिपोर्ट और डिविडेंड की तारीखें जोड़ने की अनुमति देता है।"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Позволяет добавлять в ваш календарь даты отчётов и дивидендов."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Позволяет добавлять в ваш календарь даты отчётов и дивидендов."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дозволяє додавати до вашого календаря дати звітів і дивідендів."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Дозволяє додавати до вашого календаря дати звітів і дивідендів."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许将财报和股息日期添加到你的日历。"
           }
         }
       }
     }
-  }
+  },
+  "version" : "1.0"
 }

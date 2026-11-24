@@ -89,12 +89,16 @@ final class PushManager: ObservableObject {
     private var lastLanguage = ""
     private let defaults = UserDefaults.standard
 
+    /// Окружение APNs берём из профиля подписи, а не из конфигурации сборки: сборка Release,
+    /// подписанная профилем разработчика (установка на устройства владельца), получает
+    /// «sandbox»-токены. Сборка из App Store профиля внутри не содержит — это production.
     private var environment: String {
-        #if DEBUG
-        "sandbox"
-        #else
-        "production"
-        #endif
+        guard let url = Bundle.main.url(forResource: "embedded", withExtension: "mobileprovision"),
+              let data = try? Data(contentsOf: url),
+              let text = String(data: data, encoding: .isoLatin1),
+              let r = text.range(of: "<key>aps-environment</key>") else { return "production" }
+        let tail = text[r.upperBound...].prefix(80)
+        return tail.contains("development") ? "sandbox" : "production"
     }
 
     private init() {}
