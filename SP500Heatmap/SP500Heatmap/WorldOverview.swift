@@ -80,31 +80,62 @@ struct WorldOverviewView: View {
     @State private var showFavorites = false
     private let periods = ["1d", "3d", "7d", "30d", "180d", "1y"]
 
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    private var isRegular: Bool { sizeClass == .regular }
+
+    private var hasCrypto: Bool {
+        store.regions.contains { $0.id == "assets" && $0.indices.contains { $0.id == "crypto50" } }
+    }
+
+    private var titleView: some View {
+        Text("World markets")
+            .font(Theme.serif(.largeTitle, scale: isRegular ? 1.35 : 1))
+            .foregroundColor(Theme.text)
+            .lineLimit(1)
+            .minimumScaleFactor(0.6)
+            .frame(maxWidth: isRegular ? nil : .infinity, alignment: .leading)
+    }
+
+    private var buttons: some View {
+        HStack(spacing: 6) {
+            PortfoliosEntryButton()
+            HomeHeaderButtons(
+                shareTitle: AppLanguage.string("World markets"),
+                shareSubtitle: shareSubtitle(period: period, asOf: store.overview?.asOf),
+                showFavorites: $showFavorites, onSettings: onSettings
+            ) { WorldMapContent(regions: store.regions, period: period, onSelect: { _ in }) }
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: 4) {
-                HStack {
-                    Text("World markets")
-                        .font(Theme.serif(.largeTitle))
-                        .foregroundColor(Theme.text)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.6)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    PortfoliosEntryButton()
-                    HomeHeaderButtons(
-                        shareTitle: AppLanguage.string("World markets"),
-                        shareSubtitle: shareSubtitle(period: period, asOf: store.overview?.asOf),
-                        showFavorites: $showFavorites, onSettings: onSettings
-                    ) { WorldMapContent(regions: store.regions, period: period, onSelect: { _ in }) }
-                }
-                .padding(.horizontal)
-                PeriodSwitchView(selectedPeriod: $period, availablePeriods: periods)
-                Group {
-                    if let date = localizedShortDate(store.overview?.asOf) {
-                        Text("Closing prices · \(date)")
-                    } else {
-                        Text("Closing prices")
+                if isRegular {
+                    // iPad: заголовок и кнопки в одной строке, шрифт крупнее.
+                    HStack {
+                        titleView
+                        Spacer()
+                        buttons
                     }
+                    .padding(.horizontal)
+                } else {
+                    // iPhone: заголовок на своей строке, кнопки ниже — название не сжимается.
+                    VStack(alignment: .leading, spacing: 8) {
+                        titleView
+                        buttons
+                    }
+                    .padding(.horizontal)
+                }
+                PeriodSwitchView(selectedPeriod: $period, availablePeriods: periods)
+                VStack(alignment: .leading, spacing: 1) {
+                    Group {
+                        if let date = localizedShortDate(store.overview?.asOf) {
+                            Text("Closing prices · \(date)")
+                        } else {
+                            Text("Closing prices")
+                        }
+                    }
+                    if hasCrypto { Text("Data: CoinGecko") }
                 }
                 .font(Theme.ui(.caption2))
                 .foregroundColor(Theme.muted)

@@ -79,6 +79,7 @@ struct ShareMapButton<Map: View>: View {
         .sheet(item: $file) { item in
             ActivityView(items: [item.url])
                 .presentationDetents([.medium, .large])
+                .presentationSizing(.form)
         }
     }
 

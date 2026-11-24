@@ -58,6 +58,18 @@ class NetworkService: ObservableObject {
         return try JSONDecoder().decode([DailyClose].self, from: data)
     }
 
+    func fetchMetrics(index: String) async throws -> [String: CompanyMetrics] {
+        let data = try await fetchData(try apiURL("/api/v1/metrics", index: index), timeout: 30)
+        return try JSONDecoder().decode([String: CompanyMetrics].self, from: data)
+    }
+
+    func fetchCompanyInfo(ticker: String) async throws -> CompanyInfo {
+        let encoded = ticker.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ticker
+        guard let url = URL(string: "\(baseURL)/api/v1/company/\(encoded)") else { throw NetworkError.invalidURL }
+        let data = try await fetchData(url, timeout: 30)
+        return try JSONDecoder().decode(CompanyInfo.self, from: data)
+    }
+
     func fetchPerformance(index: String? = nil) async throws -> [String: PerformanceMetrics] {
         let data = try await fetchData(try apiURL("/api/v1/performance", index: index))
         return try JSONDecoder().decode([String: PerformanceMetrics].self, from: data)

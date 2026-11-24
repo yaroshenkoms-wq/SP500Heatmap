@@ -61,10 +61,13 @@ enum Theme {
     }
 
     /// Шрифт заголовков (Instrument Serif, только regular).
-    static func serif(_ style: Font.TextStyle = .largeTitle) -> Font {
-        guard usesInstrumentSerif else { return .system(style, design: .serif) }
+    static func serif(_ style: Font.TextStyle = .largeTitle, scale: CGFloat = 1) -> Font {
+        guard usesInstrumentSerif else {
+            return scale == 1 ? .system(style, design: .serif)
+                              : .system(size: baseSize(style) * scale, weight: .regular, design: .serif)
+        }
         // Instrument Serif узкий и визуально мельче, поэтому размер чуть крупнее.
-        return .custom("InstrumentSerif-Regular", size: baseSize(style) * 1.12, relativeTo: style)
+        return .custom("InstrumentSerif-Regular", size: baseSize(style) * 1.12 * scale, relativeTo: style)
     }
 }
 
