@@ -1,9 +1,20 @@
 import SwiftUI
 import WidgetKit
 
-/// Размер плиток: по капитализации или одинаковые.
-enum SizeMode: String, CaseIterable {
-    case marketCap, equal
+/// Размер плиток: по капитализации, одинаковые, по объёму торгов или по обороту (деньги, прошедшие через бумагу).
+enum SizeMode: String, CaseIterable, Identifiable {
+    case marketCap, equal, volume, turnover
+
+    var id: String { rawValue }
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .marketCap: return "Market cap"
+        case .equal: return "Equal"
+        case .volume: return "Volume"
+        case .turnover: return "Turnover"
+        }
+    }
 
     static let storageKey = "sizeMode"
 
@@ -11,7 +22,7 @@ enum SizeMode: String, CaseIterable {
         SizeMode(rawValue: AppGroup.defaults.string(forKey: storageKey) ?? "") ?? .marketCap
     }
 
-    /// Вес плитки в карте: капитализация или 1 (внутри своего родителя).
+    /// Вес плитки там, где объёма нет (мировая карта индексов): капитализация или 1.
     static func weight(_ cap: Double) -> Double {
         current == .equal ? 1 : cap
     }

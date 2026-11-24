@@ -8,6 +8,7 @@ struct SubsectorsHeatmapView: View {
     @EnvironmentObject private var indexStore: IndexStore
     @AppStorage(ColorMetric.storageKey) private var metricRaw = "change"
     @ObservedObject private var metrics = MetricStore.shared
+    @ObservedObject private var settings = AppSettings.shared
 
     private var metricOptions: [ColorMetric] { metrics.available(for: indexStore.selectedId) }
     private var metric: ColorMetric {
@@ -62,13 +63,13 @@ struct SubsectorsHeatmapView: View {
             let avgChange = totalWeight > 0 ? weightedChange / totalWeight : 0
             let value = metric == .change ? avgChange
                 : metrics.aggregate(metric, companies: companies, index: indexStore.selectedId)
-            return SubsectorStat(name: subsector.name, totalMarketCap: totalCap, changePercent: value, subsector: subsector)
+            return SubsectorStat(name: subsector.name, totalMarketCap: totalCap, weight: metrics.sizeWeight(companies, index: indexStore.selectedId), changePercent: value, subsector: subsector)
         }
     }
     
     // Сортировка по убыванию капитализации
     var sortedSubsectorStats: [SubsectorStat] {
-        subsectorStats.sorted { $0.totalMarketCap > $1.totalMarketCap }
+        subsectorStats.sorted { $0.weight > $1.weight }
     }
     
     var body: some View {
@@ -97,7 +98,7 @@ struct SubsectorsHeatmapView: View {
                     ShareMapButton(title: localizedSectorName(sector.name) + " · " + indexStore.current.name,
                                    subtitle: shareSubtitle(period: indexStore.effectivePeriod(selectedPeriod),
                                                            asOf: indexStore.current.historyThrough)) {
-                        TreemapLayout(weights: sortedSubsectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
+                        TreemapLayout(weights: sortedSubsectorStats.map { $0.weight }) {
                             ForEach(sortedSubsectorStats) { stat in SubsectorTile(stat: stat, metric: metric, period: indexStore.effectivePeriod(selectedPeriod)) }
                         }
                     }
@@ -114,7 +115,7 @@ struct SubsectorsHeatmapView: View {
             .background(Theme.bg)
             
             GeometryReader { geometry in
-                TreemapLayout(weights: sortedSubsectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
+                TreemapLayout(weights: sortedSubsectorStats.map { $0.weight }) {
                     ForEach(sortedSubsectorStats) { stat in
                         NavigationLink(destination: CompaniesHeatmapView(subsector: stat.subsector, webSocketManager: webSocketManager, performanceStore: performanceStore)) {
                             SubsectorTile(stat: stat, metric: metric, period: indexStore.effectivePeriod(selectedPeriod))
@@ -135,6 +136,7 @@ struct SubsectorStat: Identifiable {
     let id = UUID()
     let name: String
     let totalMarketCap: Double
+    let weight: Double           // вес плитки: по капитализации, объёму, обороту или 1
     let changePercent: Double?   // значение выбранного показателя
     let subsector: Subsector
 }

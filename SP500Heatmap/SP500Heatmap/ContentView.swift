@@ -74,8 +74,8 @@ struct ContentView: View {
 
     var body: some View {
         rootContent
-        // Смена палитры или размера плиток пересобирает карты (окно настроек стоит снаружи).
-        .id("\(stackToken.uuidString)-\(settings.palette.rawValue)-\(settings.sizeMode.rawValue)")
+        // Смена палитры пересобирает карты (размер плиток карты читают сами) (окно настроек стоит снаружи).
+        .id("\(stackToken.uuidString)-\(settings.palette.rawValue)")
         .sheet(isPresented: $showSettings) {
             SettingsView(indices: worldStore.regions.flatMap { $0.indices })
                 .presentationSizing(.form)
@@ -116,6 +116,16 @@ struct ContentView: View {
         }
         .task {
             webSocketManager.connect()
+        }
+        .onOpenURL { url in
+            // sp500heatmap://index/<id> открывает карту индекса, sp500heatmap://home — главный экран.
+            guard url.scheme == "sp500heatmap" else { return }
+            if url.host == "index", let id = url.pathComponents.dropFirst().first, hasWorld {
+                indexStore.selectedId = id
+                if useSplit { splitSelection = id } else { path = [id] }
+            } else if url.host == "home" {
+                goHome()
+            }
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active && worldStore.didFinishFirstLoad {

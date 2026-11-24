@@ -8,12 +8,24 @@ struct SettingsView: View {
     @AppStorage(AlertManager.moveKey) private var moveEnabled = false
     @AppStorage(AlertManager.summaryKey) private var summaryEnabled = false
     @AppStorage(AlertManager.thresholdKey) private var threshold = AlertManager.defaultThreshold
+    @ObservedObject private var metricStore = MetricStore.shared
     @State private var showDenied = false
     @Environment(\.dismiss) private var dismiss
 
     private var currentLanguage: Binding<String> {
         Binding(get: { AppLanguage.codes.contains(language) ? language : AppLanguage.systemDefault },
                 set: { language = $0 })
+    }
+
+    /// Объём и оборот предлагаем, только если сервер их прислал.
+    private var sizeOptions: [SizeMode] {
+        SizeMode.allCases.filter { mode in
+            switch mode {
+            case .volume: return metricStore.anyVolumeData || settings.sizeMode == mode
+            case .turnover: return metricStore.anyTurnoverData || settings.sizeMode == mode
+            default: return true
+            }
+        }
     }
 
     var body: some View {
@@ -39,6 +51,7 @@ struct SettingsView: View {
                 }
             }
             .themeNavBar()
+            .task { await metricStore.load(index: "sp500") }
         }
         .alert("Notifications are off", isPresented: $showDenied) {
             Button("Open Settings") {
@@ -59,10 +72,13 @@ struct SettingsView: View {
                     .font(Theme.ui(.subheadline))
                     .foregroundColor(Theme.text)
                 Picker("Tile size", selection: $settings.sizeMode) {
-                    Text("Market cap").tag(SizeMode.marketCap)
-                    Text("Equal").tag(SizeMode.equal)
+                    ForEach(sizeOptions) { mode in Text(mode.title).tag(mode) }
                 }
-                .pickerStyle(.segmented)
+                .pickerStyle(.menu)
+                .labelsHidden()
+                Text("Volume and turnover apply to company maps; world and sector maps use market cap where there is no data.")
+                    .font(Theme.ui(.caption))
+                    .foregroundColor(Theme.muted)
             }
             .listRowBackground(Theme.panel)
             ForEach(ColorPalette.allCases, id: \.self) { palette in

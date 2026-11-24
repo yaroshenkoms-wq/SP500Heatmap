@@ -42,10 +42,19 @@ struct WidgetSnapshot: Codable {
         let changes: [String: Double]
     }
 
+    /// Список избранного: порядок и сортировка для виджета.
+    struct FavList: Codable, Identifiable {
+        let id: String
+        let name: String
+        let sort: String?
+        let tickers: [String]
+    }
+
     var updated: Date = Date()
     var asOf: String?
     var regions: [Region] = []
     var favorites: [Fav] = []
+    var favLists: [FavList]?
 
     var allIndices: [Idx] { regions.flatMap { $0.indices } }
     var drawableRegions: [Region] {

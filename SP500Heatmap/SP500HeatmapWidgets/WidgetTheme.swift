@@ -1,4 +1,5 @@
 import SwiftUI
+import WidgetKit
 
 // Чёрно-золотая тема для виджетов (те же цвета, что в Theme.swift приложения).
 enum WTheme {
@@ -15,4 +16,18 @@ enum WTheme {
     }
 
     static func percent(_ value: Double) -> String { sharedPercent(value, locale: locale) }
+
+    /// Заливка плитки. В цветном режиме — цвет карты; в режиме с одним акцентным цветом
+    /// (ночной StandBy, тонированный экран) цвет теряется, поэтому сила изменения — прозрачностью белого.
+    static func tileFill(_ change: Double?, mode: WidgetRenderingMode) -> Color {
+        guard mode != .fullColor else { return SharedHeat.color(for: change) }
+        guard let change else { return Color.white.opacity(0.08) }
+        return Color.white.opacity(0.14 + 0.36 * min(1, abs(change) / SharedHeat.cap))
+    }
+
+    /// Стрелка вместо цвета, когда цвета нет.
+    static func arrow(_ change: Double, _ mode: WidgetRenderingMode) -> String {
+        guard mode != .fullColor else { return "" }
+        return change >= 0 ? "▲ " : "▼ "
+    }
 }
