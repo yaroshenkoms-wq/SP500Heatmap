@@ -124,7 +124,7 @@ struct CompanyDetailView: View {
                         HStack(alignment: .top, spacing: 16) {
                             VStack(spacing: 8) { chartSection; alertsSection; descriptionSection; metricsSection }
                                 .frame(maxWidth: .infinity)
-                            VStack(spacing: 8) { keyDataSection; newsSection }
+                            VStack(spacing: 8) { keyDataSection; financialsSection; newsSection }
                                 .frame(maxWidth: .infinity)
                         }
                     } else {
@@ -133,6 +133,7 @@ struct CompanyDetailView: View {
                         descriptionSection
                         metricsSection
                         keyDataSection
+                        financialsSection
                         newsSection
                     }
                     Text(isCrypto ? "Data: CoinGecko" : "Data: Yahoo Finance")
@@ -150,7 +151,6 @@ struct CompanyDetailView: View {
         }
         .themeScreen()
         .navigationBarHidden(true)
-        .edgesIgnoringSafeArea(.bottom)
         .task {
             await loadHistory()
         }
@@ -209,6 +209,13 @@ struct CompanyDetailView: View {
         }
         .padding(.top, 8)
         .background(Theme.bg)
+    }
+
+    // Financials come from /financials; crypto has none, other tickers hide the block when the server has no data.
+    @ViewBuilder private var financialsSection: some View {
+        if !isCrypto {
+            FinancialsSection(ticker: company.ticker, currentPrice: history.last?.close ?? currentPrice)
+        }
     }
 
     private var chartSection: some View {

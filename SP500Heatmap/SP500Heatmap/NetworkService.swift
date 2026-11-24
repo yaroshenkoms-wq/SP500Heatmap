@@ -21,7 +21,7 @@ class NetworkService: ObservableObject {
         return url
     }
 
-    private func fetchData(_ url: URL, timeout: TimeInterval = 60) async throws -> Data {
+    func fetchData(_ url: URL, timeout: TimeInterval = 60) async throws -> Data {
         var request = URLRequest(url: url)
         request.timeoutInterval = timeout
         let (data, response) = try await URLSession.shared.data(for: request)

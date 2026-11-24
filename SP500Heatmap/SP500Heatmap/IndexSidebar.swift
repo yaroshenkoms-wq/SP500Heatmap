@@ -6,7 +6,6 @@ struct IndexSidebar: View {
     @Binding var selection: String?
     let onSelect: (String) -> Void
     let onHome: () -> Void
-    let onSettings: () -> Void
     @AppStorage("worldPeriod") private var period = "1d"
 
     var body: some View {
@@ -58,8 +57,6 @@ struct IndexSidebar: View {
         .themeNavBar()
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
-                Button(action: onSettings) { Image(systemName: "gearshape") }
-                    .accessibilityLabel(Text("Settings"))
                 LanguageMenu()
             }
         }

@@ -81,6 +81,8 @@ func formatPrice(_ value: Double, currency: String?) -> String {
 }
 
 struct FavoritesView: View {
+    /// True when shown as the root of the Watchlists tab: no Back / Home buttons.
+    var isRoot = false
     @ObservedObject private var favorites = FavoritesStore.shared
     @StateObject private var quotesStore = FavoritesQuotesStore()
     @ObservedObject private var webSocket = WebSocketManager.shared
@@ -132,18 +134,20 @@ struct FavoritesView: View {
         VStack(spacing: 0) {
             VStack(spacing: 4) {
                 HStack {
-                    Button(action: { dismiss() }) {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                            Text("Back")
+                    if !isRoot {
+                        Button(action: { dismiss() }) {
+                            HStack {
+                                Image(systemName: "chevron.backward")
+                                Text("Back")
+                            }
+                            .font(Theme.ui(.subheadline, weight: .medium))
+                            .padding(.horizontal, 10)
+                            .frame(height: 34)
+                            .outlinedControl()
                         }
-                        .font(Theme.ui(.subheadline, weight: .medium))
-                        .padding(.horizontal, 10)
-                        .frame(height: 34)
-                        .outlinedControl()
+                        .buttonStyle(.plain)
+                        HomeButton()
                     }
-                    .buttonStyle(.plain)
-                    HomeButton()
                     Spacer()
                     Text("Favorites")
                         .font(Theme.serif(.title))

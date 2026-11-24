@@ -75,9 +75,7 @@ final class WorldStore: ObservableObject {
 struct WorldOverviewView: View {
     @ObservedObject var store: WorldStore
     let onSelect: (WorldIndex) -> Void
-    var onSettings: () -> Void = {}
     @AppStorage("worldPeriod") private var period = "1d"
-    @State private var showFavorites = false
     private let periods = ["1d", "3d", "7d", "30d", "180d", "1y", "3y", "5y", "10y"]
 
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -97,14 +95,10 @@ struct WorldOverviewView: View {
     }
 
     private var buttons: some View {
-        HStack(spacing: 6) {
-            PortfoliosEntryButton()
-            HomeHeaderButtons(
-                shareTitle: AppLanguage.string("World markets"),
-                shareSubtitle: shareSubtitle(period: period, asOf: store.overview?.asOf),
-                showFavorites: $showFavorites, onSettings: onSettings
-            ) { WorldMapContent(regions: store.regions, period: period, onSelect: { _ in }) }
-        }
+        HomeHeaderButtons(
+            shareTitle: AppLanguage.string("World markets"),
+            shareSubtitle: shareSubtitle(period: period, asOf: store.overview?.asOf)
+        ) { WorldMapContent(regions: store.regions, period: period, onSelect: { _ in }) }
     }
 
     var body: some View {
@@ -152,38 +146,26 @@ struct WorldOverviewView: View {
         }
         .themeScreen()
         .navigationBarHidden(true)
-        .edgesIgnoringSafeArea(.bottom)
-        .navigationDestination(isPresented: $showFavorites) { FavoritesView() }
     }
 }
 
-// Кнопки шапки главного экрана: избранное, поделиться, настройки, язык.
+// Кнопки шапки главного экрана: утренняя сводка, поделиться, язык (остальное — во вкладках).
 private struct HomeHeaderButtons<Map: View>: View {
     let shareTitle: String
     let shareSubtitle: String
-    @Binding var showFavorites: Bool
-    let onSettings: () -> Void
     @ViewBuilder let map: () -> Map
 
     var body: some View {
         HStack(spacing: 6) {
-            Button { showFavorites = true } label: {
-                Image(systemName: "star")
+            NavigationLink { MarketBriefView() } label: {
+                Image(systemName: "sparkles")
                     .font(.subheadline)
                     .frame(width: 34, height: 34)
                     .outlinedControl()
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(Text("Favorites"))
+            .accessibilityLabel(Text("Market brief"))
             ShareMapButton(title: shareTitle, subtitle: shareSubtitle, map: map)
-            Button(action: onSettings) {
-                Image(systemName: "gearshape")
-                    .font(.subheadline)
-                    .frame(width: 34, height: 34)
-                    .outlinedControl()
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(Text("Settings"))
             LanguageMenu()
         }
     }
