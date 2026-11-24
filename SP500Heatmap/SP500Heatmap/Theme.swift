@@ -25,8 +25,9 @@ enum Theme {
     // Geist (латиница + кириллица) и Instrument Serif (только латиница) лежат в бандле.
     // Для остальных языков (zh-Hans, ar, bn, hi) и для кириллических заголовков
     // берётся системный шрифт, чтобы не было квадратиков-«тофу».
-    private static let geistLanguages: Set<String> = ["en", "es", "fr", "ru", "uk"]
-    private static let serifLanguages: Set<String> = ["en", "es", "fr"]
+    // Языки, все буквы которых есть в Geist / Instrument Serif (проверено fontTools 24.11.2026); остальные — системный шрифт.
+    private static let geistLanguages: Set<String> = ["en", "es", "fr", "ru", "uk", "de", "nl", "sv", "da", "nb", "fi", "pt-BR", "pt-PT", "it", "ca", "id", "ms", "bg"]
+    private static let serifLanguages: Set<String> = ["en", "es", "fr", "de", "nl", "sv", "da", "nb", "fi", "pt-BR", "pt-PT", "it", "ca", "id", "ms"]
 
     private static var code: String { AppLanguage.effectiveCode }
     static var usesGeist: Bool { geistLanguages.contains(code) }

@@ -7,7 +7,8 @@ enum AppLanguage {
     static let storageKey = "appLanguage"
 
     /// Порядок по правилу владельца: английский и испанский первые, русский не выше 6–7 места.
-    static let codes = ["en", "es", "zh-Hans", "ar", "fr", "bn", "hi", "ru", "uk"]
+    // 41 язык (как в PlanEditor + бенгальский). Порядок: английский и испанский первыми, русский — 7-й (правило владельца).
+    static let codes = ["en", "es", "fr", "de", "pt-BR", "it", "ru", "uk", "pl", "nl", "ca", "pt-PT", "zh-Hans", "zh-Hant", "ja", "ko", "ar", "he", "hi", "bn", "tr", "sv", "da", "nb", "fi", "cs", "sk", "ro", "hu", "el", "bg", "hr", "sr-Latn", "sl", "lt", "lv", "et", "id", "ms", "vi", "th"]
 
     /// Название языка на нём самом.
     static func nativeName(_ code: String) -> String {
@@ -18,7 +19,7 @@ enum AppLanguage {
     /// Выбранный пользователем язык; "" — не выбирал (ничего не хранится до первого выбора).
     static var selected: String { UserDefaults.standard.string(forKey: storageKey) ?? "" }
 
-    /// Язык системы, если он один из 9, иначе английский.
+    /// Язык системы, если он есть в приложении, иначе английский.
     static var systemDefault: String {
         let sys = Bundle.main.preferredLocalizations.first ?? "en"
         return codes.contains(sys) ? sys : "en"
@@ -31,7 +32,15 @@ enum AppLanguage {
 
     /// Короткий код для кнопки: EN, ES, ZH, AR, FR, BN, HI, RU, UK.
     static func shortCode(_ code: String) -> String {
-        code == "zh-Hans" ? "ZH" : code.uppercased()
+        switch code {
+        case "zh-Hans": return "ZH"
+        case "zh-Hant": return "TW"
+        case "pt-BR": return "BR"
+        case "pt-PT": return "PT"
+        case "sr-Latn": return "SR"
+        case "nb": return "NO"
+        default: return code.uppercased()
+        }
     }
 
     static var locale: Locale {

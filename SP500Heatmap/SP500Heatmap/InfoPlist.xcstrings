@@ -1,77 +1,461 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "CFBundleName" : {
-      "comment" : "Bundle name",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "SP500Heatmap"
+  "sourceLanguage": "en",
+  "strings": {
+    "CFBundleName": {
+      "comment": "Bundle name",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "bg": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "SP500Heatmap"
+          }
+        },
+        "et": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "lv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "sr-Latn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP500Heatmap"
           }
         }
       }
     },
-    "NSCalendarsWriteOnlyAccessUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "السماح بإضافة مواعيد الأرباح والتوزيعات إلى تقويمك."
+    "NSCalendarsWriteOnlyAccessUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السماح بإضافة مواعيد الأرباح والتوزيعات إلى تقويمك."
           }
         },
-        "bn" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "আপনার ক্যালেন্ডারে আয় প্রতিবেদন ও লভ্যাংশের তারিখ যোগ করার অনুমতি দেয়।"
+        "bg": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Позволява ви да добавяте дати на резултати и дивиденти към календара си."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lets you add earnings and dividend dates to your calendar."
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার ক্যালেন্ডারে আয় প্রতিবেদন ও লভ্যাংশের তারিখ যোগ করার অনুমতি দেয়।"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Permite añadir fechas de resultados y dividendos a tu calendario."
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Et permet afegir al calendari les dates de resultats i dividends."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Permet d'ajouter les dates de résultats et de dividendes à votre calendrier."
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umožňuje přidat do kalendáře data zveřejnění výsledků a dividend."
           }
         },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "आपके कैलेंडर में आय रिपोर्ट और डिविडेंड की तारीखें जोड़ने की अनुमति देता है।"
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giver dig mulighed for at føje datoer for regnskaber og udbytter til din kalender."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Позволяет добавлять в ваш календарь даты отчётов и дивидендов."
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ermöglicht es dir, Termine für Quartalszahlen und Dividenden zu deinem Kalender hinzuzufügen."
           }
         },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Дозволяє додавати до вашого календаря дати звітів і дивідендів."
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Σας επιτρέπει να προσθέτετε στο ημερολόγιό σας ημερομηνίες αποτελεσμάτων και μερισμάτων."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "允许将财报和股息日期添加到你的日历。"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lets you add earnings and dividend dates to your calendar."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite añadir fechas de resultados y dividendos a tu calendario."
+          }
+        },
+        "et": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Võimaldab lisada tulemuste ja dividendide kuupäevad sinu kalendrisse."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voit lisätä tulosjulkistusten ja osinkojen päivämäärät kalenteriisi."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permet d'ajouter les dates de résultats et de dividendes à votre calendrier."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "מאפשר להוסיף ליומן תאריכי דוחות ודיבידנדים."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपके कैलेंडर में आय रिपोर्ट और डिविडेंड की तारीखें जोड़ने की अनुमति देता है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omogućuje dodavanje datuma rezultata i dividendi u kalendar."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lehetővé teszi, hogy eredmény- és osztaléknapokat adjon a naptárához."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memungkinkan Anda menambahkan tanggal laba dan dividen ke kalender."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ti permette di aggiungere al calendario le date di utili e dividendi."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "決算日と配当日をカレンダーに追加できます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실적 및 배당 일정을 캘린더에 추가할 수 있습니다."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leidžia pridėti rezultatų ir dividendų datas į kalendorių."
+          }
+        },
+        "lv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ļauj pievienot rezultātu un dividenžu datumus jūsu kalendāram."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Membolehkan anda menambah tarikh pendapatan dan dividen ke kalendar anda."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lar deg legge til datoer for regnskap og utbytter i kalenderen din."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hiermee kun je data van winstcijfers en dividenden aan je agenda toevoegen."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pozwala dodać do kalendarza daty publikacji wyników i dywidend."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite adicionar datas de resultados e dividendos ao seu calendário."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite adicionar datas de resultados e dividendos ao seu calendário."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Îți permite să adaugi în calendar datele rezultatelor financiare și ale dividendelor."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Позволяет добавлять в ваш календарь даты отчётов и дивидендов."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umožňuje pridať do kalendára dátumy zverejnenia výsledkov a dividend."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omogoča dodajanje datumov rezultatov in dividend v koledar."
+          }
+        },
+        "sr-Latn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omogućava dodavanje datuma rezultata i dividendi u kalendar."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Låter dig lägga till datum för rapporter och utdelningar i din kalender."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ให้คุณเพิ่มวันประกาศงบและวันจ่ายเงินปันผลลงในปฏิทิน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilanço ve temettü tarihlerini takviminize eklemenizi sağlar."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дозволяє додавати до вашого календаря дати звітів і дивідендів."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cho phép bạn thêm ngày công bố kết quả kinh doanh và ngày cổ tức vào lịch."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "允许将财报和股息日期添加到你的日历。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可將財報與股息日期加入您的行事曆。"
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

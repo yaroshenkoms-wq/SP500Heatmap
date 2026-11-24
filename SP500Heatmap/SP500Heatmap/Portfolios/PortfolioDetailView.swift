@@ -85,9 +85,7 @@ struct PortfolioDetailView: View {
             if !short.isEmpty {
                 Text(verbatim: short).font(Theme.ui(.subheadline)).foregroundColor(Theme.text.opacity(0.9))
                     .fixedSize(horizontal: false, vertical: true)
-                if store.descriptionsAreEnglishFallback {
-                    Text("Text is shown in English for this language.").font(Theme.ui(.caption2)).foregroundColor(Theme.muted)
-                }
+                // Короткое описание переведено на все 41 язык; пометка про английский — только у подробного текста ниже.
             }
         }
     }
