@@ -35,8 +35,9 @@ struct SectorsHeatmapView: View {
         var totalWeight = 0.0
         for company in allCompanies {
             if let change = changePercent(for: company.ticker) {
-                weightedChange += change * company.marketCap
-                totalWeight += company.marketCap
+                let w = startWeight(company.marketCap, change)
+                weightedChange += change * w
+                totalWeight += w
             }
         }
         return totalWeight > 0 ? weightedChange / totalWeight : 0
@@ -50,8 +51,9 @@ struct SectorsHeatmapView: View {
             var totalWeight = 0.0
             for company in companies {
                 if let change = changePercent(for: company.ticker) {
-                    weightedChange += change * company.marketCap
-                    totalWeight += company.marketCap
+                    let w = startWeight(company.marketCap, change)
+                    weightedChange += change * w
+                    totalWeight += w
                 }
             }
             let avgChange = totalWeight > 0 ? weightedChange / totalWeight : 0

@@ -14,6 +14,7 @@ struct PeriodSwitchView: View {
 
     var body: some View {
         let active = availablePeriods == nil ? indexStore.effectivePeriod(selectedPeriod) : selectedPeriod
+        VStack(alignment: .leading, spacing: 2) {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
@@ -37,6 +38,15 @@ struct PeriodSwitchView: View {
             }
         }
         .frame(height: 44)
+            if ["3y", "5y", "10y"].contains(active) {
+                // Эффект выживших: в расчёте только нынешние участники индекса.
+                Text("Long periods use today's index members; companies that left the index are not counted.")
+                    .font(Theme.ui(.caption2))
+                    .foregroundColor(Theme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal)
+            }
+        }
     }
 }
 

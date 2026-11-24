@@ -43,8 +43,9 @@ struct CompaniesHeatmapView: View {
         var totalWeight = 0.0
         for company in subsector.companies {
             if let change = changePercent(for: company.ticker) {
-                weightedChange += change * company.marketCap
-                totalWeight += company.marketCap
+                let w = startWeight(company.marketCap, change)
+                weightedChange += change * w
+                totalWeight += w
             }
         }
         return totalWeight > 0 ? weightedChange / totalWeight : 0
