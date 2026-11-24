@@ -58,6 +58,16 @@ class NetworkService: ObservableObject {
         return try JSONDecoder().decode([DailyClose].self, from: data)
     }
 
+    /// Weekly closes for long ranges ("3y", "5y", "10y"); throws on an old server without ?range=.
+    func fetchHistory(ticker: String, range: String) async throws -> [DailyClose] {
+        let encoded = ticker.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ticker
+        guard let url = URL(string: "\(baseURL)/api/v1/history/\(encoded)?range=\(range)") else {
+            throw NetworkError.invalidURL
+        }
+        let data = try await fetchData(url, timeout: 30)
+        return try JSONDecoder().decode([DailyClose].self, from: data)
+    }
+
     func fetchMetrics(index: String) async throws -> [String: CompanyMetrics] {
         let data = try await fetchData(try apiURL("/api/v1/metrics", index: index), timeout: 30)
         return try JSONDecoder().decode([String: CompanyMetrics].self, from: data)
@@ -98,6 +108,9 @@ struct PerformanceMetrics: Codable {
     let day30: Double?
     let day180: Double?
     let year1: Double?
+    let year3: Double?
+    let year5: Double?
+    let year10: Double?
 
     enum CodingKeys: String, CodingKey {
         case return1M, return6M, returnYTD, return1Y
@@ -107,6 +120,9 @@ struct PerformanceMetrics: Codable {
         case day30 = "30d"
         case day180 = "180d"
         case year1 = "1y"
+        case year3 = "3y"
+        case year5 = "5y"
+        case year10 = "10y"
     }
 
     // Looks up a return by the same period keys PeriodSwitchView uses ("SC" has
@@ -119,6 +135,9 @@ struct PerformanceMetrics: Codable {
         case "30d": return day30
         case "180d": return day180
         case "1y": return year1
+        case "3y": return year3
+        case "5y": return year5
+        case "10y": return year10
         default: return nil
         }
     }

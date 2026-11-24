@@ -52,6 +52,7 @@ struct PortfolioChip: View {
 func periodTitle(_ p: PortfolioPeriod) -> LocalizedStringKey {
     switch p {
     case .y1: return "1Y"
+    case .y3: return "3Y"
     case .y5: return "5Y"
     case .y10: return "10Y"
     case .y20: return "20Y"
@@ -65,7 +66,7 @@ struct PortfolioOptionsBar: View {
     @Binding var period: PortfolioPeriod
     @Binding var currency: PortfolioCurrency
     @Binding var real: Bool
-    var periods: [PortfolioPeriod] = [.y5, .y10, .y20, .y30, .all]
+    var periods: [PortfolioPeriod] = [.y3, .y5, .y10, .y20, .y30, .all]
 
     var body: some View {
         VStack(spacing: 8) {

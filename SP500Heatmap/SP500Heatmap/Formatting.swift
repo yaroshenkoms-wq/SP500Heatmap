@@ -25,3 +25,10 @@ func formatCompact(_ value: Double) -> String {
 func localizedSectorName(_ name: String) -> String {
     AppLanguage.string(name, table: "Sectors")
 }
+
+/// Вес компании в изменении сектора или индекса: капитализация на НАЧАЛО периода (сегодняшняя / (1 + рост)).
+/// С весом по сегодняшней капитализации победители раздували итог, особенно на 3–10 годах.
+func startWeight(_ cap: Double, _ changePercent: Double) -> Double {
+    let growth = 1 + changePercent / 100
+    return cap / max(growth, 0.01)
+}

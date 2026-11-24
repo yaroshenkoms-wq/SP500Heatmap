@@ -35,8 +35,9 @@ struct SectorsHeatmapView: View {
         var totalWeight = 0.0
         for company in allCompanies {
             if let change = changePercent(for: company.ticker) {
-                weightedChange += change * company.marketCap
-                totalWeight += company.marketCap
+                let w = startWeight(company.marketCap, change)
+                weightedChange += change * w
+                totalWeight += w
             }
         }
         return totalWeight > 0 ? weightedChange / totalWeight : 0
@@ -50,8 +51,9 @@ struct SectorsHeatmapView: View {
             var totalWeight = 0.0
             for company in companies {
                 if let change = changePercent(for: company.ticker) {
-                    weightedChange += change * company.marketCap
-                    totalWeight += company.marketCap
+                    let w = startWeight(company.marketCap, change)
+                    weightedChange += change * w
+                    totalWeight += w
                 }
             }
             let avgChange = totalWeight > 0 ? weightedChange / totalWeight : 0
@@ -115,7 +117,7 @@ struct SectorsHeatmapView: View {
                                    subtitle: shareSubtitle(period: indexStore.effectivePeriod(selectedPeriod),
                                                            asOf: indexStore.current.historyThrough)) {
                         TreemapLayout(weights: sortedSectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
-                            ForEach(sortedSectorStats) { stat in SectorTile(stat: stat, metric: metric) }
+                            ForEach(sortedSectorStats) { stat in SectorTile(stat: stat, metric: metric, period: indexStore.effectivePeriod(selectedPeriod)) }
                         }
                     }
                     Text(formatPercent(indexChange))
@@ -134,7 +136,7 @@ struct SectorsHeatmapView: View {
                 TreemapLayout(weights: sortedSectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
                     ForEach(sortedSectorStats) { stat in
                         NavigationLink(destination: SubsectorsHeatmapView(sector: stat.sector, webSocketManager: webSocketManager, performanceStore: performanceStore)) {
-                            SectorTile(stat: stat, metric: metric)
+                            SectorTile(stat: stat, metric: metric, period: indexStore.effectivePeriod(selectedPeriod))
                         }
                     }
                 }
@@ -164,6 +166,7 @@ struct SectorStat: Identifiable {
 struct SectorTile: View {
     let stat: SectorStat
     var metric: ColorMetric = .change
+    var period: String? = nil
 
     var body: some View {
         TileContainer {
@@ -184,7 +187,7 @@ struct SectorTile: View {
             }
             .padding(.horizontal, 3)
         }
-        .background(metric.color(stat.changePercent))
+        .background(metric.color(stat.changePercent, period: period))
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(1)
     }

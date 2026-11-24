@@ -5,7 +5,7 @@ enum HeatmapColor {
     static let tileText = Theme.text
 
     /// Палитра (красно-зелёная или для дальтоников) берётся из настроек, см. SharedHeat.
-    static func color(for changePercent: Double?) -> Color {
-        SharedHeat.color(for: changePercent)
+    static func color(for changePercent: Double?, period: String? = nil) -> Color {
+        SharedHeat.color(for: changePercent, period: period)
     }
 }

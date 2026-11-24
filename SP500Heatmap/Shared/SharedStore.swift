@@ -107,7 +107,26 @@ enum SharedHeat {
         }
     }
 
-    static func color(for change: Double?, palette: ColorPalette = .current) -> Color {
+    /// % изменения, при котором цвет достигает полной насыщенности, для периода (SC = 1d).
+    static func cap(forPeriod period: String?) -> Double {
+        switch period {
+        case "3d": return 5
+        case "7d": return 7
+        case "30d": return 12
+        case "180d": return 25
+        case "1y": return 35
+        case "3y": return 60
+        case "5y": return 80
+        case "10y": return 150
+        default: return cap
+        }
+    }
+
+    static func color(for change: Double?, period: String?, palette: ColorPalette = .current) -> Color {
+        color(for: change, palette: palette, cap: cap(forPeriod: period))
+    }
+
+    static func color(for change: Double?, palette: ColorPalette = .current, cap: Double = SharedHeat.cap) -> Color {
         guard let change else { return Color(red: neutral.r, green: neutral.g, blue: neutral.b) }
         let t = max(-1.0, min(1.0, change / cap))
         let target = t >= 0 ? up(palette) : down(palette)

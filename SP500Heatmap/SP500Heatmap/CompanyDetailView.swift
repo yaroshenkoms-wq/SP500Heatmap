@@ -7,6 +7,9 @@ struct CompanyDetailView: View {
     @ObservedObject var webSocketManager: WebSocketManager
     @State private var selectedPeriod = "SC"
     @State private var history: [DailyClose] = []
+    // Недельные ряды для 3y/5y/10y; nil в failedLong — сервер не отдал, показываем 1y.
+    @State private var longHistory: [String: [DailyClose]] = [:]
+    @State private var failedLong: Set<String> = []
     @EnvironmentObject private var indexStore: IndexStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -31,7 +34,7 @@ struct CompanyDetailView: View {
 
     // Сколько торговых дней назад брать данные для каждого периода
     private static let periodTradingDaysBack: [String: Int] = [
-        "SC": 1, "1d": 1, "3d": 3, "7d": 5, "30d": 21, "180d": 126, "1y": 252
+        "SC": 1, "1d": 1, "3d": 3, "7d": 5, "30d": 21, "180d": 126, "1y": 252, "3y": 252, "5y": 252, "10y": 252
     ]
 
     private static let dateFormatter: DateFormatter = {
@@ -42,7 +45,20 @@ struct CompanyDetailView: View {
     }()
 
     // Реальные цены закрытия за выбранный период (из истории с бэкенда)
+    private static let longPeriods: Set<String> = ["3y", "5y", "10y"]
+
+    private var longFallbackActive: Bool {
+        Self.longPeriods.contains(selectedPeriod) && (longHistory[selectedPeriod] ?? []).isEmpty
+            && failedLong.contains(selectedPeriod)
+    }
+
     var pricesForPeriod: [StockPrice] {
+        if let long = longHistory[selectedPeriod], !long.isEmpty {
+            return long.compactMap { point in
+                guard let date = Self.dateFormatter.date(from: point.date) else { return nil }
+                return StockPrice(date: date, price: point.close)
+            }
+        }
         guard !history.isEmpty else { return [] }
         let daysBack = Self.periodTradingDaysBack[indexStore.effectivePeriod(selectedPeriod)] ?? history.count
         let startIndex = max(0, history.count - 1 - daysBack)
@@ -57,6 +73,20 @@ struct CompanyDetailView: View {
         let prices = pricesForPeriod
         guard let firstPrice = prices.first?.price, let lastPrice = prices.last?.price, firstPrice > 0 else { return 0 }
         return ((lastPrice - firstPrice) / firstPrice) * 100
+    }
+
+    private func loadLongHistory(_ period: String) async {
+        guard Self.longPeriods.contains(period), longHistory[period] == nil else { return }
+        do {
+            let fetched = try await NetworkService.shared.fetchHistory(ticker: company.ticker, range: period)
+            if fetched.count >= 2 {
+                longHistory[period] = fetched
+            } else {
+                failedLong.insert(period)
+            }
+        } catch {
+            failedLong.insert(period)
+        }
     }
 
     private func loadHistory() async {
@@ -123,6 +153,9 @@ struct CompanyDetailView: View {
         .task {
             await loadHistory()
         }
+        .task(id: selectedPeriod) {
+            await loadLongHistory(selectedPeriod)
+        }
         .task(id: company.ticker) {
             await loadInfo()
         }
@@ -180,6 +213,11 @@ struct CompanyDetailView: View {
 
     private var chartSection: some View {
         VStack(alignment: .leading) {
+            if longFallbackActive {
+                Text("Long history is not available yet - showing 1 year")
+                    .font(Theme.ui(.caption2))
+                    .foregroundColor(Theme.muted)
+            }
             if pricesForPeriod.isEmpty {
                 ProgressView()
                     .frame(height: 200)
