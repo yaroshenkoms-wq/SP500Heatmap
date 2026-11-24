@@ -110,6 +110,7 @@ struct ContentView: View {
                 else if screen.id == "screener" { ScreenerView() }
                 else if screen.id == "favorites" { FavoritesView() }
                 else if screen.id == "news" { NewsView() }
+                else if screen.id == "languages" { LanguagePickerView() }
                 else if screen.id == "chat" { AIChatView(autoAsk: AIQuestion.suggested.first) }
                 else if screen.id.hasPrefix("portfolio:"), let info = PortfolioStore.shared.info(String(screen.id.dropFirst(10))) {
                     PortfolioDetailView(info: info)

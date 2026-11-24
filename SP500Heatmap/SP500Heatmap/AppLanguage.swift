@@ -72,32 +72,122 @@ enum AppLanguage {
 }
 
 /// Кнопка выбора языка для главного экрана: контурная плашка с кодом текущего языка.
+/// Открывает отдельный экран со списком (41 язык): в выпадающем меню такой длины на iPhone
+/// прокрутка выбирала строку под пальцем (жалоба владельца 24.11.2026).
 struct LanguageMenu: View {
     @AppStorage(AppLanguage.storageKey) private var selected = ""
+    @State private var showPicker = false
 
-    // Пока пользователь не выбирал, показываем язык системы (или английский) и ничего не пишем.
-    private var current: Binding<String> {
-        Binding(get: { AppLanguage.codes.contains(selected) ? selected : AppLanguage.systemDefault },
-                set: { selected = $0 })
-    }
+    private var currentCode: String { AppLanguage.codes.contains(selected) ? selected : AppLanguage.systemDefault }
 
     var body: some View {
-        Menu {
-            Picker(selection: current) {
-                ForEach(AppLanguage.codes, id: \.self) { code in
-                    Text(verbatim: "\(AppLanguage.shortCode(code))  \(AppLanguage.nativeName(code))").tag(code)
-                }
-            } label: {
-                Text("Language")
-            }
-        } label: {
-            Text(verbatim: AppLanguage.shortCode(current.wrappedValue))
+        Button { showPicker = true } label: {
+            Text(verbatim: AppLanguage.shortCode(currentCode))
                 .font(Theme.ui(.footnote, weight: .semibold))
                 .tracking(0.8)
                 .padding(.horizontal, 10)
                 .frame(minWidth: 40, minHeight: 34)
                 .outlinedControl()
         }
+        .buttonStyle(.plain)
         .accessibilityLabel(Text("Language"))
+        .sheet(isPresented: $showPicker) { LanguagePickerView() }
+    }
+}
+
+/// Строка «Язык» для настроек: показывает текущий язык и открывает тот же экран выбора.
+struct LanguageSettingsRow: View {
+    @AppStorage(AppLanguage.storageKey) private var selected = ""
+    @State private var showPicker = false
+
+    private var currentCode: String { AppLanguage.codes.contains(selected) ? selected : AppLanguage.systemDefault }
+
+    var body: some View {
+        Button { showPicker = true } label: {
+            HStack {
+                Text("Language").font(Theme.ui(.subheadline)).foregroundColor(Theme.text)
+                Spacer()
+                Text(verbatim: "\(AppLanguage.shortCode(currentCode))  \(AppLanguage.nativeName(currentCode))")
+                    .font(Theme.ui(.subheadline)).foregroundColor(Theme.gold)
+                Image(systemName: "chevron.forward").font(.caption).foregroundColor(Theme.muted)
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showPicker) { LanguagePickerView() }
+    }
+}
+
+/// Экран выбора языка: прокручиваемый список с поиском; сверху текущий язык и язык телефона.
+struct LanguagePickerView: View {
+    @AppStorage(AppLanguage.storageKey) private var selected = ""
+    @Environment(\.dismiss) private var dismiss
+    @State private var query = ""
+
+    private var currentCode: String { AppLanguage.codes.contains(selected) ? selected : AppLanguage.systemDefault }
+
+    private var suggested: [String] {
+        var out = [currentCode]
+        let sys = AppLanguage.systemDefault
+        if sys != currentCode { out.append(sys) }
+        if !out.contains("en") { out.append("en") }
+        return out
+    }
+
+    private var filtered: [String] {
+        let q = query.trimmingCharacters(in: .whitespaces).lowercased()
+        guard !q.isEmpty else { return AppLanguage.codes }
+        return AppLanguage.codes.filter { code in
+            AppLanguage.nativeName(code).lowercased().contains(q)
+                || AppLanguage.shortCode(code).lowercased().contains(q)
+                || (Locale(identifier: "en").localizedString(forIdentifier: code) ?? "").lowercased().contains(q)
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            List {
+                if query.isEmpty {
+                    Section { ForEach(suggested, id: \.self) { row($0) } }
+                }
+                Section { ForEach(filtered, id: \.self) { row($0) } }
+            }
+            .scrollContentBackground(.hidden)
+            .background(Theme.bg)
+            .searchable(text: $query, prompt: Text("Search"))
+            .navigationTitle(Text("Language"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button { dismiss() } label: { Text("Done") }.tint(Theme.gold)
+                }
+            }
+        }
+        .presentationDetents([.large])
+        .preferredColorScheme(.dark)
+    }
+
+    private func row(_ code: String) -> some View {
+        Button {
+            selected = code
+            dismiss()
+        } label: {
+            HStack(spacing: 12) {
+                Text(verbatim: AppLanguage.shortCode(code))
+                    .font(Theme.ui(.footnote, weight: .semibold))
+                    .foregroundColor(Theme.gold)
+                    .frame(width: 34, alignment: .leading)
+                Text(verbatim: AppLanguage.nativeName(code))
+                    .font(.body)
+                    .foregroundColor(Theme.text)
+                Spacer()
+                if code == currentCode {
+                    Image(systemName: "checkmark").foregroundColor(Theme.gold)
+                }
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .listRowBackground(Theme.panel)
     }
 }

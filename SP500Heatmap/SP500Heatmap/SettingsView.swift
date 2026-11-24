@@ -114,15 +114,7 @@ struct SettingsView: View {
 
     private var languageSection: some View {
         Section {
-            Picker(selection: currentLanguage) {
-                ForEach(AppLanguage.codes, id: \.self) { code in
-                    Text(verbatim: "\(AppLanguage.shortCode(code))  \(AppLanguage.nativeName(code))").tag(code)
-                }
-            } label: {
-                Text("Language")
-                    .font(Theme.ui(.subheadline))
-                    .foregroundColor(Theme.text)
-            }
+            LanguageSettingsRow()
             .listRowBackground(Theme.panel)
         } header: {
             sectionTitle("Language")
