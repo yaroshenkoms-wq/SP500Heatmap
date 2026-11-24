@@ -17,6 +17,7 @@ struct SP500HeatmapApp: App {
     init() {
         AlertManager.registerBackgroundTask()
         AppSettings.mirrorLanguage()
+        Task { @MainActor in WatchSync.shared.start() }
     }
 
     var body: some Scene {

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>SP500 Heatmap</string>
+	<key>WKApplication</key>
+	<true/>
+	<key>WKCompanionAppBundleIdentifier</key>
+	<string>com.maximyaroshenko.SP500Heatmap2</string>
+	<key>WKRunsIndependentlyOfCompanionApp</key>
+	<true/>
+	<key>BASE_URL</key>
+	<string>$(BASE_URL)</string>
+</dict>
+</plist>
