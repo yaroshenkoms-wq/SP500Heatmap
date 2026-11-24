@@ -89,6 +89,7 @@ struct WorldOverviewView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                    PortfoliosEntryButton()
                     LanguageMenu()
                 }
                 .padding(.horizontal)
