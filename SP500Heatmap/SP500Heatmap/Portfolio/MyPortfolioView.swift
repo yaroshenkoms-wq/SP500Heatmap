@@ -189,6 +189,8 @@ struct MyPortfolioView: View {
                 }
                 if !p.transactions.isEmpty {
                     PortfolioInsightView(holdings: r.holdings.map(PortfolioInsightHolding.init))
+                    AskAIButton(question: .portfolio, suggestions: [.portfolio, .marketToday, .compare("AAPL", "MSFT")])
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 footer
             }

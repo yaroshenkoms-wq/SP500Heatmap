@@ -7,6 +7,7 @@ struct MoreView: View {
     var body: some View {
         List {
             Section {
+                NavigationLink { NewsView() } label: { row("News", "newspaper") }
                 NavigationLink { CalendarView() } label: { row("Calendar", "calendar") }
                 NavigationLink { PortfoliosView() } label: { row("Model portfolios", "chart.pie") }
                 NavigationLink { AlertsView() } label: { row("Stock alerts", "bell") }
