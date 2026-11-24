@@ -1,7 +1,7 @@
 {
  "app": "SP500Heatmap",
  "ours": "SP500 Heatmap",
- "summary": "Раунд 4 (24.11.2026): у нас 251 баллов — первое место (TradingView 200, Investing.com 196). Отстаём в push-оповещениях, Apple Watch, ИИ и личном портфеле.",
+ "summary": "Раунд 5 (24.11.2026): у нас 280 баллов — первое место (TradingView 200, Investing.com 196). Отстаём в push-оповещениях, Apple Watch, живых ценах вне США.",
  "rounds": [
   {
    "date": "2026-11-23",
@@ -2296,6 +2296,723 @@
     "3. Личный портфель: свои бумаги, количество, доход.",
     "4. ИИ: «почему двигается» по новостям.",
     "5. Рисование линий на графике."
+   ]
+  },
+  {
+   "date": "2026-11-24",
+   "title": "Раунд 5: те же 14 приложений, наша 1.1 после финансов, календаря, скринера, портфеля и ИИ (24.11.2026)",
+   "source": [
+    "раунд 3 (баллы конкурентов без изменений)",
+    "наше приложение 1.1 — проверено на симуляторе и устройствах владельца"
+   ],
+   "scale": "0-10",
+   "apps": [
+    "SP500 Heatmap",
+    "Stock Map",
+    "Stock+",
+    "HeatMap",
+    "TradingView",
+    "Finviz",
+    "Stock Heatmap (StockAlarm)",
+    "History of Market",
+    "Market Atlas",
+    "StockMap (Yojowa)",
+    "SectorView",
+    "Investing.com",
+    "Yahoo Finance",
+    "moomoo"
+   ],
+   "groups": [
+    {
+     "name": "Функции",
+     "rows": [
+      {
+       "name": "Карта S&P 500 по секторам",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 9,
+        "Stock+": 8,
+        "HeatMap": 8,
+        "TradingView": 9,
+        "Finviz": 10,
+        "Stock Heatmap (StockAlarm)": 8,
+        "History of Market": 9,
+        "Market Atlas": 6,
+        "StockMap (Yojowa)": 8,
+        "SectorView": 7,
+        "Investing.com": 7,
+        "Yahoo Finance": 5,
+        "moomoo": 7
+       }
+      },
+      {
+       "name": "Выбор периода (у нас 7)",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 5,
+        "Stock+": 3,
+        "HeatMap": 8,
+        "TradingView": 6,
+        "Finviz": 7,
+        "Stock Heatmap (StockAlarm)": 7,
+        "History of Market": 10,
+        "Market Atlas": 6,
+        "StockMap (Yojowa)": "?",
+        "SectorView": 7,
+        "Investing.com": 6,
+        "Yahoo Finance": 2,
+        "moomoo": 9
+       },
+       "note": "у нас «сегодня», 1д–1г и 3, 5, 10 лет; у History of Market 1Д–10Л"
+      },
+      {
+       "name": "Живые цены в сессию",
+       "values": {
+        "SP500 Heatmap": 7,
+        "Stock Map": "?",
+        "Stock+": "?",
+        "HeatMap": 6,
+        "TradingView": 9,
+        "Finviz": 6,
+        "Stock Heatmap (StockAlarm)": 5,
+        "History of Market": 2,
+        "Market Atlas": 0,
+        "StockMap (Yojowa)": 6,
+        "SectorView": "?",
+        "Investing.com": 8,
+        "Yahoo Finance": 7,
+        "moomoo": 9
+       },
+       "note": "у нас живые цены только для США"
+      },
+      {
+       "name": "Другие индексы (Nasdaq 100, Dow)",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 9,
+        "Stock+": 9,
+        "HeatMap": 9,
+        "TradingView": 10,
+        "Finviz": 9,
+        "Stock Heatmap (StockAlarm)": 0,
+        "History of Market": 9,
+        "Market Atlas": 5,
+        "StockMap (Yojowa)": 7,
+        "SectorView": 2,
+        "Investing.com": 8,
+        "Yahoo Finance": 2,
+        "moomoo": 6
+       },
+       "note": "у нас ещё S&P 400 и S&P 600"
+      },
+      {
+       "name": "Мировые рынки (IBEX 35, DAX)",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": 7,
+        "TradingView": 9,
+        "Finviz": 5,
+        "Stock Heatmap (StockAlarm)": 0,
+        "History of Market": 4,
+        "Market Atlas": 8,
+        "StockMap (Yojowa)": 0,
+        "SectorView": 1,
+        "Investing.com": 7,
+        "Yahoo Finance": 0,
+        "moomoo": 2
+       },
+       "note": "у нас 39 индексов Америки, Европы, Азии; IBEX 35 у конкурентов явно не найден"
+      },
+      {
+       "name": "Крипта и ETF",
+       "values": {
+        "SP500 Heatmap": 8,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": 9,
+        "TradingView": 10,
+        "Finviz": 8,
+        "Stock Heatmap (StockAlarm)": 6,
+        "History of Market": 6,
+        "Market Atlas": "?",
+        "StockMap (Yojowa)": 7,
+        "SectorView": 5,
+        "Investing.com": "?",
+        "Yahoo Finance": 2,
+        "moomoo": "?"
+       },
+       "note": "у нас карты 50 крупнейших монет (CoinGecko) и 50 крупнейших ETF"
+      },
+      {
+       "name": "Виджеты и экран блокировки",
+       "values": {
+        "SP500 Heatmap": 9,
+        "Stock Map": 9,
+        "Stock+": 0,
+        "HeatMap": "?",
+        "TradingView": "?",
+        "Finviz": "?",
+        "Stock Heatmap (StockAlarm)": "?",
+        "History of Market": 10,
+        "Market Atlas": 7,
+        "StockMap (Yojowa)": 6,
+        "SectorView": "?",
+        "Investing.com": "?",
+        "Yahoo Finance": "?",
+        "moomoo": "?"
+       },
+       "note": "у нас «Мировые рынки» (выбор региона), «Моё избранное» (выбор списка), экран блокировки, режим ожидания, кнопки Пункта управления; нет живой карточки на время торгов (нужен ключ APNs)"
+      },
+      {
+       "name": "Избранное, списки",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 9,
+        "Stock+": 6,
+        "HeatMap": "?",
+        "TradingView": 10,
+        "Finviz": 8,
+        "Stock Heatmap (StockAlarm)": 5,
+        "History of Market": 9,
+        "Market Atlas": 7,
+        "StockMap (Yojowa)": 7,
+        "SectorView": "?",
+        "Investing.com": 9,
+        "Yahoo Finance": 9,
+        "moomoo": 9
+       },
+       "note": "у нас несколько списков с названиями, сортировка, заметки, карта или список, синхронизация через iCloud"
+      },
+      {
+       "name": "Цвет и размер по другим метрикам (P/E, объём)",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 4,
+        "Stock+": 2,
+        "HeatMap": 5,
+        "TradingView": 10,
+        "Finviz": 6,
+        "Stock Heatmap (StockAlarm)": 5,
+        "History of Market": 9,
+        "Market Atlas": 5,
+        "StockMap (Yojowa)": 2,
+        "SectorView": 1,
+        "Investing.com": 10,
+        "Yahoo Finance": 1,
+        "moomoo": 6
+       },
+       "note": "у нас размер: капитализация, поровну, объём, оборот; цвет: %, P/E, P/S, P/B, дивиденды, 52 недели, бета, рост выручки, относительный объём"
+      },
+      {
+       "name": "Графики, технический анализ",
+       "values": {
+        "SP500 Heatmap": 8,
+        "Stock Map": 1,
+        "Stock+": 8,
+        "HeatMap": 5,
+        "TradingView": 10,
+        "Finviz": 9,
+        "Stock Heatmap (StockAlarm)": 5,
+        "History of Market": 4,
+        "Market Atlas": "?",
+        "StockMap (Yojowa)": "?",
+        "SectorView": 6,
+        "Investing.com": 9,
+        "Yahoo Finance": 8,
+        "moomoo": 9
+       },
+       "note": "у нас линия и свечи 1М–10Л, объём, SMA/EMA, RSI, MACD, сравнение с индексом, перекрестие, полный экран; нет рисования линий"
+      },
+      {
+       "name": "Оповещения",
+       "values": {
+        "SP500 Heatmap": 6,
+        "Stock Map": 0,
+        "Stock+": "?",
+        "HeatMap": 8,
+        "TradingView": 10,
+        "Finviz": 9,
+        "Stock Heatmap (StockAlarm)": "?",
+        "History of Market": "?",
+        "Market Atlas": "?",
+        "StockMap (Yojowa)": "?",
+        "SectorView": "?",
+        "Investing.com": 9,
+        "Yahoo Finance": 9,
+        "moomoo": 9
+       },
+       "note": "у нас цена акции и движение индекса (локально, могут опаздывать) и точные напоминания об отчётности и дивидендах; push с сервера — после ключа APNs"
+      },
+      {
+       "name": "Испанский язык",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": 8,
+        "TradingView": 9,
+        "Finviz": 0,
+        "Stock Heatmap (StockAlarm)": 0,
+        "History of Market": 8,
+        "Market Atlas": 8,
+        "StockMap (Yojowa)": 0,
+        "SectorView": 8,
+        "Investing.com": 9,
+        "Yahoo Finance": 8,
+        "moomoo": 0
+       },
+       "note": "у нас испанский с версии 1.1"
+      },
+      {
+       "name": "Цена для пользователя (10 = бесплатно)",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 7,
+        "Stock+": 6,
+        "HeatMap": 6,
+        "TradingView": 4,
+        "Finviz": 5,
+        "Stock Heatmap (StockAlarm)": 6,
+        "History of Market": 7,
+        "Market Atlas": 6,
+        "StockMap (Yojowa)": 3,
+        "SectorView": 10,
+        "Investing.com": 5,
+        "Yahoo Finance": 5,
+        "moomoo": 8
+       },
+       "note": "конкуренты: $3–5 в месяц (карты), $18–88 в месяц (TradingView, Investing, Finviz)"
+      },
+      {
+       "name": "Карта всех мировых индексов на одном экране",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": 6,
+        "TradingView": 6,
+        "Finviz": 6,
+        "Stock Heatmap (StockAlarm)": 0,
+        "History of Market": 2,
+        "Market Atlas": 7,
+        "StockMap (Yojowa)": 0,
+        "SectorView": 2,
+        "Investing.com": 3,
+        "Yahoo Finance": 0,
+        "moomoo": 0
+       },
+       "note": "у нас главная «Мировые рынки» по регионам; у HeatMap и Market Atlas — обзор по странам"
+      },
+      {
+       "name": "Сектора и компании внутри индексов Европы, Азии, Латинской Америки",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": 5,
+        "TradingView": 8,
+        "Finviz": 3,
+        "Stock Heatmap (StockAlarm)": 0,
+        "History of Market": 4,
+        "Market Atlas": 6,
+        "StockMap (Yojowa)": 0,
+        "SectorView": 0,
+        "Investing.com": 6,
+        "Yahoo Finance": 0,
+        "moomoo": 3
+       }
+      },
+      {
+       "name": "Число языков интерфейса",
+       "values": {
+        "SP500 Heatmap": 8,
+        "Stock Map": 1,
+        "Stock+": 3,
+        "HeatMap": 9,
+        "TradingView": 10,
+        "Finviz": 1,
+        "Stock Heatmap (StockAlarm)": 1,
+        "History of Market": 7,
+        "Market Atlas": 8,
+        "StockMap (Yojowa)": 1,
+        "SectorView": 10,
+        "Investing.com": 10,
+        "Yahoo Finance": 6,
+        "moomoo": 3
+       },
+       "note": "у нас 9; HeatMap 16, TradingView 19, Investing 22, SectorView 32; Stock Map, Finviz — только английский"
+      },
+      {
+       "name": "Выбор языка внутри приложения",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": "?",
+        "Stock+": "?",
+        "HeatMap": "?",
+        "TradingView": "?",
+        "Finviz": "?",
+        "Stock Heatmap (StockAlarm)": "?",
+        "History of Market": "?",
+        "Market Atlas": "?",
+        "StockMap (Yojowa)": "?",
+        "SectorView": "?",
+        "Investing.com": "?",
+        "Yahoo Finance": "?",
+        "moomoo": "?"
+       },
+       "note": "у нас кнопка EN/ES/… на главной; у остальных не проверено"
+      },
+      {
+       "name": "iPad",
+       "values": {
+        "SP500 Heatmap": 8,
+        "Stock Map": 9,
+        "Stock+": 7,
+        "HeatMap": 7,
+        "TradingView": 10,
+        "Finviz": 0,
+        "Stock Heatmap (StockAlarm)": 7,
+        "History of Market": 9,
+        "Market Atlas": 7,
+        "StockMap (Yojowa)": 7,
+        "SectorView": 7,
+        "Investing.com": 9,
+        "Yahoo Finance": 9,
+        "moomoo": 9
+       },
+       "note": "у нас список индексов слева, карта справа, все ориентации"
+      },
+      {
+       "name": "Apple Watch",
+       "values": {
+        "SP500 Heatmap": 0,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": 0,
+        "TradingView": "?",
+        "Finviz": 0,
+        "Stock Heatmap (StockAlarm)": 0,
+        "History of Market": 0,
+        "Market Atlas": 7,
+        "StockMap (Yojowa)": 0,
+        "SectorView": 0,
+        "Investing.com": 8,
+        "Yahoo Finance": "?",
+        "moomoo": "?"
+       }
+      },
+      {
+       "name": "Новости",
+       "values": {
+        "SP500 Heatmap": 6,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": 7,
+        "TradingView": 10,
+        "Finviz": 9,
+        "Stock Heatmap (StockAlarm)": 7,
+        "History of Market": 0,
+        "Market Atlas": "?",
+        "StockMap (Yojowa)": "?",
+        "SectorView": "?",
+        "Investing.com": 10,
+        "Yahoo Finance": 10,
+        "moomoo": 10
+       },
+       "note": "у нас до 8 заголовков в карточке компании (Yahoo)"
+      },
+      {
+       "name": "Фундаментальные показатели (P/E, дивиденды, отчётность)",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 1,
+        "Stock+": 3,
+        "HeatMap": 6,
+        "TradingView": 10,
+        "Finviz": 10,
+        "Stock Heatmap (StockAlarm)": 5,
+        "History of Market": 6,
+        "Market Atlas": 5,
+        "StockMap (Yojowa)": "?",
+        "SectorView": 3,
+        "Investing.com": 10,
+        "Yahoo Finance": 9,
+        "moomoo": 10
+       },
+       "note": "у нас P/E, P/S, P/B, EV/EBITDA, PEG, P/FCF, маржи, ROE/ROA, долг; выручка, прибыль, EPS, FCF за 4 года и 6 кварталов; мнения и цели аналитиков; кто из известных инвесторов держит (13F Udak)"
+      },
+      {
+       "name": "Календарь отчётов и дивидендов",
+       "values": {
+        "SP500 Heatmap": 9,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": "?",
+        "TradingView": 10,
+        "Finviz": 9,
+        "Stock Heatmap (StockAlarm)": "?",
+        "History of Market": "?",
+        "Market Atlas": "?",
+        "StockMap (Yojowa)": "?",
+        "SectorView": "?",
+        "Investing.com": 8,
+        "Yahoo Finance": 8,
+        "moomoo": "?"
+       },
+       "note": "у нас отдельный календарь отчётностей и отсечек по дням, фильтры (всё/списки/индекс), добавление в календарь iPhone, напоминания; нет оценок EPS"
+      },
+      {
+       "name": "Скринер, фильтры, лидеры роста и падения",
+       "values": {
+        "SP500 Heatmap": 9,
+        "Stock Map": 2,
+        "Stock+": 0,
+        "HeatMap": "?",
+        "TradingView": 9,
+        "Finviz": 10,
+        "Stock Heatmap (StockAlarm)": 2,
+        "History of Market": 3,
+        "Market Atlas": 7,
+        "StockMap (Yojowa)": "?",
+        "SectorView": 3,
+        "Investing.com": 9,
+        "Yahoo Finance": 8,
+        "moomoo": 8
+       },
+       "note": "у нас 3464 бумаги 40+ индексов, фильтры по сектору, капитализации, P/E, P/S, P/B, дивидендам, бете, росту выручки, росту за период, 52 неделям, объёму; 7 готовых подборок; результат списком или картой; сохранение"
+      },
+      {
+       "name": "Портфель",
+       "values": {
+        "SP500 Heatmap": 9,
+        "Stock Map": 0,
+        "Stock+": 6,
+        "HeatMap": "?",
+        "TradingView": 6,
+        "Finviz": "?",
+        "Stock Heatmap (StockAlarm)": "?",
+        "History of Market": "?",
+        "Market Atlas": "?",
+        "StockMap (Yojowa)": 6,
+        "SectorView": "?",
+        "Investing.com": 9,
+        "Yahoo Finance": 9,
+        "moomoo": 10
+       },
+       "note": "у нас несколько портфелей, сделки, FIFO, прибыль в € или $, дивиденды, карта и доли по секторам/странам/валютам, сравнение с индексом, CSV, iCloud; без подключения к брокеру"
+      },
+      {
+       "name": "ИИ-функции",
+       "values": {
+        "SP500 Heatmap": 7,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": 9,
+        "TradingView": "?",
+        "Finviz": 3,
+        "Stock Heatmap (StockAlarm)": 0,
+        "History of Market": 0,
+        "Market Atlas": 7,
+        "StockMap (Yojowa)": 8,
+        "SectorView": 0,
+        "Investing.com": 6,
+        "Yahoo Finance": "?",
+        "moomoo": 8
+       },
+       "note": "у нас «почему двигается», сводка рынка, разбор портфеля — модель Apple на устройстве (бесплатно, без интернета) или сводка по шаблону, где Apple Intelligence нет; нет чата"
+      },
+      {
+       "name": "Поделиться картинкой карты",
+       "values": {
+        "SP500 Heatmap": 9,
+        "Stock Map": "?",
+        "Stock+": "?",
+        "HeatMap": "?",
+        "TradingView": "?",
+        "Finviz": "?",
+        "Stock Heatmap (StockAlarm)": 8,
+        "History of Market": "?",
+        "Market Atlas": 8,
+        "StockMap (Yojowa)": "?",
+        "SectorView": "?",
+        "Investing.com": 7,
+        "Yahoo Finance": "?",
+        "moomoo": "?"
+       }
+      },
+      {
+       "name": "Синхронизация между устройствами",
+       "values": {
+        "SP500 Heatmap": 8,
+        "Stock Map": 9,
+        "Stock+": 0,
+        "HeatMap": "?",
+        "TradingView": 10,
+        "Finviz": 9,
+        "Stock Heatmap (StockAlarm)": 6,
+        "History of Market": 9,
+        "Market Atlas": 8,
+        "StockMap (Yojowa)": "?",
+        "SectorView": "?",
+        "Investing.com": 9,
+        "Yahoo Finance": 9,
+        "moomoo": 9
+       },
+       "note": "у нас избранное и списки через iCloud"
+      },
+      {
+       "name": "Палитра для дальтоников",
+       "values": {
+        "SP500 Heatmap": 9,
+        "Stock Map": 10,
+        "Stock+": "?",
+        "HeatMap": "?",
+        "TradingView": "?",
+        "Finviz": "?",
+        "Stock Heatmap (StockAlarm)": "?",
+        "History of Market": "?",
+        "Market Atlas": "?",
+        "StockMap (Yojowa)": "?",
+        "SectorView": "?",
+        "Investing.com": "?",
+        "Yahoo Finance": "?",
+        "moomoo": 6
+       },
+       "note": "у нас сине-оранжевая палитра в настройках"
+      },
+      {
+       "name": "Без рекламы",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 10,
+        "Stock+": "?",
+        "HeatMap": "?",
+        "TradingView": 5,
+        "Finviz": "?",
+        "Stock Heatmap (StockAlarm)": "?",
+        "History of Market": "?",
+        "Market Atlas": "?",
+        "StockMap (Yojowa)": "?",
+        "SectorView": "?",
+        "Investing.com": 3,
+        "Yahoo Finance": 3,
+        "moomoo": "?"
+       },
+       "note": "Investing и Yahoo: реклама в бесплатной версии"
+      },
+      {
+       "name": "Без регистрации",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 10,
+        "Stock+": "?",
+        "HeatMap": "?",
+        "TradingView": "?",
+        "Finviz": "?",
+        "Stock Heatmap (StockAlarm)": 8,
+        "History of Market": 10,
+        "Market Atlas": 8,
+        "StockMap (Yojowa)": "?",
+        "SectorView": "?",
+        "Investing.com": "?",
+        "Yahoo Finance": "?",
+        "moomoo": 3
+       }
+      },
+      {
+       "name": "Модельные портфели и исторический калькулятор (с 1926 г.)",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 0,
+        "Stock+": 0,
+        "HeatMap": "?",
+        "TradingView": "?",
+        "Finviz": "?",
+        "Stock Heatmap (StockAlarm)": 0,
+        "History of Market": 0,
+        "Market Atlas": 0,
+        "StockMap (Yojowa)": 0,
+        "SectorView": 0,
+        "Investing.com": 2,
+        "Yahoo Finance": "?",
+        "moomoo": "?"
+       },
+       "note": "у нас 60 моделей Udak (Баффетт, Далио, Bogleheads…), доходность и просадка с 1926 г., 23 исторические эпохи, калькулятор в $ и €; у Investing — платные ИИ-стратегии ProPicks"
+      },
+      {
+       "name": "Сроки 3, 5 и 10 лет на карте",
+       "values": {
+        "SP500 Heatmap": 10,
+        "Stock Map": 0,
+        "Stock+": "?",
+        "HeatMap": 0,
+        "TradingView": "?",
+        "Finviz": 0,
+        "Stock Heatmap (StockAlarm)": 0,
+        "History of Market": 10,
+        "Market Atlas": 8,
+        "StockMap (Yojowa)": "?",
+        "SectorView": 0,
+        "Investing.com": 0,
+        "Yahoo Finance": 0,
+        "moomoo": 0
+       },
+       "note": "у нас 3/5/10 лет по недельным ценам; History of Market — до 10 лет, Market Atlas — «машина времени» с 1996 г."
+      },
+      {
+       "name": "Оценка в App Store (звёзды × 2)",
+       "values": {
+        "SP500 Heatmap": "?",
+        "Stock Map": 9.6,
+        "Stock+": 9,
+        "HeatMap": 9.7,
+        "TradingView": 9.6,
+        "Finviz": 7.4,
+        "Stock Heatmap (StockAlarm)": 9,
+        "History of Market": "?",
+        "Market Atlas": "?",
+        "StockMap (Yojowa)": 8.2,
+        "SectorView": 9.7,
+        "Investing.com": 9.4,
+        "Yahoo Finance": 9.6,
+        "moomoo": 9.4
+       },
+       "note": "не входит в сумму. Число оценок: Stock Map 1083, Stock+ 81, HeatMap 232, TradingView 428 тыс., Finviz 16, StockAlarm 8, Yojowa 9, SectorView 7, Investing 39 тыс., Yahoo 629 тыс., moomoo 38 тыс.; у нас пока 0"
+      }
+     ]
+    }
+   ],
+   "totals": {
+    "SP500 Heatmap": 280,
+    "Stock Map": 105,
+    "Stock+": 61,
+    "HeatMap": 128,
+    "TradingView": 200,
+    "Finviz": 142,
+    "Stock Heatmap (StockAlarm)": 91,
+    "History of Market": 147,
+    "Market Atlas": 144,
+    "StockMap (Yojowa)": 68,
+    "SectorView": 72,
+    "Investing.com": 196,
+    "Yahoo Finance": 129,
+    "moomoo": 153
+   },
+   "totals_how": "сумма баллов 0–10 по 32 строкам (строка «Оценка в App Store» не входит); «?» — нет данных, считается как 0. Баллы конкурентов — из раунда 2 (по описаниям в App Store), наши — по проверке приложения.",
+   "findings": [
+    "Наша сумма выросла с 251 до 280: Фундаментальные показатели 7→10, Календарь отчётов и дивидендов 6→9, Скринер 2→9, Портфель 0→9, ИИ-функции 0→7.",
+    "Первое место; дальше TradingView 200, Investing.com 196, moomoo 153, History of Market 147.",
+    "Осталось слабым: push-оповещения и живая карточка на время торгов (нужен ключ APNs), Apple Watch, живые цены вне США, рисование на графике, ИИ-чат, подключение портфеля к брокеру.",
+    "Оговорка: сумма — по нашему списку из 32 строк, где много того, что важно именно карте рынка; у больших платформ сила в графиках, оповещениях, новостях и сообществе, а «?» у конкурентов считается как 0. Наше приложение проверено руками, конкуренты — по описаниям."
+   ],
+   "actions": [
+    "1. Ключ APNs (владелец) → push-оповещения и живая карточка во время торгов.",
+    "2. Apple Watch.",
+    "3. Рисование линий на графике.",
+    "4. ИИ-чат по рынку и компании на модели Apple.",
+    "5. Оценки EPS в календаре."
    ]
   }
  ]

@@ -48,6 +48,12 @@
 - Сервер: FUNDAMENTALS_REFRESH=1 (ночной проход 01–07 UTC, ~1 запрос/с), крипта раз в 6 ч, ETF по закрытию США. 24.11 первый проход фундаментала запущен вручную (/tmp/fund_first.log на сервере).
 - Отладка на симуляторе (только Debug): `-openIndex ibex35`, `-openScreen settings|portfolios|favorites|portfolio:m_dalio|company:AAPL`.
 
+## 1.1 — раунд 5 (24.11.2026, не выпущено, стоит на iPhone и iPad владельца)
+- Нижние вкладки: Рынки, Избранное (списки), Портфель (личный), Скринер, Ещё (календарь, модельные портфели Udak, оповещения, настройки).
+- Сервер: /api/v1/financials/{ticker} (Yahoo + держатели из 13F Udak: data/guru_holdings.json, tools/sync_udak_gurus.py), /calendar, /screener, /brief; ряды индексов (^GSPC, ^IBEX…) и курсы валют в истории (для сравнения портфеля).
+- ИИ на устройстве (Apple FoundationModels, iOS 26 + Apple Intelligence), иначе сводка по шаблону.
+- 24.11 по ошибке в git попали build/ и trading_system/ (коммит 11a82e3), сразу убраны из git (9cd6620), на диске остались; в истории открытого репозитория они есть — чистка истории только по слову владельца.
+
 ## Серверы
 - **Рабочий** (его использует 1.0.1): https://217-160-93-254.sslip.io/sp500 (WebSocket `/sp500/ws`).
   Служба `sp500-api` на сервере проектов; код — git clone этого репозитория, ключ Finnhub — в env-файле на сервере.
