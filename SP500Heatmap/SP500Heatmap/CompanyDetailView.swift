@@ -259,7 +259,9 @@ struct CompanyDetailView: View {
                 .foregroundColor(Theme.text)
             // P/E и прочее — в «Ключевых данных» (/company); здесь только капитализация, без пустых «Н/Д».
             HStack {
-                MetricItem(title: "Market Cap", value: formatMarketCap(company.marketCap))
+                if company.marketCap > 0 {  // карточка, открытая не с карты (поиск, ссылка), может не знать капитализацию
+                    MetricItem(title: "Market Cap", value: formatMarketCap(company.marketCap))
+                }
                 if let pe = company.peRatio {
                     Spacer()
                     MetricItem(title: "P/E", value: formatDecimal(pe))

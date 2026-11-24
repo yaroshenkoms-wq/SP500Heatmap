@@ -307,7 +307,7 @@ enum AppTab: String {
 enum DebugDemoData {
     static func seedPortfolio() {
         let store = MyPortfolioStore.shared
-        for p in store.all where p.name == "Mi cartera" || p.name == "My portfolio" { store.delete(p.id) }
+        for p in store.all where p.name == "Mi cartera" || p.name == "My portfolio" || p.name == AppLanguage.string("My portfolio") { store.delete(p.id) }
         let cal = Calendar(identifier: .gregorian)
         func d(_ monthsAgo: Int) -> Date { cal.date(byAdding: .month, value: -monthsAgo, to: Date()) ?? Date() }
         // (тикер, индекс, валюта, количество, цена покупки, месяцев назад)
@@ -317,7 +317,7 @@ enum DebugDemoData {
             ("SAN.MC", "ibex35", "EUR", 1200, 3.9, 16), ("ITX.MC", "ibex35", "EUR", 150, 35.5, 14),
             ("IBE.MC", "ibex35", "EUR", 400, 11.8, 12), ("BBVA.MC", "ibex35", "EUR", 500, 8.7, 10),
         ]
-        var p = store.create(name: "Mi cartera", base: .EUR)
+        var p = store.create(name: AppLanguage.string("My portfolio"), base: .EUR)
         p.transactions = rows.map { MyPortfolio.Transaction(ticker: $0.0, indexId: $0.1, type: .buy, date: d($0.5), quantity: $0.3, price: $0.4, currency: $0.2) }
         store.update(p)
         store.selectedId = p.id
