@@ -38,6 +38,16 @@
 - Приложение: 9 языков (en, es, zh-Hans, ar, fr, bn, hi, ru, uk), сектора переводятся (`Sectors.xcstrings`). Не сделано: установка на iPhone, снимки и тексты App Store.
 - Отброшены: S&P IPSA, WIG20, Hang Seng Tech (нет надёжного состава), PSEi (Yahoo не знает символы).
 
+## Версия 1.1 — что добавлено 24.11.2026 (не выпущено, стоит на iPhone и iPad владельца)
+- Главная «Мировые рынки» (40 индексов + регион «Крипто и ETF»: crypto50 по CoinGecko, etf50), выбор языка EN/ES/…, оформление PlanEditor.
+- Избранное, виджеты (World markets, My favorites, экран блокировки), «Поделиться картой», настройки (плитки поровну, палитра для дальтоников), локальные оповещения (индекс ±X %, итог дня; iOS сама решает, когда фоновая проверка).
+- Цвет плиток по P/E, дивидендной доходности, 52-недельному диапазону (`/api/v1/metrics`); карточка компании: ключевые данные и новости (`/api/v1/company/{ticker}`, кэш 6 ч в fundamentals.db).
+- Раздел «Портфели»: 60 моделей Udak (данные `Resources/portfolios_data.json` из `~/Udak/Brokers/site/static/calc/data.json`, обновление — `tools/sync_udak_portfolios.py`), калькулятор, эпохи; цифры совпадают с backtest.py сайта.
+- iPad: список индексов слева, карта справа.
+- ВЫКЛЮЧЕНО до входа владельца в Xcode (Settings → Accounts, Apple ID команды DR8U87NRB8): App Group и iCloud KVS — синхронизация избранного между устройствами и данные избранного в виджете. Полные права — в `*.capabilities.entitlements`: скопировать в `*.entitlements` и собрать с -allowProvisioningUpdates. Ключи API (5D3F7FC37S — не проходит авторизацию в xcodebuild, K77DUS2BFK — «roles ''») для этого не подходят.
+- Сервер: FUNDAMENTALS_REFRESH=1 (ночной проход 01–07 UTC, ~1 запрос/с), крипта раз в 6 ч, ETF по закрытию США. 24.11 первый проход фундаментала запущен вручную (/tmp/fund_first.log на сервере).
+- Отладка на симуляторе (только Debug): `-openIndex ibex35`, `-openScreen settings|portfolios|favorites|portfolio:m_dalio|company:AAPL`.
+
 ## Серверы
 - **Рабочий** (его использует 1.0.1): https://217-160-93-254.sslip.io/sp500 (WebSocket `/sp500/ws`).
   Служба `sp500-api` на сервере проектов; код — git clone этого репозитория, ключ Finnhub — в env-файле на сервере.
