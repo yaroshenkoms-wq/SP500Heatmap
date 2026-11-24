@@ -41,7 +41,7 @@ enum AlertManager {
     }
 
     static func scheduleRefresh() {
-        guard moveEnabled || summaryEnabled else {
+        guard moveEnabled || summaryEnabled || AlertStore.hasPriceAlerts else {
             BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: taskId)
             return
         }
@@ -75,7 +75,8 @@ enum AlertManager {
 
     @discardableResult
     static func check() async -> Bool {
-        guard moveEnabled || summaryEnabled else { return true }
+        let priceOK = await PriceAlertChecker.run()
+        guard moveEnabled || summaryEnabled else { return priceOK }
         guard let overview = try? await NetworkService.shared.fetchWorldOverview() else { return false }
         await MainActor.run { WidgetBridge.publish(overview: overview) }
         let indices = overview.regions.flatMap { $0.indices }

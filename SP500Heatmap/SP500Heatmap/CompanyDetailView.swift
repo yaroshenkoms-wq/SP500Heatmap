@@ -122,13 +122,14 @@ struct CompanyDetailView: View {
                 VStack(spacing: 8) {
                     if isRegular {
                         HStack(alignment: .top, spacing: 16) {
-                            VStack(spacing: 8) { chartSection; descriptionSection; metricsSection }
+                            VStack(spacing: 8) { chartSection; alertsSection; descriptionSection; metricsSection }
                                 .frame(maxWidth: .infinity)
                             VStack(spacing: 8) { keyDataSection; newsSection }
                                 .frame(maxWidth: .infinity)
                         }
                     } else {
                         chartSection
+                        alertsSection
                         descriptionSection
                         metricsSection
                         keyDataSection
@@ -212,38 +213,17 @@ struct CompanyDetailView: View {
     }
 
     private var chartSection: some View {
-        VStack(alignment: .leading) {
-            if longFallbackActive {
-                Text("Long history is not available yet - showing 1 year")
-                    .font(Theme.ui(.caption2))
-                    .foregroundColor(Theme.muted)
-            }
-            if pricesForPeriod.isEmpty {
-                ProgressView()
-                    .frame(height: 200)
-                    .frame(maxWidth: .infinity)
-            } else {
-                Chart(pricesForPeriod) { item in
-                    LineMark(
-                        x: .value("Date", item.date),
-                        y: .value("Price", item.price)
-                    )
-                    .foregroundStyle(Theme.gold)
-                }
-                .chartXAxis { AxisMarks { _ in
-                    AxisGridLine().foregroundStyle(Theme.line)
-                    AxisValueLabel().foregroundStyle(Theme.muted)
-                } }
-                .chartYAxis { AxisMarks { _ in
-                    AxisGridLine().foregroundStyle(Theme.line)
-                    AxisValueLabel().foregroundStyle(Theme.muted)
-                } }
-                .frame(height: isRegular ? 320 : 200)
-                .padding(12)
-                .panelCard()
-                .padding(.horizontal)
-            }
-        }
+        ProChartView(ticker: company.ticker, indexId: indexStore.selectedId)
+    }
+
+    private var loadedInfo: CompanyInfo? {
+        if case .loaded(let info) = infoState { return info }
+        return nil
+    }
+
+    private var alertsSection: some View {
+        CompanyAlertsSection(company: company, indexId: indexStore.selectedId,
+                             currentPrice: history.last?.close ?? currentPrice, info: loadedInfo)
     }
 
     // Описаний компаний сервер пока не отдаёт: без текста раздел не показываем.

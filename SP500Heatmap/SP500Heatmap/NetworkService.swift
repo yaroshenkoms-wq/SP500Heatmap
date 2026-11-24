@@ -68,6 +68,16 @@ class NetworkService: ObservableObject {
         return try JSONDecoder().decode([DailyClose].self, from: data)
     }
 
+    /// Свечи для профессионального графика; бросает ошибку, если на сервере нет /ohlc.
+    func fetchOHLC(ticker: String, range: String) async throws -> OHLCSeries {
+        let encoded = ticker.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ticker
+        guard let url = URL(string: "\(baseURL)/api/v1/ohlc/\(encoded)?range=\(range)") else {
+            throw NetworkError.invalidURL
+        }
+        let data = try await fetchData(url, timeout: 30)
+        return try JSONDecoder().decode(OHLCSeries.self, from: data)
+    }
+
     func fetchMetrics(index: String) async throws -> [String: CompanyMetrics] {
         let data = try await fetchData(try apiURL("/api/v1/metrics", index: index), timeout: 30)
         return try JSONDecoder().decode([String: CompanyMetrics].self, from: data)
@@ -141,4 +151,20 @@ struct PerformanceMetrics: Codable {
         default: return nil
         }
     }
+}
+
+struct OHLCBar: Codable {
+    let t: String
+    let o: Double
+    let h: Double
+    let l: Double
+    let c: Double
+    let v: Double?
+}
+
+struct OHLCSeries: Codable {
+    let ticker: String?
+    let currency: String?
+    let interval: String?
+    let bars: [OHLCBar]
 }
