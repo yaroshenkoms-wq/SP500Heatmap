@@ -26,4 +26,4 @@ Permissions (all optional, requested only when the user uses the feature)
 
 Languages: 41 (including right-to-left Arabic and Hebrew).
 
-Contact: vmyaros@gmail.com
+Contact: yaroshenkoms@gmail.com
