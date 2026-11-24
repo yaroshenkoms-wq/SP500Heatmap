@@ -7,6 +7,8 @@ struct SP500HeatmapWidgetsBundle: WidgetBundle {
         WorldMarketsWidget()
         FavoritesWidget()
         IndexLockScreenWidget()
+        OpenAppControl()
+        OpenIndexControl()
     }
 }
 
@@ -14,7 +16,7 @@ struct SP500HeatmapWidgetsBundle: WidgetBundle {
 
 struct WorldMarketsWidget: Widget {
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: "WorldMarketsWidget", intent: NoConfigIntent.self, provider: StaticProvider()) { entry in
+        AppIntentConfiguration(kind: "WorldMarketsWidget", intent: SelectRegionIntent.self, provider: WorldProvider()) { entry in
             WorldMarketsView(entry: entry)
                 .environment(\.locale, WTheme.locale)
                 .containerBackground(WTheme.bg, for: .widget)
@@ -30,7 +32,8 @@ struct WorldMarketsView: View {
     let entry: MarketEntry
 
     var body: some View {
-        if let snapshot = entry.snapshot, !snapshot.drawableRegions.isEmpty {
+        let regions = (entry.snapshot?.drawableRegions ?? []).filter { entry.region == "all" || $0.id == entry.region }
+        if !regions.isEmpty {
             VStack(spacing: 0) {
                 HStack {
                     Text("World markets")
@@ -43,8 +46,8 @@ struct WorldMarketsView: View {
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
-                TreemapLayout(weights: snapshot.drawableRegions.map { $0.totalCap }) {
-                    ForEach(snapshot.drawableRegions) { region in
+                TreemapLayout(weights: regions.map { $0.totalCap }) {
+                    ForEach(regions) { region in
                         TreemapLayout(weights: region.drawable.map { $0.capUSD ?? 0 }) {
                             ForEach(region.drawable) { index in
                                 WorldTile(index: index)
@@ -64,12 +67,13 @@ struct WorldMarketsView: View {
 
 private struct WorldTile: View {
     let index: WidgetSnapshot.Idx
+    @Environment(\.widgetRenderingMode) private var mode
 
     var body: some View {
         let change = index.changes["1d"]
         GeometryReader { geo in
             ZStack {
-                SharedHeat.color(for: change)
+                WTheme.tileFill(change, mode: mode)
                 if geo.size.width >= 46 && geo.size.height >= 26 {
                     VStack(spacing: 1) {
                         Text(verbatim: index.name)
@@ -77,7 +81,7 @@ private struct WorldTile: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
                         if let change {
-                            Text(verbatim: WTheme.percent(change))
+                            Text(verbatim: WTheme.arrow(change, mode) + WTheme.percent(change))
                                 .font(.system(size: 9))
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.6)
@@ -98,7 +102,7 @@ private struct WorldTile: View {
 
 struct FavoritesWidget: Widget {
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: "FavoritesWidget", intent: NoConfigIntent.self, provider: StaticProvider()) { entry in
+        AppIntentConfiguration(kind: "FavoritesWidget", intent: SelectListIntent.self, provider: FavoritesProvider()) { entry in
             FavoritesView(entry: entry)
                 .environment(\.locale, WTheme.locale)
                 .containerBackground(WTheme.bg, for: .widget)
@@ -111,10 +115,29 @@ struct FavoritesWidget: Widget {
 
 struct FavoritesView: View {
     @Environment(\.widgetFamily) private var family
+    @Environment(\.showsWidgetContainerBackground) private var showsBackground
     let entry: MarketEntry
 
+    /// Бумаги выбранного списка в его порядке (старый снимок без списков — все бумаги).
+    private var favorites: [WidgetSnapshot.Fav] {
+        let all = entry.snapshot?.favorites ?? []
+        guard let lists = entry.snapshot?.favLists, !lists.isEmpty else { return all }
+        let list = lists.first { $0.id == entry.listId } ?? lists.first { $0.id == "default" } ?? lists[0]
+        let byTicker = Dictionary(all.map { ($0.ticker, $0) }, uniquingKeysWith: { first, _ in first })
+        let ordered = list.tickers.compactMap { byTicker[$0] }
+        switch list.sort {
+        case "change": return ordered.sorted { ($0.changes["1d"] ?? -.infinity) > ($1.changes["1d"] ?? -.infinity) }
+        case "name": return ordered.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        default: return ordered
+        }
+    }
+
+    private var listName: String? {
+        (entry.snapshot?.favLists ?? []).first { $0.id == entry.listId }?.name
+    }
+
     var body: some View {
-        let favorites = entry.snapshot?.favorites ?? []
+        let favorites = favorites
         if favorites.isEmpty {
             EmptyHint(symbol: "star", text: "Add favorites in the app: tap the star on a company.")
         } else {
@@ -123,9 +146,12 @@ struct FavoritesView: View {
             let shown = Array(favorites.prefix(limit))
             VStack(spacing: 4) {
                 HStack {
-                    Text("My favorites")
+                    Group {
+                        if let listName { Text(verbatim: listName) } else { Text("My favorites") }
+                    }
                         .font(.system(.caption, design: .serif).weight(.semibold))
                         .foregroundColor(WTheme.text)
+                        .lineLimit(1)
                     Spacer()
                     Text("1d")
                         .font(.caption2)
@@ -136,7 +162,7 @@ struct FavoritesView: View {
                         ForEach(0..<columns, id: \.self) { col in
                             let i = row * columns + col
                             if i < shown.count {
-                                FavCell(fav: shown[i])
+                                FavCell(fav: shown[i], large: !showsBackground)
                             } else {
                                 Color.clear.frame(maxWidth: .infinity, maxHeight: .infinity)
                             }
@@ -150,25 +176,29 @@ struct FavoritesView: View {
 
 private struct FavCell: View {
     let fav: WidgetSnapshot.Fav
+    /// StandBy: виджет без своей подложки и крупнее — шрифт больше.
+    var large = false
+    @Environment(\.widgetRenderingMode) private var mode
 
     var body: some View {
         let change = fav.changes["1d"]
         VStack(spacing: 1) {
             Text(verbatim: fav.ticker)
-                .font(.system(size: 12, weight: .semibold))
+                .font(.system(size: large ? 15 : 12, weight: .semibold))
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
             if let change {
-                Text(verbatim: WTheme.percent(change))
-                    .font(.system(size: 10))
+                Text(verbatim: WTheme.arrow(change, mode) + WTheme.percent(change))
+                    .font(.system(size: large ? 13 : 10, weight: large ? .medium : .regular))
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
-                    .opacity(0.9)
+                    .opacity(0.95)
             }
         }
         .foregroundColor(WTheme.text)
+        .widgetAccentable()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(SharedHeat.color(for: change))
+        .background(WTheme.tileFill(change, mode: mode))
         .clipShape(RoundedRectangle(cornerRadius: 6))
     }
 }

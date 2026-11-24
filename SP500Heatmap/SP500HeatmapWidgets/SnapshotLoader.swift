@@ -61,24 +61,108 @@ struct MarketEntry: TimelineEntry {
     let date: Date
     let snapshot: WidgetSnapshot?
     let indexId: String
+    var listId: String = "default"
+    var region: String = "all"
 }
 
-// Виджеты «Мир» и «Избранное» без настроек.
-struct NoConfigIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource = "Widget"
+// Виджет «Избранное»: какой список показывать.
+struct FavoriteListEntity: AppEntity {
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "List"
+    static var defaultQuery = FavoriteListQuery()
+
+    var id: String
+    var name: String
+
+    var displayRepresentation: DisplayRepresentation { DisplayRepresentation(title: "\(name)") }
 }
 
-struct StaticProvider: AppIntentTimelineProvider {
+struct FavoriteListQuery: EntityQuery {
+    private func all() -> [FavoriteListEntity] {
+        let lists = SnapshotIO.read()?.favLists ?? []
+        let result = lists.map { FavoriteListEntity(id: $0.id, name: $0.name) }
+        return result.isEmpty ? [FavoriteListEntity(id: "default", name: String(localized: "Favorites"))] : result
+    }
+
+    func entities(for identifiers: [String]) async throws -> [FavoriteListEntity] {
+        all().filter { identifiers.contains($0.id) }
+    }
+
+    func suggestedEntities() async throws -> [FavoriteListEntity] { all() }
+
+    func defaultResult() async -> FavoriteListEntity? { all().first { $0.id == "default" } ?? all().first }
+}
+
+struct SelectListIntent: WidgetConfigurationIntent {
+    static var title: LocalizedStringResource = "Choose list"
+    static var description = IntentDescription("Pick which favorites list the widget shows.")
+
+    @Parameter(title: "List")
+    var list: FavoriteListEntity?
+}
+
+struct FavoritesProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> MarketEntry {
         MarketEntry(date: Date(), snapshot: nil, indexId: "sp500")
     }
 
-    func snapshot(for configuration: NoConfigIntent, in context: Context) async -> MarketEntry {
-        MarketEntry(date: Date(), snapshot: context.isPreview ? SnapshotIO.read() : await SnapshotLoader.load(), indexId: "sp500")
+    func snapshot(for configuration: SelectListIntent, in context: Context) async -> MarketEntry {
+        MarketEntry(date: Date(), snapshot: context.isPreview ? SnapshotIO.read() : await SnapshotLoader.load(),
+                    indexId: "sp500", listId: configuration.list?.id ?? "default")
     }
 
-    func timeline(for configuration: NoConfigIntent, in context: Context) async -> Timeline<MarketEntry> {
-        let entry = MarketEntry(date: Date(), snapshot: await SnapshotLoader.load(), indexId: "sp500")
+    func timeline(for configuration: SelectListIntent, in context: Context) async -> Timeline<MarketEntry> {
+        let entry = MarketEntry(date: Date(), snapshot: await SnapshotLoader.load(),
+                                indexId: "sp500", listId: configuration.list?.id ?? "default")
+        return Timeline(entries: [entry], policy: .after(Date().addingTimeInterval(30 * 60)))
+    }
+}
+
+// Виджет «Мировые рынки»: фильтр по региону.
+enum WorldRegionOption: String, AppEnum {
+    case all, americas, europe, asiaPacific, assets
+
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Region"
+    static var caseDisplayRepresentations: [WorldRegionOption: DisplayRepresentation] = [
+        .all: "All markets",
+        .americas: "Americas",
+        .europe: "Europe",
+        .asiaPacific: "Asia-Pacific",
+        .assets: "Crypto & ETFs",
+    ]
+
+    /// Идентификатор региона в данных сервера.
+    var regionId: String? {
+        switch self {
+        case .all: return nil
+        case .americas: return "americas"
+        case .europe: return "europe"
+        case .asiaPacific: return "asia_pacific"
+        case .assets: return "assets"
+        }
+    }
+}
+
+struct SelectRegionIntent: WidgetConfigurationIntent {
+    static var title: LocalizedStringResource = "Choose region"
+    static var description = IntentDescription("Pick which markets the widget shows.")
+
+    @Parameter(title: "Region", default: .all)
+    var region: WorldRegionOption
+}
+
+struct WorldProvider: AppIntentTimelineProvider {
+    func placeholder(in context: Context) -> MarketEntry {
+        MarketEntry(date: Date(), snapshot: nil, indexId: "sp500")
+    }
+
+    func snapshot(for configuration: SelectRegionIntent, in context: Context) async -> MarketEntry {
+        MarketEntry(date: Date(), snapshot: context.isPreview ? SnapshotIO.read() : await SnapshotLoader.load(),
+                    indexId: "sp500", region: configuration.region.regionId ?? "all")
+    }
+
+    func timeline(for configuration: SelectRegionIntent, in context: Context) async -> Timeline<MarketEntry> {
+        let entry = MarketEntry(date: Date(), snapshot: await SnapshotLoader.load(),
+                                indexId: "sp500", region: configuration.region.regionId ?? "all")
         return Timeline(entries: [entry], policy: .after(Date().addingTimeInterval(30 * 60)))
     }
 }

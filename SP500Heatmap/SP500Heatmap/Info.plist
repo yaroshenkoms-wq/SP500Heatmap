@@ -21,6 +21,17 @@
 	<array>
 		<string>fetch</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.maximyaroshenko.SP500Heatmap2</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sp500heatmap</string>
+			</array>
+		</dict>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Geist-Regular.ttf</string>

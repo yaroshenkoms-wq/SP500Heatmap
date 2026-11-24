@@ -29,12 +29,12 @@ enum WidgetBridge {
         WidgetCenter.shared.reloadAllTimelines()
     }
 
-    /// Убирает из снимка бумаги, которых больше нет в избранном (и сразу обновляет виджет).
-    static func pruneFavorites(keeping tickers: Set<String>) {
-        guard var snapshot = SnapshotIO.read() else { return }
-        let kept = snapshot.favorites.filter { tickers.contains($0.ticker) }
-        guard kept.count != snapshot.favorites.count else { return }
-        snapshot.favorites = kept
+    /// Составы списков избранного; бумаги, которых нет ни в одном списке, пропадают из снимка (виджет обновляется сразу).
+    static func publish(lists: [WidgetSnapshot.FavList]) {
+        var snapshot = SnapshotIO.read() ?? WidgetSnapshot()
+        let keep = Set(lists.flatMap(\.tickers))
+        snapshot.favorites = snapshot.favorites.filter { keep.contains($0.ticker) }
+        snapshot.favLists = lists
         SnapshotIO.write(snapshot)
         WidgetCenter.shared.reloadAllTimelines()
     }

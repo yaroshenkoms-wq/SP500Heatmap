@@ -8,6 +8,7 @@ struct CompaniesHeatmapView: View {
     @EnvironmentObject private var indexStore: IndexStore
     @AppStorage(ColorMetric.storageKey) private var metricRaw = "change"
     @ObservedObject private var metrics = MetricStore.shared
+    @ObservedObject private var settings = AppSettings.shared
 
     private var metricOptions: [ColorMetric] { metrics.available(for: indexStore.selectedId) }
     private var metric: ColorMetric {
@@ -29,10 +30,11 @@ struct CompaniesHeatmapView: View {
         return performanceStore.changePercent(for: ticker, period: period)
     }
 
-    var companiesWithChanges: [(company: Company, change: Double?)] {
+    var companiesWithChanges: [(company: Company, change: Double?, weight: Double)] {
         subsector.companies.map { company in
             (company, metric == .change ? changePercent(for: company.ticker)
-                : metrics.value(metric, ticker: company.ticker, index: indexStore.selectedId))
+                : metrics.value(metric, ticker: company.ticker, index: indexStore.selectedId),
+             metrics.sizeWeight([company], index: indexStore.selectedId))
         }
     }
 
@@ -52,8 +54,8 @@ struct CompaniesHeatmapView: View {
     }
     
     // Сортировка по убыванию капитализации
-    var sortedCompaniesWithChanges: [(company: Company, change: Double?)] {
-        companiesWithChanges.sorted { $0.company.marketCap > $1.company.marketCap }
+    var sortedCompaniesWithChanges: [(company: Company, change: Double?, weight: Double)] {
+        companiesWithChanges.sorted { $0.weight > $1.weight }
     }
     
     var body: some View {
@@ -82,7 +84,7 @@ struct CompaniesHeatmapView: View {
                     ShareMapButton(title: localizedSectorName(subsector.name) + " · " + indexStore.current.name,
                                    subtitle: shareSubtitle(period: indexStore.effectivePeriod(selectedPeriod),
                                                            asOf: indexStore.current.historyThrough)) {
-                        TreemapLayout(weights: sortedCompaniesWithChanges.map { SizeMode.weight($0.company.marketCap) }) {
+                        TreemapLayout(weights: sortedCompaniesWithChanges.map { $0.weight }) {
                             ForEach(sortedCompaniesWithChanges, id: \.company.ticker) { item in
                                 CompanyTile(company: item.company, changePercent: item.change, metric: metric, period: indexStore.effectivePeriod(selectedPeriod))
                             }
@@ -101,7 +103,7 @@ struct CompaniesHeatmapView: View {
             .background(Theme.bg)
             
             GeometryReader { geometry in
-                TreemapLayout(weights: sortedCompaniesWithChanges.map { SizeMode.weight($0.company.marketCap) }) {
+                TreemapLayout(weights: sortedCompaniesWithChanges.map { $0.weight }) {
                     ForEach(sortedCompaniesWithChanges, id: \.company.ticker) { item in
                         NavigationLink(destination: CompanyDetailView(company: item.company, webSocketManager: webSocketManager)) {
                             CompanyTile(company: item.company, changePercent: item.change, metric: metric, period: indexStore.effectivePeriod(selectedPeriod))
