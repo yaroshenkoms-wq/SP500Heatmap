@@ -308,7 +308,7 @@ struct NewsAITests {
 
     @Test func suggestedQuestionsMatchSpec() {
         let en = AIQuestion.suggested.map { $0.text("en") }
-        #expect(en == ["Why is the market down today?", "Compare AAPL and MSFT", "Best dividend stocks in IBEX 35", "How is my portfolio doing?"])
+        #expect(en == ["What is happening in the market today?", "Compare AAPL and MSFT", "Best dividend stocks in IBEX 35", "How is my portfolio doing?"])
         #expect(AIQuestion.stock("NVDA").text("en") == "Why is NVDA moving today?")
     }
 }

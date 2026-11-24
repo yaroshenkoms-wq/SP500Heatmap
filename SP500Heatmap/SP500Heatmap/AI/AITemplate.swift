@@ -96,7 +96,8 @@ enum AITemplate {
         guard f.hasContent else { return empty(code) }
         let changes = f.indices.map(\.change)
         let ups = changes.filter { $0 > flat }.count, downs = changes.filter { $0 < -flat }.count
-        let s: AISentiment = ups > 0 && downs == 0 ? .up : (downs > 0 && ups == 0 ? .down : .mixed)
+        // Большинство решает: при 4 индексах вверх и 1 вниз это «в основном растут», а не «разнонаправленно».
+        let s: AISentiment = ups > 0 && ups >= 2 * downs ? .up : (downs > 0 && downs >= 2 * ups ? .down : .mixed)
         let headline: String
         switch s {
         case .up: headline = AIL.s("Markets are mostly higher today.", code)

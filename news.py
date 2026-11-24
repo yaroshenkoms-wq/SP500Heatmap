@@ -149,4 +149,9 @@ def build_news(path, scope, symbols, lang="en", limit=50, news_fetcher=None, rss
         groups = list(pool.map(lambda s: symbol_news(path, s, news_fetcher, now), syms))
     if lang in RSS_FEEDS and scope in ("market", "index"):
         groups.insert(0, rss_news(path, lang, rss_fetcher, now))
-    return merge(groups, max(1, min(limit, 200)))
+    items = merge(groups, 200)
+    if lang != "en":
+        # Новости на языке пользователя — первыми (по дате внутри групп): испанский интерфейс
+        # открывался английскими заголовками, хотя испанские источники были (24.11.2026).
+        items.sort(key=lambda i: i.get("lang") != lang)
+    return items[:max(1, min(limit, 200))]

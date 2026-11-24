@@ -24,7 +24,7 @@ enum AIQuestion: Hashable, Identifiable {
     /// Текст вопроса на языке `code`.
     func text(_ code: String, indexName: (String) -> String = { $0 == "ibex35" ? "IBEX 35" : $0 }) -> String {
         switch self {
-        case .marketToday: return AIL.s("Why is the market down today?", code)
+        case .marketToday: return AIL.s("What is happening in the market today?", code)
         case .compare(let a, let b): return AIL.f("Compare %1$@ and %2$@", code, a, b)
         case .dividends(let i): return AIL.f("Best dividend stocks in %@", code, indexName(i))
         case .portfolio: return AIL.s("How is my portfolio doing?", code)

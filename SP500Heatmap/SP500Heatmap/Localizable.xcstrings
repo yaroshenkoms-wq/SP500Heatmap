@@ -27651,6 +27651,58 @@
         }
       }
     },
+    "What is happening in the market today?": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ماذا يحدث في السوق اليوم؟"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আজ বাজারে কী হচ্ছে?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué pasa hoy en el mercado?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Que se passe-t-il sur le marché aujourd'hui ?"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आज बाज़ार में क्या हो रहा है?"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Что сегодня с рынком?"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Що сьогодні з ринком?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今天市场怎么样？"
+          }
+        }
+      }
+    },
     "Why is %@ moving today?": {
       "extractionState": "manual",
       "localizations": {
