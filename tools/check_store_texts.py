@@ -25,8 +25,8 @@ def main():
                 errors.append(f"{loc}: {k} missing/empty"); continue
             if len(v) > lim:
                 errors.append(f"{loc}: {k} {len(v)}>{lim}")
-        if d.get("name") != "SP500Heatmap":
-            errors.append(f"{loc}: name must stay SP500Heatmap")
+        if not str(d.get("name", "")).startswith("SP500 Heatmap"):  # 24.11.2026 владелец: «SP500 Heatmap: …»
+            errors.append(f"{loc}: name must start with 'SP500 Heatmap'")
         if not d.get("name_proposal") or len(d["name_proposal"]) > 30:
             errors.append(f"{loc}: name_proposal missing or >30")
         kw = d.get("keywords", "")
