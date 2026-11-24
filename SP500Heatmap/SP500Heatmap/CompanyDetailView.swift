@@ -208,17 +208,20 @@ struct CompanyDetailView: View {
         }
     }
 
-    private var descriptionSection: some View {
+    // Описаний компаний сервер пока не отдаёт: без текста раздел не показываем.
+    @ViewBuilder private var descriptionSection: some View {
+        if let text = company.description, !text.isEmpty {
         VStack(alignment: .leading) {
             Text("Description")
                 .font(Theme.serif(.title3))
                 .foregroundColor(Theme.text)
-            Text(verbatim: (company.description?.isEmpty ?? true) ? AppLanguage.string("No description available.") : (company.description ?? ""))
+            Text(verbatim: text)
                 .font(Theme.ui(.subheadline))
                 .foregroundColor(Theme.muted)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
+        }
     }
 
     private var metricsSection: some View {
@@ -226,12 +229,18 @@ struct CompanyDetailView: View {
             Text("Metrics")
                 .font(Theme.serif(.title3))
                 .foregroundColor(Theme.text)
+            // P/E и прочее — в «Ключевых данных» (/company); здесь только капитализация, без пустых «Н/Д».
             HStack {
                 MetricItem(title: "Market Cap", value: formatMarketCap(company.marketCap))
+                if let pe = company.peRatio {
+                    Spacer()
+                    MetricItem(title: "P/E", value: formatDecimal(pe))
+                }
+                if let volume = company.volume {
+                    Spacer()
+                    MetricItem(title: "Volume", value: formatVolume(volume))
+                }
                 Spacer()
-                MetricItem(title: "P/E", value: company.peRatio != nil ? formatDecimal(company.peRatio!) : AppLanguage.string("N/A"))
-                Spacer()
-                MetricItem(title: "Volume", value: company.volume != nil ? formatVolume(company.volume!) : AppLanguage.string("N/A"))
             }
             .padding(12)
             .panelCard()

@@ -15,7 +15,7 @@ struct PeriodSwitchView: View {
     var body: some View {
         let active = availablePeriods == nil ? indexStore.effectivePeriod(selectedPeriod) : selectedPeriod
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 ForEach(periods, id: \.self) { period in
                     Button(action: {
                         selectedPeriod = period

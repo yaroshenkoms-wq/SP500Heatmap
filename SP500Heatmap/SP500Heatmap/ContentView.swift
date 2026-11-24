@@ -88,7 +88,11 @@ struct ContentView: View {
                 else if screen.id.hasPrefix("portfolio:"), let info = PortfolioStore.shared.info(String(screen.id.dropFirst(10))) {
                     PortfolioDetailView(info: info)
                 }
+                else if screen.id.hasPrefix("company:") {
+                    CompanyDetailView(company: Company(ticker: String(screen.id.dropFirst(8)), name: String(screen.id.dropFirst(8)), marketCap: 0, description: nil, peRatio: nil, volume: nil), webSocketManager: webSocketManager)
+                }
             }
+            .environmentObject(indexStore)
         }
         #endif
         .background(Theme.bg.ignoresSafeArea())
