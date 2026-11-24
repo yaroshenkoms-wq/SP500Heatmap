@@ -50,7 +50,7 @@ struct IndexSidebar: View {
         .scrollContentBackground(.hidden)
         .background(Theme.bg)
         .safeAreaInset(edge: .top, spacing: 0) {
-            PeriodSwitchView(selectedPeriod: $period, availablePeriods: ["1d", "3d", "7d", "30d", "180d", "1y"])
+            PeriodSwitchView(selectedPeriod: $period, availablePeriods: ["1d", "3d", "7d", "30d", "180d", "1y", "3y", "5y", "10y"])
                 .background(Theme.bg)
         }
         .navigationTitle(Text("World markets"))

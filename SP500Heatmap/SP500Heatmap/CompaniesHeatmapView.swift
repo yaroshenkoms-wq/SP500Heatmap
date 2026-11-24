@@ -83,7 +83,7 @@ struct CompaniesHeatmapView: View {
                                                            asOf: indexStore.current.historyThrough)) {
                         TreemapLayout(weights: sortedCompaniesWithChanges.map { SizeMode.weight($0.company.marketCap) }) {
                             ForEach(sortedCompaniesWithChanges, id: \.company.ticker) { item in
-                                CompanyTile(company: item.company, changePercent: item.change, metric: metric)
+                                CompanyTile(company: item.company, changePercent: item.change, metric: metric, period: indexStore.effectivePeriod(selectedPeriod))
                             }
                         }
                     }
@@ -103,7 +103,7 @@ struct CompaniesHeatmapView: View {
                 TreemapLayout(weights: sortedCompaniesWithChanges.map { SizeMode.weight($0.company.marketCap) }) {
                     ForEach(sortedCompaniesWithChanges, id: \.company.ticker) { item in
                         NavigationLink(destination: CompanyDetailView(company: item.company, webSocketManager: webSocketManager)) {
-                            CompanyTile(company: item.company, changePercent: item.change, metric: metric)
+                            CompanyTile(company: item.company, changePercent: item.change, metric: metric, period: indexStore.effectivePeriod(selectedPeriod))
                         }
                         .favoriteContextMenu(ticker: item.company.ticker, name: item.company.name, indexId: indexStore.selectedId)
                     }
@@ -122,6 +122,7 @@ struct CompanyTile: View {
     let company: Company
     let changePercent: Double?   // значение выбранного показателя (при «% change» — изменение)
     var metric: ColorMetric = .change
+    var period: String? = nil
 
     var body: some View {
         TileContainer {
@@ -141,7 +142,7 @@ struct CompanyTile: View {
             }
             .padding(.horizontal, 2)
         }
-        .background(metric.color(changePercent))
+        .background(metric.color(changePercent, period: period))
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(1)
     }

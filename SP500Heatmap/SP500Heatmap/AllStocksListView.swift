@@ -40,7 +40,10 @@ struct AllStocksListView: View {
                 return1M: metrics?.return1M,
                 return6M: metrics?.return6M,
                 returnYTD: metrics?.returnYTD,
-                return1Y: metrics?.return1Y
+                return1Y: metrics?.return1Y,
+                return3Y: metrics?.year3,
+                return5Y: metrics?.year5,
+                return10Y: metrics?.year10
             )
         }
     }
@@ -113,6 +116,9 @@ struct PerformanceRow: Identifiable {
     let return6M: Double?
     let returnYTD: Double?
     let return1Y: Double?
+    let return3Y: Double?
+    let return5Y: Double?
+    let return10Y: Double?
 }
 
 // MARK: - Overview Table
@@ -242,6 +248,12 @@ struct PerformanceTableView: View {
                 return sortAscending ? (a.returnYTD ?? -.infinity) < (b.returnYTD ?? -.infinity) : (a.returnYTD ?? -.infinity) > (b.returnYTD ?? -.infinity)
             case "1Y":
                 return sortAscending ? (a.return1Y ?? -.infinity) < (b.return1Y ?? -.infinity) : (a.return1Y ?? -.infinity) > (b.return1Y ?? -.infinity)
+            case "3Y":
+                return sortAscending ? (a.return3Y ?? -.infinity) < (b.return3Y ?? -.infinity) : (a.return3Y ?? -.infinity) > (b.return3Y ?? -.infinity)
+            case "5Y":
+                return sortAscending ? (a.return5Y ?? -.infinity) < (b.return5Y ?? -.infinity) : (a.return5Y ?? -.infinity) > (b.return5Y ?? -.infinity)
+            case "10Y":
+                return sortAscending ? (a.return10Y ?? -.infinity) < (b.return10Y ?? -.infinity) : (a.return10Y ?? -.infinity) > (b.return10Y ?? -.infinity)
             default:
                 return sortAscending ? a.ticker < b.ticker : a.ticker > b.ticker
             }
@@ -250,6 +262,7 @@ struct PerformanceTableView: View {
     
     var body: some View {
         ScrollView {
+          ScrollView(.horizontal, showsIndicators: false) {
             LazyVStack(alignment: .leading, spacing: 0) {
                 // Заголовки
                 HStack(spacing: 4) {
@@ -264,6 +277,12 @@ struct PerformanceTableView: View {
                     SortableHeader(title: "YTD", column: "YTD", sortColumn: $sortColumn, sortAscending: $sortAscending)
                         .frame(width: 55, alignment: .trailing)
                     SortableHeader(title: "1Y", column: "1Y", sortColumn: $sortColumn, sortAscending: $sortAscending)
+                        .frame(width: 55, alignment: .trailing)
+                    SortableHeader(title: "3Y", column: "3Y", sortColumn: $sortColumn, sortAscending: $sortAscending)
+                        .frame(width: 55, alignment: .trailing)
+                    SortableHeader(title: "5Y", column: "5Y", sortColumn: $sortColumn, sortAscending: $sortAscending)
+                        .frame(width: 55, alignment: .trailing)
+                    SortableHeader(title: "10Y", column: "10Y", sortColumn: $sortColumn, sortAscending: $sortAscending)
                         .frame(width: 55, alignment: .trailing)
                 }
                 .font(Theme.ui(.caption, weight: .semibold))
@@ -302,6 +321,9 @@ struct PerformanceTableView: View {
                             PerformanceCell(value: row.return6M).frame(width: 55, alignment: .trailing)
                             PerformanceCell(value: row.returnYTD).frame(width: 55, alignment: .trailing)
                             PerformanceCell(value: row.return1Y).frame(width: 55, alignment: .trailing)
+                            PerformanceCell(value: row.return3Y).frame(width: 55, alignment: .trailing)
+                            PerformanceCell(value: row.return5Y).frame(width: 55, alignment: .trailing)
+                            PerformanceCell(value: row.return10Y).frame(width: 55, alignment: .trailing)
                         }
                         .padding(.horizontal, 6)
                         .padding(.vertical, 14)
@@ -311,6 +333,8 @@ struct PerformanceTableView: View {
                     Rectangle().fill(Theme.line).frame(height: 1).padding(.leading, 6)
                 }
             }
+            .frame(minWidth: 600, alignment: .leading)
+          }
         }
     }
 }

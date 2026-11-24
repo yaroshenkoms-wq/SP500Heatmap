@@ -78,7 +78,7 @@ struct WorldOverviewView: View {
     var onSettings: () -> Void = {}
     @AppStorage("worldPeriod") private var period = "1d"
     @State private var showFavorites = false
-    private let periods = ["1d", "3d", "7d", "30d", "180d", "1y"]
+    private let periods = ["1d", "3d", "7d", "30d", "180d", "1y", "3y", "5y", "10y"]
 
     @Environment(\.horizontalSizeClass) private var sizeClass
     private var isRegular: Bool { sizeClass == .regular }
@@ -227,7 +227,7 @@ private struct RegionBlock: View {
                 TreemapLayout(weights: region.drawable.map { SizeMode.weight($0.capUSD ?? 0) }) {
                     ForEach(region.drawable) { index in
                         Button { onSelect(index) } label: {
-                            WorldIndexTile(index: index, change: index.change(for: period))
+                            WorldIndexTile(index: index, change: index.change(for: period), period: period)
                         }
                         .buttonStyle(.plain)
                     }
@@ -241,6 +241,7 @@ private struct RegionBlock: View {
 struct WorldIndexTile: View {
     let index: WorldIndex
     let change: Double?
+    var period: String? = nil
 
     var body: some View {
         TileContainer {
@@ -260,7 +261,7 @@ struct WorldIndexTile: View {
             }
             .padding(.horizontal, 3)
         }
-        .background(HeatmapColor.color(for: change))
+        .background(HeatmapColor.color(for: change, period: period))
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(1)
     }

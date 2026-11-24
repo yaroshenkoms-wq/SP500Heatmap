@@ -30,12 +30,13 @@ enum PortfolioCurrency: String, CaseIterable {
 }
 
 enum PortfolioPeriod: String, CaseIterable, Identifiable {
-    case y1, y5, y10, y20, y30, all
+    case y1, y3, y5, y10, y20, y30, all
     var id: String { rawValue }
     /// Number of months, nil = whole history of the model.
     var months: Int? {
         switch self {
         case .y1: return 12
+        case .y3: return 36
         case .y5: return 60
         case .y10: return 120
         case .y20: return 240

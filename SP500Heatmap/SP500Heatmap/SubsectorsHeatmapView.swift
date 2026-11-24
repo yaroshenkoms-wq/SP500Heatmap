@@ -96,7 +96,7 @@ struct SubsectorsHeatmapView: View {
                                    subtitle: shareSubtitle(period: indexStore.effectivePeriod(selectedPeriod),
                                                            asOf: indexStore.current.historyThrough)) {
                         TreemapLayout(weights: sortedSubsectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
-                            ForEach(sortedSubsectorStats) { stat in SubsectorTile(stat: stat, metric: metric) }
+                            ForEach(sortedSubsectorStats) { stat in SubsectorTile(stat: stat, metric: metric, period: indexStore.effectivePeriod(selectedPeriod)) }
                         }
                     }
                     Text(formatPercent(sectorChange))
@@ -115,7 +115,7 @@ struct SubsectorsHeatmapView: View {
                 TreemapLayout(weights: sortedSubsectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
                     ForEach(sortedSubsectorStats) { stat in
                         NavigationLink(destination: CompaniesHeatmapView(subsector: stat.subsector, webSocketManager: webSocketManager, performanceStore: performanceStore)) {
-                            SubsectorTile(stat: stat, metric: metric)
+                            SubsectorTile(stat: stat, metric: metric, period: indexStore.effectivePeriod(selectedPeriod))
                         }
                     }
                 }
@@ -140,6 +140,7 @@ struct SubsectorStat: Identifiable {
 struct SubsectorTile: View {
     let stat: SubsectorStat
     var metric: ColorMetric = .change
+    var period: String? = nil
 
     var body: some View {
         TileContainer {
@@ -160,7 +161,7 @@ struct SubsectorTile: View {
             }
             .padding(.horizontal, 3)
         }
-        .background(metric.color(stat.changePercent))
+        .background(metric.color(stat.changePercent, period: period))
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(1)
     }

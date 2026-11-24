@@ -39,8 +39,8 @@ enum ColorMetric: String, CaseIterable, Identifiable {
         }
     }
 
-    func color(_ value: Double?) -> Color {
-        if self == .change { return HeatmapColor.color(for: value) }
+    func color(_ value: Double?, period: String? = nil) -> Color {
+        if self == .change { return HeatmapColor.color(for: value, period: period) }
         guard let s = score(value) else { return SharedHeat.color(for: nil) }
         return SharedHeat.color(for: s * SharedHeat.cap)
     }

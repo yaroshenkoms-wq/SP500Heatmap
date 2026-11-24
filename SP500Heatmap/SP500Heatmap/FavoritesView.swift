@@ -4,7 +4,7 @@ extension PerformanceMetrics {
     /// Доходности по ключам периодов, как в PeriodSwitchView.
     var changesByPeriod: [String: Double] {
         var result: [String: Double] = [:]
-        for (key, value) in [("1d", day1), ("3d", day3), ("7d", day7), ("30d", day30), ("180d", day180), ("1y", year1)] {
+        for (key, value) in [("1d", day1), ("3d", day3), ("7d", day7), ("30d", day30), ("180d", day180), ("1y", year1), ("3y", year3), ("5y", year5), ("10y", year10)] {
             if let value { result[key] = value }
         }
         return result
@@ -77,7 +77,7 @@ struct FavoritesView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("worldPeriod") private var period = "1d"
     @State private var openItem: FavoriteItem?
-    private let periods = ["1d", "3d", "7d", "30d", "180d", "1y"]
+    private let periods = ["1d", "3d", "7d", "30d", "180d", "1y", "3y", "5y", "10y"]
 
     private var currencies: [String: String] {
         Dictionary(indexStore.indices.compactMap { index in index.currency.map { (index.id, $0) } },
@@ -142,7 +142,7 @@ struct FavoritesView: View {
                     if favorites.items.count >= 3 {
                         TreemapLayout(weights: favorites.items.map { _ in 1.0 }) {
                             ForEach(favorites.items) { item in
-                                FavoriteTile(item: item, change: change(item))
+                                FavoriteTile(item: item, change: change(item), period: period)
                             }
                         }
                         .frame(height: 190)
@@ -189,6 +189,7 @@ struct FavoritesView: View {
 private struct FavoriteTile: View {
     let item: FavoriteItem
     let change: Double?
+    var period: String? = nil
 
     var body: some View {
         TileContainer {
@@ -208,7 +209,7 @@ private struct FavoriteTile: View {
             }
             .padding(.horizontal, 3)
         }
-        .background(HeatmapColor.color(for: change))
+        .background(HeatmapColor.color(for: change, period: period))
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(1)
     }
