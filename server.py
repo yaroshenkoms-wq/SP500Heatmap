@@ -50,6 +50,15 @@ WORLD_REFRESH_CHECK_SECONDS = int(os.getenv("WORLD_REFRESH_CHECK_SECONDS", "300"
 WORLD_REFRESH_DELAY_MINUTES = int(os.getenv("WORLD_REFRESH_DELAY_MINUTES", "30"))
 WORLD_DB_MAX_AGE_SECONDS = int(os.getenv("WORLD_DB_MAX_AGE_SECONDS", "86400"))
 
+# Длинные периоды 3y/5y/10y: недельные закрытия в history_long.db (в память — только базовые цены)
+LONG_DB_PATH = os.path.join(BASE_DIR, "history_long.db")
+LONG_PERIODS = {"3y": 3, "5y": 5, "10y": 10}
+_long_env = os.getenv("LONG_REFRESH")
+# по умолчанию включено только вместе с WORLD_REFRESH=1 (как крипта); LONG_REFRESH=0 выключает
+LONG_REFRESH = (WORLD_REFRESH if _long_env is None
+                else _long_env.strip().lower() not in ("0", "false", "no", ""))
+LONG_CHECK_SECONDS = int(os.getenv("LONG_CHECK_SECONDS", "3600"))
+
 MARKET_TZ = ZoneInfo("America/New_York")
 
 # Фундаментал и новости (SQLite, не в памяти) — см. fetch_fundamentals.py
@@ -90,6 +99,8 @@ app.add_middleware(
 price_cache = {}
 _overview_cache = {"version": 0, "key": None, "at": 0.0, "data": None}  # кэш /api/v1/world-overview
 world_history_cache = {}  # то же для history_world.db (все остальные индексы)
+long_bases = {}  # ticker -> {"3y": база, "5y": база, "10y": база}; None если истории короче периода
+_long_db_mtime = {"value": None}
 history_cache = {}  # ticker -> [{"date": "YYYY-MM-DD", "close": float}, ...] по возрастанию даты
 
 
@@ -473,6 +484,67 @@ def load_world_history():
     return True
 
 
+def years_ago(today, years):
+    """Дата на N лет раньше today (date); 29 февраля -> 28 февраля."""
+    try:
+        return today.replace(year=today.year - years)
+    except ValueError:
+        return today.replace(year=today.year - years, day=28)
+
+
+def compute_long_bases(db_path=None, today=None):
+    """ticker -> {"3y","5y","10y"} = недельное закрытие на дату «сегодня − N лет» или раньше.
+    Нет базы (история короче N лет, с запасом 7 дней на недельный шаг) — None. В памяти только эти числа."""
+    db_path = db_path or LONG_DB_PATH
+    today = today or datetime.now(ZoneInfo("UTC")).date()
+    if not os.path.exists(db_path):
+        return {}
+    conn = sqlite3.connect(db_path)
+    try:
+        first = dict(conn.execute("SELECT ticker, MIN(date) FROM weekly_closes GROUP BY ticker"))
+        bases = {t: {} for t in first}
+        for key, years in LONG_PERIODS.items():
+            target = years_ago(today, years)
+            limit = (target + timedelta(days=7)).isoformat()
+            cur = conn.execute("SELECT ticker, close, MAX(date) FROM weekly_closes WHERE date <= ? GROUP BY ticker",
+                               (target.isoformat(),))
+            got = {t: c for t, c, _ in cur}
+            for t in first:
+                bases[t][key] = got.get(t) if first[t] <= limit else None
+        return bases
+    except sqlite3.Error as e:
+        print(f"⚠️ history_long.db не прочитан: {e}")
+        return {}
+    finally:
+        conn.close()
+
+
+def load_long_history():
+    """Пересчитывает маленький словарь баз длинных периодов (подмена целиком)."""
+    global long_bases
+    if not os.path.exists(LONG_DB_PATH):
+        return False
+    fresh = compute_long_bases()
+    long_bases = fresh
+    _long_db_mtime["value"] = os.path.getmtime(LONG_DB_PATH)
+    _overview_cache["version"] += 1
+    print(f"✅ Длинные периоды: базы для {len(long_bases)} тикеров")
+    warm_world_overview()
+    return True
+
+
+def long_returns(ticker, series):
+    """{"3y","5y","10y"}: % от недельной базы до последнего дневного закрытия (нет дневных — последнее недельное нельзя,
+    поэтому None); None, если базы нет."""
+    bases = long_bases.get(ticker)
+    last = series[-1]["close"] if series else None
+    out = {}
+    for key in LONG_PERIODS:
+        base = bases.get(key) if bases else None
+        out[key] = ((last - base) / base * 100) if (base and base > 0 and last is not None) else None
+    return out
+
+
 def world_db_changed() -> bool:
     try:
         return os.path.getmtime(WORLD_DB_PATH) != _world_db_mtime["value"]
@@ -510,7 +582,7 @@ def build_world_hierarchy(entry):
 CONTINUOUS_PERIOD_DAYS = {"1d": 1, "3d": 3, "7d": 7, "30d": 30, "180d": 180, "1y": 365}
 
 
-def performance_entry(series, continuous=False):
+def performance_entry(series, continuous=False, ticker=None):
     days_of = CONTINUOUS_PERIOD_DAYS if continuous else {"30d": 21, "180d": 126, "1y": 252}
     return_1m = compute_return(series, days_of["30d"])
     return_6m = compute_return(series, days_of["180d"])
@@ -526,6 +598,7 @@ def performance_entry(series, continuous=False):
     }
     for period, days in EXTRA_PERIOD_TRADING_DAYS.items():
         entry[period] = compute_return(series, CONTINUOUS_PERIOD_DAYS[period] if continuous else days)
+    entry.update(long_returns(ticker, series))
     return entry
 
 
@@ -731,7 +804,8 @@ def build_index_overview(entry):
     total = 0.0
     shown = 0
     days_of = CONTINUOUS_PERIOD_DAYS if entry.get("continuous") else OVERVIEW_PERIODS
-    weighted = {p: [0.0, 0.0] for p in OVERVIEW_PERIODS}  # period -> [сумма cap*ret, сумма cap]
+    all_periods = list(OVERVIEW_PERIODS) + list(LONG_PERIODS)
+    weighted = {p: [0.0, 0.0] for p in all_periods}  # period -> [сумма cap*ret, сумма cap]
     through = ""
     latest = history_last_date(history_cache if entry["id"] == "sp500" else world_history_cache)
     for row in load_index_rows(entry):
@@ -751,13 +825,17 @@ def build_index_overview(entry):
             if ret is not None:
                 weighted[period][0] += cap_usd * ret
                 weighted[period][1] += cap_usd
+        for period, ret in long_returns(row["ticker"], series).items():
+            if ret is not None:
+                weighted[period][0] += cap_usd * ret
+                weighted[period][1] += cap_usd
     ok = shown > 0 and total > 0
     result = {
         "id": entry["id"], "name": entry.get("name", entry["id"]), "country": entry.get("country", ""),
         "currency": entry.get("currency", ""), "live": bool(entry.get("live", False)), "count": shown,
         "capUSD": total if ok else None, "historyThrough": through,
         "changes": {p: (w[0] / w[1] if w[1] > 0 else None) for p, w in weighted.items()} if ok
-                   else {p: None for p in OVERVIEW_PERIODS},
+                   else {p: None for p in all_periods},
     }
     if entry.get("source"):
         result["source"] = entry["source"]  # атрибуция данных (крипта: "Data: CoinGecko")
@@ -952,10 +1030,45 @@ async def get_market_hierarchy(index: Optional[str] = None):
     return result
 
 @app.get("/api/v1/history/{ticker}")
-async def get_history(ticker: str):
-    """Дневные цены закрытия за последний год для тикера (history.db и history_world.db)"""
+async def get_history(ticker: str, range: Optional[str] = None):
+    """Дневные цены закрытия за последний год для тикера (history.db и history_world.db).
+    ?range=3y|5y|10y — недельный ряд из history_long.db (читается по запросу); нет базы — []."""
     t = ticker.upper()
-    return history_cache.get(t) or world_history_cache.get(t) or []
+    daily = history_cache.get(t) or world_history_cache.get(t) or []
+    if range is None:
+        return daily
+    years = LONG_PERIODS.get(range)
+    if years is None:
+        raise HTTPException(status_code=400, detail="range must be 3y, 5y or 10y")
+    return read_long_series(t, years, daily)
+
+
+def read_long_series(ticker, years, daily=None, db_path=None):
+    """Недельные точки от базы (закрытие на дату «сегодня − N лет» или раньше) до конца; в конец добавляем
+    последнее дневное закрытие, если оно новее последней недельной точки."""
+    db_path = db_path or LONG_DB_PATH
+    if not os.path.exists(db_path):
+        return []
+    target = years_ago(datetime.now(ZoneInfo("UTC")).date(), years).isoformat()
+    conn = sqlite3.connect(db_path)
+    try:
+        # тикер в базе — как в CSV (BRK.B); запрос мог прийти и в варианте с дефисом
+        names = [ticker, ticker.replace("-", ".")] if "-" in ticker and not ticker.endswith("-USD") else [ticker]
+        rows = []
+        for name in names:
+            rows = conn.execute("SELECT date, close FROM weekly_closes WHERE ticker = ? AND date >= "
+                                "COALESCE((SELECT MAX(date) FROM weekly_closes WHERE ticker = ? AND date <= ?), '') "
+                                "ORDER BY date", (name, name, target)).fetchall()
+            if rows:
+                break
+    except sqlite3.Error:
+        return []
+    finally:
+        conn.close()
+    out = [{"date": d, "close": c} for d, c in rows]
+    if out and daily and daily[-1]["date"] > out[-1]["date"]:
+        out.append({"date": daily[-1]["date"], "close": daily[-1]["close"]})
+    return out
 
 
 # Дополнительные периоды для переключателя SC/1d/3d/7d/30d/180d/1y на heatmap-экранах.
@@ -974,7 +1087,7 @@ async def get_performance(index: Optional[str] = None):
     entry_ = resolve_index(index)
     if entry_ is not None:
         continuous = bool(entry_.get("continuous"))
-        return {t: performance_entry(s, continuous) for t, s in index_series(entry_).items()}
+        return {t: performance_entry(s, continuous, t) for t, s in index_series(entry_).items()}
     result = {}
     for ticker, series in history_cache.items():
         return1M = compute_return(series, 21)
@@ -991,6 +1104,7 @@ async def get_performance(index: Optional[str] = None):
         }
         for period, days in EXTRA_PERIOD_TRADING_DAYS.items():
             entry[period] = compute_return(series, days)
+        entry.update(long_returns(ticker, series))
         result[ticker] = entry
     return result
 
@@ -1117,6 +1231,42 @@ def run_crypto_refresh():
     except ImportError:
         return None
     return fetch_assets.refresh_crypto(WORLD_DB_PATH)
+
+
+def run_long_refresh():
+    try:
+        import fetch_long
+    except ImportError:
+        print("⚠️ fetch_long.py не найден — длинные периоды не обновлены")
+        return None
+    return fetch_long.refresh(LONG_DB_PATH)
+
+
+def long_refresh_due(now_utc, last_run_date):
+    """Пора качать: базы нет — сразу; иначе по субботам (UTC), один раз в сутки."""
+    if not os.path.exists(LONG_DB_PATH):
+        return True
+    return now_utc.weekday() == 5 and last_run_date != now_utc.date()
+
+
+async def long_refresher():
+    """Недельные закрытия 10+ лет: при старте, если базы нет, и каждую субботу. Докачка пропускает свежие тикеры,
+    так что повторный запуск после обрыва дешёвый."""
+    last_run = None
+    while True:
+        try:
+            now = datetime.now(ZoneInfo("UTC"))
+            if long_refresh_due(now, last_run):
+                last_run = now.date()
+                print("📚 Обновляем длинные периоды (history_long.db)")
+                result = await asyncio.to_thread(run_long_refresh)
+                if result:
+                    await asyncio.to_thread(load_long_history)
+            elif os.path.exists(LONG_DB_PATH) and os.path.getmtime(LONG_DB_PATH) != _long_db_mtime["value"]:
+                await asyncio.to_thread(load_long_history)
+        except Exception as e:
+            print(f"⚠️ Обновление длинных периодов не удалось: {e}")
+        await asyncio.sleep(LONG_CHECK_SECONDS)
 
 
 async def crypto_refresher():
@@ -1249,6 +1399,7 @@ async def websocket_endpoint(websocket: WebSocket):
 async def lifespan(_: FastAPI):
     load_history()
     load_world_history()
+    load_long_history()
     seed_prices_from_history()
     load_initial_prices()  # фоллбэк для тикеров без реальной истории
     if not price_cache:
@@ -1275,6 +1426,8 @@ async def lifespan(_: FastAPI):
         asyncio.create_task(world_refresher())
     if CRYPTO_REFRESH and WORLD_REFRESH:
         asyncio.create_task(crypto_refresher())
+    if LONG_REFRESH:
+        asyncio.create_task(long_refresher())
     if FUNDAMENTALS_REFRESH:
         asyncio.create_task(fundamentals_refresher())
 

@@ -11,3 +11,5 @@ history_world.db
 history_world.db.*
 .cache_world/
 fundamentals.db*
+history_long.db
+history_long.db.*

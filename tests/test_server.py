@@ -225,7 +225,7 @@ class TestPerformanceIndex:
         data = client.get("/api/v1/performance?index=ibex35").json()
         assert set(data) == {"SAN.MC", "BBVA.MC", "ITX.MC", "OLD.MC"}
         assert data["BBVA.MC"]["1d"] == 10.0
-        assert set(data["BBVA.MC"]) == {"return1M", "return6M", "returnYTD", "return1Y", "30d", "180d", "1y", "1d", "3d", "7d"}
+        assert set(data["BBVA.MC"]) == {"return1M", "return6M", "returnYTD", "return1Y", "30d", "180d", "1y", "1d", "3d", "7d", "3y", "5y", "10y"}
 
     def test_default_is_history_db_only(self, world, client):
         data = client.get("/api/v1/performance").json()
@@ -295,7 +295,7 @@ class TestWorldOverview:
         assert spx["changes"]["1d"] == 10.0
         ibex = europe["indices"][0]
         assert set(ibex) == {"id", "name", "country", "currency", "live", "count", "capUSD", "historyThrough", "changes"}
-        assert set(ibex["changes"]) == {"1d", "3d", "7d", "30d", "180d", "1y"}
+        assert set(ibex["changes"]) == {"1d", "3d", "7d", "30d", "180d", "1y", "3y", "5y", "10y"}
         # SAN 80B, BBVA 90B, ITX 150B (EUR) * 1.10; OLD (stale) and NOHIST (no data) are not shown
         assert ibex["count"] == 3
         assert ibex["capUSD"] == pytest.approx(320e9 * 1.10)
