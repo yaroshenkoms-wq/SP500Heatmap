@@ -7,6 +7,9 @@ struct ContentView: View {
     @State private var path: [String] = []
     @State private var stackToken = UUID()
     @State private var showSettings = false
+    #if DEBUG
+    @State private var debugScreen: String?
+    #endif
     @ObservedObject private var settings = AppSettings.shared
     @Environment(\.scenePhase) private var scenePhase
 
@@ -40,6 +43,17 @@ struct ContentView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView(indices: worldStore.regions.flatMap { $0.indices })
         }
+        #if DEBUG
+        .fullScreenCover(item: Binding(get: { debugScreen.map(DebugScreen.init) }, set: { debugScreen = $0?.id })) { screen in
+            NavigationStack {
+                if screen.id == "portfolios" { PortfoliosView() }
+                else if screen.id == "favorites" { FavoritesView() }
+                else if screen.id.hasPrefix("portfolio:"), let info = PortfolioStore.shared.info(String(screen.id.dropFirst(10))) {
+                    PortfolioDetailView(info: info)
+                }
+            }
+        }
+        #endif
         .background(Theme.bg.ignoresSafeArea())
         .environment(\.goHome, hasWorld ? { goHome() } : nil)
         .environmentObject(indexStore)
@@ -51,6 +65,10 @@ struct ContentView: View {
             if let id = UserDefaults.standard.string(forKey: "openIndex"), hasWorld {
                 indexStore.selectedId = id
                 path.append(id)
+            }
+            // `-openScreen settings|portfolios|favorites|portfolio:m_dalio` — сразу открыть экран.
+            if let screen = UserDefaults.standard.string(forKey: "openScreen") {
+                if screen == "settings" { showSettings = true } else { debugScreen = screen }
             }
             #endif
         }
@@ -153,3 +171,7 @@ struct IndexFlowView: View {
 #Preview {
     ContentView()
 }
+
+#if DEBUG
+private struct DebugScreen: Identifiable { let id: String }
+#endif
