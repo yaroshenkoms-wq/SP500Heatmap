@@ -299,13 +299,11 @@
 				3917BDD92FDAC3A7006A9826 /* Frameworks */,
 				3917BDDA2FDAC3A7006A9826 /* Resources */,
 				875668829FEE6DB4419E2CCB /* Embed Foundation Extensions */,
-				09731B8AF1D7985E975FE502 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				0ABBFE99CCCC0B5CA84ADB7B /* PBXTargetDependency */,
-				A7F0D633B58BD281B257749A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3917BDDE2FDAC3A7006A9826 /* SP500Heatmap */,
