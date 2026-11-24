@@ -205,8 +205,7 @@ struct CompanyDetailView: View {
                 }
             }
             .padding(.horizontal)
-
-            PeriodSwitchView(selectedPeriod: $selectedPeriod)
+            // Сроки выбираются у графика (1M…10Y); в шапке — изменение за сегодня (второй ряд кнопок путал, 24.11.2026).
         }
         .padding(.top, 8)
         .background(Theme.bg)
