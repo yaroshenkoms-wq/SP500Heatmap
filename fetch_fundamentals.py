@@ -40,7 +40,10 @@ def yahoo_symbol(symbol):
 
 def init_db(conn):
     # WAL: чтение из сервера не ждёт, пока ночной проход пишет (24.11.2026: «database is locked» → 500 у /metrics)
-    conn.execute("PRAGMA journal_mode=WAL")
+    try:
+        conn.execute("PRAGMA journal_mode=WAL")
+    except sqlite3.OperationalError:
+        pass  # база занята — режим переключится при следующем открытии
     conn.execute("""CREATE TABLE IF NOT EXISTS fundamentals (
         symbol TEXT PRIMARY KEY, name TEXT, pe REAL, forward_pe REAL, div_yield REAL, dividend_rate REAL,
         ex_dividend_date TEXT, earnings_date TEXT, beta REAL, currency TEXT, updated_at REAL NOT NULL,
@@ -174,10 +177,9 @@ def refresh_fundamentals(db_path, symbols, info_fetcher=None, throttle=THROTTLE_
                 failed += 1
             else:
                 save_one(conn, symbol, fields)
+                conn.commit()  # сразу: не держим запись открытой, пока ждём Yahoo
                 ok += 1
             done += 1
-            if done % 20 == 0:
-                conn.commit()
             sleep(throttle)
         conn.commit()
     finally:
