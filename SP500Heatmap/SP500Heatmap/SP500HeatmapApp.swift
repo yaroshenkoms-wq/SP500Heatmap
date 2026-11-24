@@ -6,10 +6,17 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 @main
 struct SP500HeatmapApp: App {
     @AppStorage(AppLanguage.storageKey) private var language = ""
+    @Environment(\.scenePhase) private var scenePhase
+
+    init() {
+        AlertManager.registerBackgroundTask()
+        AppSettings.mirrorLanguage()
+    }
 
     var body: some Scene {
         WindowGroup {
@@ -20,6 +27,13 @@ struct SP500HeatmapApp: App {
                 .id(language)
                 .preferredColorScheme(.dark)
                 .tint(Theme.gold)
+                .onChange(of: language) { _, _ in
+                    AppSettings.mirrorLanguage()
+                    WidgetCenter.shared.reloadAllTimelines()
+                }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .background { AlertManager.scheduleRefresh() }
         }
     }
 }

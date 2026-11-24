@@ -66,6 +66,15 @@ struct CompaniesHeatmapView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                     Spacer()
+                    ShareMapButton(title: localizedSectorName(subsector.name) + " · " + indexStore.current.name,
+                                   subtitle: shareSubtitle(period: indexStore.effectivePeriod(selectedPeriod),
+                                                           asOf: indexStore.current.historyThrough)) {
+                        TreemapLayout(weights: sortedCompaniesWithChanges.map { SizeMode.weight($0.company.marketCap) }) {
+                            ForEach(sortedCompaniesWithChanges, id: \.company.ticker) { item in
+                                CompanyTile(company: item.company, changePercent: item.change)
+                            }
+                        }
+                    }
                     Text(formatPercent(subsectorChange))
                         .font(Theme.ui(.title2, weight: .medium))
                         .foregroundColor(Theme.changeColor(subsectorChange))
@@ -78,11 +87,12 @@ struct CompaniesHeatmapView: View {
             .background(Theme.bg)
             
             GeometryReader { geometry in
-                TreemapLayout(weights: sortedCompaniesWithChanges.map { $0.company.marketCap }) {
+                TreemapLayout(weights: sortedCompaniesWithChanges.map { SizeMode.weight($0.company.marketCap) }) {
                     ForEach(sortedCompaniesWithChanges, id: \.company.ticker) { item in
                         NavigationLink(destination: CompanyDetailView(company: item.company, webSocketManager: webSocketManager)) {
                             CompanyTile(company: item.company, changePercent: item.change)
                         }
+                        .favoriteContextMenu(ticker: item.company.ticker, name: item.company.name, indexId: indexStore.selectedId)
                     }
                 }
                 .frame(width: geometry.size.width, height: geometry.size.height)

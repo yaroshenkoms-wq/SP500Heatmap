@@ -93,6 +93,7 @@ struct CompanyDetailView: View {
                             .font(Theme.ui(.caption))
                             .foregroundColor(Theme.muted)
                     }
+                    FavoriteStarButton(ticker: company.ticker, name: company.name)
                     Spacer()
                     VStack(alignment: .trailing) {
                         Text(indexStore.formatPrice(currentPrice))

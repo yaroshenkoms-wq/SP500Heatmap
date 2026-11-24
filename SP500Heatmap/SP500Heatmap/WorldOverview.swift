@@ -21,6 +21,7 @@ struct WorldRegion: Decodable, Identifiable {
         case "americas": return "Americas"
         case "europe": return "Europe"
         case "asia_pacific": return "Asia-Pacific"
+        case "assets": return "Crypto & ETFs"
         default: return "Other"
         }
     }
@@ -38,10 +39,7 @@ struct WorldIndex: Decodable, Identifiable {
         return value
     }
 
-    var flag: String {
-        IndexInfo(id: id, name: name, region: nil, country: country, currency: nil,
-                  live: false, count: nil, historyThrough: nil).flag
-    }
+    var flag: String { countryFlag(country) }
 }
 
 @MainActor
@@ -63,6 +61,7 @@ final class WorldStore: ObservableObject {
         do {
             let fetched = try await NetworkService.shared.fetchWorldOverview()
             overview = fetched.regions.contains { !$0.drawable.isEmpty } ? fetched : nil
+            if let overview { WidgetBridge.publish(overview: overview) }
         } catch is CancellationError {
             return
         } catch {
@@ -76,7 +75,9 @@ final class WorldStore: ObservableObject {
 struct WorldOverviewView: View {
     @ObservedObject var store: WorldStore
     let onSelect: (WorldIndex) -> Void
+    var onSettings: () -> Void = {}
     @AppStorage("worldPeriod") private var period = "1d"
+    @State private var showFavorites = false
     private let periods = ["1d", "3d", "7d", "30d", "180d", "1y"]
 
     var body: some View {
@@ -89,7 +90,11 @@ struct WorldOverviewView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    LanguageMenu()
+                    HomeHeaderButtons(
+                        shareTitle: AppLanguage.string("World markets"),
+                        shareSubtitle: shareSubtitle(period: period, asOf: store.overview?.asOf),
+                        showFavorites: $showFavorites, onSettings: onSettings
+                    ) { WorldMapContent(regions: store.regions, period: period, onSelect: { _ in }) }
                 }
                 .padding(.horizontal)
                 PeriodSwitchView(selectedPeriod: $period, availablePeriods: periods)
@@ -109,17 +114,61 @@ struct WorldOverviewView: View {
             .background(Theme.bg)
 
             GeometryReader { geometry in
-                TreemapLayout(weights: store.regions.map { $0.totalCap }) {
-                    ForEach(store.regions) { region in
-                        RegionBlock(region: region, period: period, onSelect: onSelect)
-                    }
-                }
-                .frame(width: geometry.size.width, height: geometry.size.height)
+                WorldMapContent(regions: store.regions, period: period, onSelect: onSelect)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
             }
         }
         .themeScreen()
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.bottom)
+        .navigationDestination(isPresented: $showFavorites) { FavoritesView() }
+    }
+}
+
+// Кнопки шапки главного экрана: избранное, поделиться, настройки, язык.
+private struct HomeHeaderButtons<Map: View>: View {
+    let shareTitle: String
+    let shareSubtitle: String
+    @Binding var showFavorites: Bool
+    let onSettings: () -> Void
+    @ViewBuilder let map: () -> Map
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Button { showFavorites = true } label: {
+                Image(systemName: "star")
+                    .font(.subheadline)
+                    .frame(width: 34, height: 34)
+                    .outlinedControl()
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("Favorites"))
+            ShareMapButton(title: shareTitle, subtitle: shareSubtitle, map: map)
+            Button(action: onSettings) {
+                Image(systemName: "gearshape")
+                    .font(.subheadline)
+                    .frame(width: 34, height: 34)
+                    .outlinedControl()
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("Settings"))
+            LanguageMenu()
+        }
+    }
+}
+
+// Карта мира: регионы, внутри них индексы.
+struct WorldMapContent: View {
+    let regions: [WorldRegion]
+    let period: String
+    let onSelect: (WorldIndex) -> Void
+
+    var body: some View {
+        TreemapLayout(weights: regions.map { SizeMode.weight($0.totalCap) }) {
+            ForEach(regions) { region in
+                RegionBlock(region: region, period: period, onSelect: onSelect)
+            }
+        }
     }
 }
 
@@ -143,7 +192,7 @@ private struct RegionBlock: View {
                         .padding(.horizontal, 6)
                         .padding(.vertical, 3)
                 }
-                TreemapLayout(weights: region.drawable.map { $0.capUSD ?? 0 }) {
+                TreemapLayout(weights: region.drawable.map { SizeMode.weight($0.capUSD ?? 0) }) {
                     ForEach(region.drawable) { index in
                         Button { onSelect(index) } label: {
                             WorldIndexTile(index: index, change: index.change(for: period))

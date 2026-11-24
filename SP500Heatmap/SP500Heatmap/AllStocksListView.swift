@@ -208,6 +208,7 @@ struct OverviewTableView: View {
                         .padding(.vertical, 14)
                     }
                     .buttonStyle(PlainButtonStyle())
+                    .favoriteContextMenu(ticker: row.ticker, name: row.name, indexId: indexStore.selectedId)
                     Rectangle().fill(Theme.line).frame(height: 1).padding(.leading, 6)
                 }
             }
@@ -221,6 +222,7 @@ struct OverviewTableView: View {
 
 // MARK: - Performance Table
 struct PerformanceTableView: View {
+    @EnvironmentObject private var indexStore: IndexStore
     let rows: [PerformanceRow]
     @Binding var sortColumn: String
     @Binding var sortAscending: Bool
@@ -305,6 +307,7 @@ struct PerformanceTableView: View {
                         .padding(.vertical, 14)
                     }
                     .buttonStyle(PlainButtonStyle())
+                    .favoriteContextMenu(ticker: row.ticker, name: row.name, indexId: indexStore.selectedId)
                     Rectangle().fill(Theme.line).frame(height: 1).padding(.leading, 6)
                 }
             }

@@ -98,6 +98,13 @@ struct SectorsHeatmapView: View {
                         }
                     }
                     Spacer()
+                    ShareMapButton(title: indexStore.current.name,
+                                   subtitle: shareSubtitle(period: indexStore.effectivePeriod(selectedPeriod),
+                                                           asOf: indexStore.current.historyThrough)) {
+                        TreemapLayout(weights: sortedSectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
+                            ForEach(sortedSectorStats) { stat in SectorTile(stat: stat) }
+                        }
+                    }
                     Text(formatPercent(indexChange))
                         .font(Theme.ui(.title2, weight: .medium))
                         .foregroundColor(Theme.changeColor(indexChange))
@@ -110,7 +117,7 @@ struct SectorsHeatmapView: View {
             .background(Theme.bg)
             
             GeometryReader { geometry in
-                TreemapLayout(weights: sortedSectorStats.map { $0.totalMarketCap }) {
+                TreemapLayout(weights: sortedSectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
                     ForEach(sortedSectorStats) { stat in
                         NavigationLink(destination: SubsectorsHeatmapView(sector: stat.sector, webSocketManager: webSocketManager, performanceStore: performanceStore)) {
                             SectorTile(stat: stat)

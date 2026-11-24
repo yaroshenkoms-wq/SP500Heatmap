@@ -15,19 +15,7 @@ struct IndexInfo: Identifiable, Codable, Equatable {
     static let sp500 = IndexInfo(id: "sp500", name: "S&P 500", region: "americas", country: "US",
                                  currency: "USD", live: true, count: nil, historyThrough: nil)
 
-    // Country flag emoji built from the ISO country code ("ES" -> flag of Spain).
-    var flag: String {
-        var code = (country ?? "").uppercased()
-        if code == "UK" { code = "GB" }
-        guard code.count == 2 else { return "🌐" }
-        let base: UInt32 = 0x1F1E6 - 65
-        var result = ""
-        for scalar in code.unicodeScalars {
-            guard let flagScalar = UnicodeScalar(base + scalar.value) else { return "🌐" }
-            result.unicodeScalars.append(flagScalar)
-        }
-        return result
-    }
+    var flag: String { countryFlag(country) }
 }
 
 // Holds the list of indices and the chosen one. If the server has no /indices

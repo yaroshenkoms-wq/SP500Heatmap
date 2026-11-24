@@ -18,7 +18,7 @@ enum Theme {
 
     static let radius: CGFloat = 8
 
-    static func changeColor(_ value: Double) -> Color { value >= 0 ? ok : danger }
+    static func changeColor(_ value: Double) -> Color { SharedHeat.textColor(for: value) }
 
     // MARK: Шрифты
 

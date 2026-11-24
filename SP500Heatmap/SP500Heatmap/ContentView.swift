@@ -6,6 +6,8 @@ struct ContentView: View {
     @StateObject private var worldStore = WorldStore.shared
     @State private var path: [String] = []
     @State private var stackToken = UUID()
+    @State private var showSettings = false
+    @ObservedObject private var settings = AppSettings.shared
     @Environment(\.scenePhase) private var scenePhase
 
     private var hasWorld: Bool { !worldStore.regions.isEmpty }
@@ -20,10 +22,10 @@ struct ContentView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .themeScreen()
                 } else if hasWorld {
-                    WorldOverviewView(store: worldStore) { index in
+                    WorldOverviewView(store: worldStore, onSelect: { index in
                         indexStore.selectedId = index.id
                         path.append(index.id)
-                    }
+                    }, onSettings: { showSettings = true })
                 } else {
                     // Old server without world-overview: open the S&P 500 map directly.
                     IndexFlowView(webSocketManager: webSocketManager)
@@ -33,7 +35,11 @@ struct ContentView: View {
                 IndexFlowView(webSocketManager: webSocketManager)
             }
         }
-        .id(stackToken)
+        // Смена палитры или размера плиток пересобирает карты (окно настроек стоит снаружи).
+        .id("\(stackToken.uuidString)-\(settings.palette.rawValue)-\(settings.sizeMode.rawValue)")
+        .sheet(isPresented: $showSettings) {
+            SettingsView(indices: worldStore.regions.flatMap { $0.indices })
+        }
         .background(Theme.bg.ignoresSafeArea())
         .environment(\.goHome, hasWorld ? { goHome() } : nil)
         .environmentObject(indexStore)

@@ -79,6 +79,13 @@ struct SubsectorsHeatmapView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                     Spacer()
+                    ShareMapButton(title: localizedSectorName(sector.name) + " · " + indexStore.current.name,
+                                   subtitle: shareSubtitle(period: indexStore.effectivePeriod(selectedPeriod),
+                                                           asOf: indexStore.current.historyThrough)) {
+                        TreemapLayout(weights: sortedSubsectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
+                            ForEach(sortedSubsectorStats) { stat in SubsectorTile(stat: stat) }
+                        }
+                    }
                     Text(formatPercent(sectorChange))
                         .font(Theme.ui(.title2, weight: .medium))
                         .foregroundColor(Theme.changeColor(sectorChange))
@@ -91,7 +98,7 @@ struct SubsectorsHeatmapView: View {
             .background(Theme.bg)
             
             GeometryReader { geometry in
-                TreemapLayout(weights: sortedSubsectorStats.map { $0.totalMarketCap }) {
+                TreemapLayout(weights: sortedSubsectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
                     ForEach(sortedSubsectorStats) { stat in
                         NavigationLink(destination: CompaniesHeatmapView(subsector: stat.subsector, webSocketManager: webSocketManager, performanceStore: performanceStore)) {
                             SubsectorTile(stat: stat)
