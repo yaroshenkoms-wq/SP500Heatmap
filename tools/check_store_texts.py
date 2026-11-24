@@ -43,7 +43,7 @@ def main():
             warns.append(f"{loc}: few bullets in description")
         if "SP500" not in desc:
             warns.append(f"{loc}: description lacks brand")
-        if len(desc) < 1200:
+        if len(desc) < (600 if loc.split('-')[0] in ('zh', 'ja', 'ko') else 1200):
             warns.append(f"{loc}: description short ({len(desc)})")
     extra = sorted(p.stem for p in root.glob("*.json") if p.stem not in LOCALES)
     if extra:
