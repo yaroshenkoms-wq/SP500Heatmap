@@ -300,7 +300,9 @@ class TestWorldOverview:
         assert ibex["count"] == 3
         assert ibex["capUSD"] == pytest.approx(320e9 * 1.10)
         # SAN +10%, BBVA +10%, ITX -10%, weights 80/90/150
-        assert ibex["changes"]["1d"] == pytest.approx((80 * 10 + 90 * 10 - 150 * 10) / 320)
+        # вес — капитализация на начало периода: сегодняшняя / (1 + рост)
+        w = [80 / 1.1, 90 / 1.1, 150 / 0.9]
+        assert ibex["changes"]["1d"] == pytest.approx((w[0] * 10 + w[1] * 10 - w[2] * 10) / sum(w))
         assert ibex["historyThrough"] == day(11)
 
     def test_row_currency_overrides_index_currency(self, world, client):

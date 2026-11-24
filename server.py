@@ -798,6 +798,14 @@ def _overview_row_shown(entry, row, latest) -> bool:
     return True
 
 
+def start_weight(cap, ret_percent):
+    """Вес компании в изменении индекса — её капитализация на НАЧАЛО периода: сегодняшняя / (1 + рост).
+    С весом по сегодняшней капитализации победители раздували итог (S&P 500 за 10 лет +1225 % вместо ~+230 %,
+    24.11.2026). Так итог равен росту общей стоимости компаний, как у индекса."""
+    growth = 1.0 + ret_percent / 100.0
+    return cap / growth if growth > 0.01 else cap / 0.01
+
+
 def build_index_overview(entry):
     """Сводка одного индекса. Компании без курса валюты исключаются и из капитализации, и из изменения;
     если не осталось ни одной — capUSD = None и changes = None (плитку клиент не рисует)."""
@@ -823,12 +831,14 @@ def build_index_overview(entry):
         for period in OVERVIEW_PERIODS:
             ret = compute_return(series, days_of[period])
             if ret is not None:
-                weighted[period][0] += cap_usd * ret
-                weighted[period][1] += cap_usd
+                w = start_weight(cap_usd, ret)
+                weighted[period][0] += w * ret
+                weighted[period][1] += w
         for period, ret in long_returns(row["ticker"], series).items():
             if ret is not None:
-                weighted[period][0] += cap_usd * ret
-                weighted[period][1] += cap_usd
+                w = start_weight(cap_usd, ret)
+                weighted[period][0] += w * ret
+                weighted[period][1] += w
     ok = shown > 0 and total > 0
     result = {
         "id": entry["id"], "name": entry.get("name", entry["id"]), "country": entry.get("country", ""),
