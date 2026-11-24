@@ -90,6 +90,7 @@ struct WorldOverviewView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                    PortfoliosEntryButton()
                     HomeHeaderButtons(
                         shareTitle: AppLanguage.string("World markets"),
                         shareSubtitle: shareSubtitle(period: period, asOf: store.overview?.asOf),
