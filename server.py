@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
-from fastapi import FastAPI, Query, WebSocket
+from fastapi import FastAPI, Query, WebSocket, Body
 from fastapi.middleware.cors import CORSMiddleware
 import sys
 import time
@@ -66,6 +66,8 @@ FUNDAMENTALS_DB_PATH = os.path.join(BASE_DIR, "fundamentals.db")
 VOLUMES_DB_PATH = os.path.join(BASE_DIR, "volumes.db")
 OHLC_DB_PATH = os.path.join(BASE_DIR, "ohlc_cache.db")
 FINANCIALS_DB_PATH = os.path.join(BASE_DIR, "financials_cache.db")
+PUSH_DB_PATH = os.getenv("PUSH_DB_PATH", os.path.join(BASE_DIR, "push.db"))
+NEWS_DB_PATH = os.getenv("NEWS_DB_PATH", os.path.join(BASE_DIR, "news_cache.db"))
 GURU_HOLDINGS_PATH = os.path.join(BASE_DIR, "data", "guru_holdings.json")
 # Недельный проход по всем тикерам: только ночью (UTC), не чаще ~1 запроса/сек (FUNDAMENTALS_REFRESH=1 включает)
 FUNDAMENTALS_REFRESH = os.getenv("FUNDAMENTALS_REFRESH", "0").strip().lower() not in ("0", "false", "no", "")
@@ -407,6 +409,8 @@ def find_index(index_id):
 
 
 def _parse_cap(cap_str) -> float:
+    if isinstance(cap_str, (int, float)):
+        return float(cap_str)
     cap_str = (cap_str or "").strip()
     try:
         if cap_str.endswith("T"):
@@ -1305,6 +1309,94 @@ async def get_company(ticker: str):
         return await asyncio.to_thread(build_company_payload, t)
 
 
+
+# ---------------------------------------------------------------- push, Live Activity, новости
+
+def _push_error(e):
+    raise HTTPException(status_code=422, detail=str(e))
+
+
+@app.post("/api/v1/push/register")
+async def push_register(body: dict = Body(...)):
+    import push
+    try:
+        pid = await asyncio.to_thread(push.register_device, PUSH_DB_PATH, body.get("token"), body.get("platform", "ios"),
+                                      body.get("env", "production"), body.get("lang", "en"), body.get("tz", "UTC"))
+    except ValueError as e:
+        _push_error(e)
+    return {"id": pid}
+
+
+@app.delete("/api/v1/push/register/{token}")
+async def push_unregister(token: str):
+    import push
+    return {"deleted": await asyncio.to_thread(push.delete_device, PUSH_DB_PATH, token)}
+
+
+@app.put("/api/v1/push/rules/{token}")
+async def push_rules(token: str, body: dict = Body(...)):
+    import push
+    try:
+        n = await asyncio.to_thread(push.set_rules, PUSH_DB_PATH, token, body.get("rules", []))
+    except ValueError as e:
+        _push_error(e)
+    if n is None:
+        raise HTTPException(status_code=404, detail="device not registered")
+    return {"count": n}
+
+
+@app.post("/api/v1/push/liveactivity")
+async def push_liveactivity(body: dict = Body(...)):
+    """token — push-to-start (kind=start) или update-токен активности (kind=update). env/lang/deviceToken необязательны."""
+    import push
+    env, lang = body.get("env"), body.get("lang")
+    dev_token = body.get("deviceToken")
+    if dev_token and not (env and lang):
+        dev = next((d for d in await asyncio.to_thread(push.list_devices, PUSH_DB_PATH) if d["token"] == dev_token), None)
+        if dev:
+            env, lang = env or dev["env"], lang or dev["lang"]
+    if not find_index(body.get("indexId") or ""):
+        raise HTTPException(status_code=404, detail="unknown index")
+    try:
+        await asyncio.to_thread(push.upsert_live, PUSH_DB_PATH, body.get("token"), body.get("kind"), body["indexId"],
+                                body.get("tickers") or [], env or "production", lang or "en")
+    except ValueError as e:
+        _push_error(e)
+    return {"ok": True}
+
+
+@app.delete("/api/v1/push/liveactivity/{token}")
+async def push_liveactivity_end(token: str):
+    import push
+    return {"deleted": await asyncio.to_thread(push.delete_live, PUSH_DB_PATH, token)}
+
+
+def news_scope_symbols(scope, index_id, tickers):
+    if scope == "tickers":
+        return [t.strip().upper() for t in (tickers or "").split(",") if t.strip()][:8]
+    if scope == "index":
+        entry = find_index(index_id or "sp500")
+        if not entry:
+            raise HTTPException(status_code=404, detail="unknown index")
+        rows = sorted(load_index_rows(entry), key=lambda r: _parse_cap(r.get("cap")), reverse=True)
+        return [r["ticker"] for r in rows[:6]]
+    return []
+
+
+@app.get("/api/v1/news")
+async def get_news(scope: str = "market", indexId: Optional[str] = None, tickers: Optional[str] = None,
+                   lang: str = "en", limit: int = 50):
+    import news
+    if scope not in ("market", "index", "tickers"):
+        raise HTTPException(status_code=422, detail="scope must be market|index|tickers")
+    symbols = news_scope_symbols(scope, indexId, tickers)
+    if scope == "tickers" and not symbols:
+        return {"items": []}
+    code = lang.split("-")[0].lower()
+    items = await asyncio.to_thread(news.build_news, NEWS_DB_PATH, scope, symbols, code, limit)
+    return {"items": items}
+
+
 # ---------------------------------------------------------------- отчётность, календарь, скринер, дайджест
 
 _financials_semaphore = None
@@ -1807,8 +1899,13 @@ async def lifespan(_: FastAPI):
         asyncio.create_task(long_refresher())
     if FUNDAMENTALS_REFRESH:
         asyncio.create_task(fundamentals_refresher())
+    import push
+    import apns
+    sender = asyncio.create_task(push.sender_loop(sys.modules[__name__], PUSH_DB_PATH, NEWS_DB_PATH,
+                                                  apns.ApnsClient(apns.ApnsConfig.from_env())))
 
     yield
+    sender.cancel()
 
 
 app.router.lifespan_context = lifespan

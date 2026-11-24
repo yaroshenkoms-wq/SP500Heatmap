@@ -3,3 +3,6 @@ uvicorn>=0.39
 websockets>=15.0
 python-dotenv>=1.2
 yfinance>=0.2.50
+httpx[http2]>=0.28
+PyJWT>=2.8
+cryptography>=43
