@@ -813,7 +813,7 @@ def build_index_overview(entry):
     shown = 0
     days_of = CONTINUOUS_PERIOD_DAYS if entry.get("continuous") else OVERVIEW_PERIODS
     all_periods = list(OVERVIEW_PERIODS) + list(LONG_PERIODS)
-    weighted = {p: [0.0, 0.0] for p in all_periods}  # period -> [сумма cap*ret, сумма cap]
+    weighted = {p: [0.0, 0.0, 0] for p in all_periods}  # period -> [сумма w*ret, сумма w, сколько компаний с данными]
     through = ""
     latest = history_last_date(history_cache if entry["id"] == "sp500" else world_history_cache)
     for row in load_index_rows(entry):
@@ -834,17 +834,21 @@ def build_index_overview(entry):
                 w = start_weight(cap_usd, ret)
                 weighted[period][0] += w * ret
                 weighted[period][1] += w
+                weighted[period][2] += 1
         for period, ret in long_returns(row["ticker"], series).items():
             if ret is not None:
                 w = start_weight(cap_usd, ret)
                 weighted[period][0] += w * ret
                 weighted[period][1] += w
+                weighted[period][2] += 1
     ok = shown > 0 and total > 0
     result = {
         "id": entry["id"], "name": entry.get("name", entry["id"]), "country": entry.get("country", ""),
         "currency": entry.get("currency", ""), "live": bool(entry.get("live", False)), "count": shown,
         "capUSD": total if ok else None, "historyThrough": through,
-        "changes": {p: (w[0] / w[1] if w[1] > 0 else None) for p, w in weighted.items()} if ok
+        # Период без истории у половины компаний не показываем: иначе итог по 2 монетам из 50
+        # выдавался за всю крипту (+7926 % за 10 лет, 24.11.2026).
+        "changes": {p: (w[0] / w[1] if w[1] > 0 and w[2] * 2 >= shown else None) for p, w in weighted.items()} if ok
                    else {p: None for p in all_periods},
     }
     if entry.get("source"):

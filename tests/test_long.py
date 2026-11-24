@@ -171,7 +171,8 @@ def test_performance_and_overview_have_long(world, longdb):
     server._overview_cache.update(data=None, key=None)
     ov = client.get("/api/v1/world-overview").json()
     idx = {i["id"]: i for r in ov["regions"] for i in r["indices"]}
-    assert idx["ibex35"]["changes"]["3y"] == pytest.approx(120.0)
+    # 3 года есть только у SAN.MC — меньше половины компаний индекса, поэтому период не показываем
+    assert idx["ibex35"]["changes"]["3y"] is None
     assert idx["ibex35"]["changes"]["10y"] is None
     assert idx["sp500"]["changes"]["5y"] == pytest.approx(340.0)
 
