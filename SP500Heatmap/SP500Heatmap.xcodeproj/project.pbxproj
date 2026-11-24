@@ -7,7 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1265F012CE0AD92CB31DAD13 /* SP500HeatmapWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D7F270ADC4FC42130FC8A295 /* SP500HeatmapWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1601EEABD39E45DF87A2F2CF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 489035E00F521D7A7066AF14 /* Foundation.framework */; };
 		1ABC69A2DEF7C103646F78F9 /* SP500HeatmapWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 437D0AFAA513D41078B45CF8 /* SP500HeatmapWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		29E53F9F512D5966D54D1F17 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 489035E00F521D7A7066AF14 /* Foundation.framework */; };
+		580FFBC04BF7156CB8B5D76A /* TreemapLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674C6F1488875F126DF77C93 /* TreemapLayout.swift */; };
+		A791F77B1878CF6DFB4800FA /* SP500HeatmapWatchWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E11AD54B4E889BD1CCD1EDE9 /* SP500HeatmapWatchWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BBB4496B93D60B38311EEA14 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2225F9FA3EAA1C4DF833E688 /* SharedStore.swift */; };
+		D13B5D51B5D8FD0DBE25B583 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2225F9FA3EAA1C4DF833E688 /* SharedStore.swift */; };
+		F52AA9B87DB0A887280DCA0A /* TreemapLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674C6F1488875F126DF77C93 /* TreemapLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,9 +40,34 @@
 			remoteGlobalIDString = 3917BDDB2FDAC3A7006A9826;
 			remoteInfo = SP500Heatmap;
 		};
+		70A6110C87A40CF3DEE6CAEE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3917BDD42FDAC3A7006A9826 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EF52DFE20808B711374A6A9;
+			remoteInfo = SP500HeatmapWatchWidgets;
+		};
+		F18C341F8A4E2501BABBBCEE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3917BDD42FDAC3A7006A9826 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 431D9DB1EF203F924F347440;
+			remoteInfo = SP500HeatmapWatch;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		09731B8AF1D7985E975FE502 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				1265F012CE0AD92CB31DAD13 /* SP500HeatmapWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		875668829FEE6DB4419E2CCB /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -46,13 +79,29 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E1C950B71EEA47237165CC19 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A791F77B1878CF6DFB4800FA /* SP500HeatmapWatchWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2225F9FA3EAA1C4DF833E688 /* SharedStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SharedStore.swift; sourceTree = "<group>"; };
 		3917BDDC2FDAC3A7006A9826 /* SP500Heatmap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SP500Heatmap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3917BDE92FDAC3A9006A9826 /* SP500HeatmapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SP500HeatmapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3917BDF32FDAC3A9006A9826 /* SP500HeatmapUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SP500HeatmapUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		437D0AFAA513D41078B45CF8 /* SP500HeatmapWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = SP500HeatmapWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		489035E00F521D7A7066AF14 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS11.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		674C6F1488875F126DF77C93 /* TreemapLayout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TreemapLayout.swift; sourceTree = "<group>"; };
+		D7F270ADC4FC42130FC8A295 /* SP500HeatmapWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SP500HeatmapWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E11AD54B4E889BD1CCD1EDE9 /* SP500HeatmapWatchWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SP500HeatmapWatchWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -82,6 +131,13 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		14A65AABCE93FE69BA95A213 /* WatchApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = WatchApp;
+			sourceTree = "<group>";
+		};
 		3917BDDE2FDAC3A7006A9826 /* SP500Heatmap */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -102,6 +158,20 @@
 			exceptions = (
 			);
 			path = SP500HeatmapUITests;
+			sourceTree = "<group>";
+		};
+		878E21C9E8BFF6B72EBF6DCF /* WatchWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = WatchWidgets;
+			sourceTree = "<group>";
+		};
+		A487BFA1A25A81E0E717B262 /* WatchShared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = WatchShared;
 			sourceTree = "<group>";
 		};
 		FDA57610C12980829BCB5275 /* SP500HeatmapWidgets */ = {
@@ -136,10 +206,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		96BDF08D00AD0C055AD989D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29E53F9F512D5966D54D1F17 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9B3D1C004E8371E267DD1DFE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAF3AB9F2C95E00D0879AB65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1601EEABD39E45DF87A2F2CF /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,6 +241,11 @@
 				3917BDDD2FDAC3A7006A9826 /* Products */,
 				FDA57610C12980829BCB5275 /* SP500HeatmapWidgets */,
 				050E1FCF7A7A96EB3209EA5C /* Shared */,
+				84FAF6609F7400C027F9BC8F /* Frameworks */,
+				14A65AABCE93FE69BA95A213 /* WatchApp */,
+				878E21C9E8BFF6B72EBF6DCF /* WatchWidgets */,
+				A487BFA1A25A81E0E717B262 /* WatchShared */,
+				C73F197982A574E4F5D61F34 /* SharedForWatch */,
 			);
 			sourceTree = "<group>";
 		};
@@ -165,8 +256,36 @@
 				3917BDE92FDAC3A9006A9826 /* SP500HeatmapTests.xctest */,
 				3917BDF32FDAC3A9006A9826 /* SP500HeatmapUITests.xctest */,
 				437D0AFAA513D41078B45CF8 /* SP500HeatmapWidgets.appex */,
+				D7F270ADC4FC42130FC8A295 /* SP500HeatmapWatch.app */,
+				E11AD54B4E889BD1CCD1EDE9 /* SP500HeatmapWatchWidgets.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		84FAF6609F7400C027F9BC8F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F1C7E32091CD37279BD6B73B /* watchOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C73F197982A574E4F5D61F34 /* SharedForWatch */ = {
+			isa = PBXGroup;
+			children = (
+				2225F9FA3EAA1C4DF833E688 /* SharedStore.swift */,
+				674C6F1488875F126DF77C93 /* TreemapLayout.swift */,
+			);
+			name = SharedForWatch;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		F1C7E32091CD37279BD6B73B /* watchOS */ = {
+			isa = PBXGroup;
+			children = (
+				489035E00F521D7A7066AF14 /* Foundation.framework */,
+			);
+			name = watchOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,11 +299,13 @@
 				3917BDD92FDAC3A7006A9826 /* Frameworks */,
 				3917BDDA2FDAC3A7006A9826 /* Resources */,
 				875668829FEE6DB4419E2CCB /* Embed Foundation Extensions */,
+				09731B8AF1D7985E975FE502 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				0ABBFE99CCCC0B5CA84ADB7B /* PBXTargetDependency */,
+				A7F0D633B58BD281B257749A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3917BDDE2FDAC3A7006A9826 /* SP500Heatmap */,
@@ -236,6 +357,50 @@
 			productName = SP500HeatmapUITests;
 			productReference = 3917BDF32FDAC3A9006A9826 /* SP500HeatmapUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		431D9DB1EF203F924F347440 /* SP500HeatmapWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 09B3B52B8200B265C174B41C /* Build configuration list for PBXNativeTarget "SP500HeatmapWatch" */;
+			buildPhases = (
+				C5B22035FD26E002C36CAD3A /* Sources */,
+				96BDF08D00AD0C055AD989D1 /* Frameworks */,
+				8148EA223A5DF4E17C641E84 /* Resources */,
+				E1C950B71EEA47237165CC19 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B882C77FF5460CFE5F55276D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				14A65AABCE93FE69BA95A213 /* WatchApp */,
+				A487BFA1A25A81E0E717B262 /* WatchShared */,
+			);
+			name = SP500HeatmapWatch;
+			productName = SP500HeatmapWatch;
+			productReference = D7F270ADC4FC42130FC8A295 /* SP500HeatmapWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6EF52DFE20808B711374A6A9 /* SP500HeatmapWatchWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B8C1A507B953FC11721C5336 /* Build configuration list for PBXNativeTarget "SP500HeatmapWatchWidgets" */;
+			buildPhases = (
+				28F447506BFC1C7B3AC4D8E2 /* Sources */,
+				DAF3AB9F2C95E00D0879AB65 /* Frameworks */,
+				9E1F36C7F0DF516EA2E63F46 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				878E21C9E8BFF6B72EBF6DCF /* WatchWidgets */,
+				A487BFA1A25A81E0E717B262 /* WatchShared */,
+			);
+			name = SP500HeatmapWatchWidgets;
+			productName = SP500HeatmapWatchWidgets;
+			productReference = E11AD54B4E889BD1CCD1EDE9 /* SP500HeatmapWatchWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		873247507EDCA094220F6CA9 /* SP500HeatmapWidgets */ = {
 			isa = PBXNativeTarget;
@@ -310,6 +475,8 @@
 				3917BDE82FDAC3A9006A9826 /* SP500HeatmapTests */,
 				3917BDF22FDAC3A9006A9826 /* SP500HeatmapUITests */,
 				873247507EDCA094220F6CA9 /* SP500HeatmapWidgets */,
+				431D9DB1EF203F924F347440 /* SP500HeatmapWatch */,
+				6EF52DFE20808B711374A6A9 /* SP500HeatmapWatchWidgets */,
 			);
 		};
 /* End PBXProject section */
@@ -336,7 +503,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8148EA223A5DF4E17C641E84 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		90F7D097E54944BF39426F89 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9E1F36C7F0DF516EA2E63F46 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -346,6 +527,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		28F447506BFC1C7B3AC4D8E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D13B5D51B5D8FD0DBE25B583 /* SharedStore.swift in Sources */,
+				580FFBC04BF7156CB8B5D76A /* TreemapLayout.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3917BDD82FDAC3A7006A9826 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -364,6 +554,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C5B22035FD26E002C36CAD3A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBB4496B93D60B38311EEA14 /* SharedStore.swift in Sources */,
+				F52AA9B87DB0A887280DCA0A /* TreemapLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,9 +592,76 @@
 			target = 3917BDDB2FDAC3A7006A9826 /* SP500Heatmap */;
 			targetProxy = 3917BDF42FDAC3A9006A9826 /* PBXContainerItemProxy */;
 		};
+		A7F0D633B58BD281B257749A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SP500HeatmapWatch;
+			target = 431D9DB1EF203F924F347440 /* SP500HeatmapWatch */;
+			targetProxy = F18C341F8A4E2501BABBBCEE /* PBXContainerItemProxy */;
+		};
+		B882C77FF5460CFE5F55276D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SP500HeatmapWatchWidgets;
+			target = 6EF52DFE20808B711374A6A9 /* SP500HeatmapWatchWidgets */;
+			targetProxy = 70A6110C87A40CF3DEE6CAEE /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		0394F809A38C42B80FF716AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "https://217-160-93-254.sslip.io/sp500";
+				CODE_SIGN_ENTITLEMENTS = WatchSupport/SP500HeatmapWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "WatchSupport/WatchApp-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "SP500 Heatmap";
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maximyaroshenko.SP500Heatmap2.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		31AB12A25A6AB0F40CAB3B9E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "https://217-160-93-254.sslip.io/sp500";
+				CODE_SIGN_ENTITLEMENTS = WatchSupport/SP500HeatmapWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "WatchSupport/WatchApp-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "SP500 Heatmap";
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maximyaroshenko.SP500Heatmap2.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
 		3917BDFB2FDAC3A9006A9826 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -653,6 +919,67 @@
 			};
 			name = Release;
 		};
+		7CC69EB5A7BED550672F610E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "https://217-160-93-254.sslip.io/sp500";
+				CODE_SIGN_ENTITLEMENTS = WatchSupport/SP500HeatmapWatchWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "WatchSupport/WatchWidgets-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "SP500 Heatmap";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maximyaroshenko.SP500Heatmap2.watchkitapp.Widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		B6B1CF4A6370B7CA94136F7D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "https://217-160-93-254.sslip.io/sp500";
+				CODE_SIGN_ENTITLEMENTS = WatchSupport/SP500HeatmapWatchWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = DR8U87NRB8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "WatchSupport/WatchWidgets-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "SP500 Heatmap";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maximyaroshenko.SP500Heatmap2.watchkitapp.Widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
 		C1A71E0D863342F1658DEBE3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -710,6 +1037,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		09B3B52B8200B265C174B41C /* Build configuration list for PBXNativeTarget "SP500HeatmapWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				31AB12A25A6AB0F40CAB3B9E /* Release */,
+				0394F809A38C42B80FF716AA /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1058CF25510D98F71A8FB57E /* Build configuration list for PBXNativeTarget "SP500HeatmapWidgets" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -751,6 +1087,15 @@
 			buildConfigurations = (
 				3917BE042FDAC3A9006A9826 /* Debug */,
 				3917BE052FDAC3A9006A9826 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B8C1A507B953FC11721C5336 /* Build configuration list for PBXNativeTarget "SP500HeatmapWatchWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B6B1CF4A6370B7CA94136F7D /* Release */,
+				7CC69EB5A7BED550672F610E /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
