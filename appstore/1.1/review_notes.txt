@@ -1,0 +1,29 @@
+SP500 Heatmap 1.1 - notes for App Review
+
+No sign-in is required. The app has no accounts and nothing to purchase (free, no ads, no in-app purchases, no subscriptions). Open the app and the world markets map loads right away.
+
+What the app does
+Interactive heatmaps of 40 stock indices, the top 50 cryptocurrencies and the top 50 ETFs, with sector, industry and company drill-down; company pages with charts, financials, analyst targets and news; a screener; an earnings and dividend calendar; a personal portfolio tracker and watchlists; model portfolios; widgets.
+
+Data sources
+- Yahoo Finance: quotes, history, fundamentals, news for indices and stocks.
+- Finnhub: live US prices during the US session.
+- CoinGecko: cryptocurrency data (attribution to CoinGecko is shown in the app).
+- Famous investors' holdings come from public SEC 13F filings.
+Market data may be delayed. The app states that it is for information only and is not investment advice.
+
+AI features
+"Why is it moving", the daily market brief and the AI chat run on the device with Apple FoundationModels (Apple Intelligence). On devices without Apple Intelligence, the app uses template-based quick answers. Nothing typed into the chat is sent to a third-party AI service.
+
+Model portfolios
+The 60 model portfolios (Buffett, Dalio All Weather, Bogleheads and others) are historical simulations since 1926 for education. They are not recommendations and the app does not trade or hold any money.
+
+Permissions (all optional, requested only when the user uses the feature)
+- Notifications: price alerts, index moves, daily summary, earnings and dividend reminders. To test: open the alerts/notifications option in the app and allow notifications when iOS asks. A device push token, language, time zone and alert rules are sent to our server only for this feature.
+- Live Activity: shown during the US trading session after the user starts it; needs Live Activities enabled in iOS settings.
+- Calendar: write-only access, used only to add earnings or dividend events when the user taps "Add to Calendar". The app does not read the calendar.
+- iCloud: portfolio and watchlists sync through the user's own iCloud (iCloud key-value storage). Works without iCloud too, data then stays on the device.
+
+Languages: 41 (including right-to-left Arabic and Hebrew).
+
+Contact: vmyaros@gmail.com
