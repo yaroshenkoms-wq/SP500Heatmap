@@ -146,7 +146,6 @@ struct SectorsHeatmapView: View {
         }
         .themeScreen()
         .navigationBarHidden(true)
-        .edgesIgnoringSafeArea(.bottom)
         .task(id: indexStore.selectedId) { await metrics.load(index: indexStore.selectedId) }
         .sheet(isPresented: $showIndexPicker) {
             IndexPickerView(indexStore: indexStore)

@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var debugScreen: String?
     #endif
     @ObservedObject private var settings = AppSettings.shared
+    @State private var tab: AppTab = .markets
     @Environment(\.scenePhase) private var scenePhase
 
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -24,17 +25,37 @@ struct ContentView: View {
         splitSelection = id
     }
 
-    @ViewBuilder private var rootContent: some View {
+    private var rootContent: some View {
+        TabView(selection: $tab) {
+            Tab("Markets", systemImage: "globe", value: AppTab.markets) { marketsContent }
+            Tab("Watchlists", systemImage: "star", value: AppTab.watchlists) {
+                NavigationStack { FavoritesView(isRoot: true) }
+            }
+            Tab("Portfolio", systemImage: "briefcase", value: AppTab.portfolio) {
+                NavigationStack { MyPortfolioView() }
+            }
+            Tab("Screener", systemImage: "slider.horizontal.3", value: AppTab.screener) {
+                NavigationStack { ScreenerView() }
+            }
+            Tab("More", systemImage: "ellipsis", value: AppTab.more) {
+                NavigationStack { MoreView(onSettings: { showSettings = true }) }
+            }
+        }
+        .tint(Theme.gold)
+        .toolbarBackground(Theme.bg, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
+        .toolbarColorScheme(.dark, for: .tabBar)
+    }
+
+    @ViewBuilder private var marketsContent: some View {
         if useSplit {
             NavigationSplitView(columnVisibility: .constant(.all)) {
                 IndexSidebar(store: worldStore, selection: $splitSelection,
-                             onSelect: { selectIndex($0) }, onHome: { selectIndex(nil) },
-                             onSettings: { showSettings = true })
+                             onSelect: { selectIndex($0) }, onHome: { selectIndex(nil) })
             } detail: {
                 NavigationStack {
                     if splitSelection == nil {
-                        WorldOverviewView(store: worldStore, onSelect: { selectIndex($0.id) },
-                                          onSettings: { showSettings = true })
+                        WorldOverviewView(store: worldStore, onSelect: { selectIndex($0.id) })
                     } else {
                         IndexFlowView(webSocketManager: webSocketManager)
                     }
@@ -60,7 +81,7 @@ struct ContentView: View {
                     WorldOverviewView(store: worldStore, onSelect: { index in
                         indexStore.selectedId = index.id
                         path.append(index.id)
-                    }, onSettings: { showSettings = true })
+                    })
                 } else {
                     // Old server without world-overview: open the S&P 500 map directly.
                     IndexFlowView(webSocketManager: webSocketManager)
@@ -84,6 +105,8 @@ struct ContentView: View {
         .fullScreenCover(item: Binding(get: { debugScreen.map(DebugScreen.init) }, set: { debugScreen = $0?.id })) { screen in
             NavigationStack {
                 if screen.id == "portfolios" { PortfoliosView() }
+                else if screen.id == "calendar" { CalendarView() }
+                else if screen.id == "screener" { ScreenerView() }
                 else if screen.id == "favorites" { FavoritesView() }
                 else if screen.id.hasPrefix("portfolio:"), let info = PortfolioStore.shared.info(String(screen.id.dropFirst(10))) {
                     PortfolioDetailView(info: info)
@@ -96,7 +119,7 @@ struct ContentView: View {
         }
         #endif
         .background(Theme.bg.ignoresSafeArea())
-        .environment(\.goHome, hasWorld ? { goHome() } : nil)
+        .environment(\.goHome, hasWorld ? { tab = .markets; goHome() } : nil)
         .environmentObject(indexStore)
         .task {
             await indexStore.loadIfNeeded()
@@ -108,7 +131,9 @@ struct ContentView: View {
                 splitSelection = id
                 path.append(id)
             }
-            // `-openScreen settings|portfolios|favorites|portfolio:m_dalio` — сразу открыть экран.
+            // `-openTab markets|watchlists|portfolio|screener|more` — сразу открыть вкладку.
+            if let raw = UserDefaults.standard.string(forKey: "openTab"), let t = AppTab(rawValue: raw) { tab = t }
+            // `-openScreen settings|calendar|screener|portfolios|favorites|portfolio:m_dalio` — сразу открыть экран.
             if let screen = UserDefaults.standard.string(forKey: "openScreen") {
                 if screen == "settings" { showSettings = true } else { debugScreen = screen }
             }
@@ -120,10 +145,14 @@ struct ContentView: View {
         .onOpenURL { url in
             // sp500heatmap://index/<id> открывает карту индекса, sp500heatmap://home — главный экран.
             guard url.scheme == "sp500heatmap" else { return }
-            if url.host == "index", let id = url.pathComponents.dropFirst().first, hasWorld {
+            if let host = url.host, let t = AppTab(rawValue: host) {
+                tab = t
+            } else if url.host == "index", let id = url.pathComponents.dropFirst().first, hasWorld {
+                tab = .markets
                 indexStore.selectedId = id
                 if useSplit { splitSelection = id } else { path = [id] }
             } else if url.host == "home" {
+                tab = .markets
                 goHome()
             }
         }
@@ -232,3 +261,7 @@ struct IndexFlowView: View {
 #if DEBUG
 private struct DebugScreen: Identifiable { let id: String }
 #endif
+
+enum AppTab: String {
+    case markets, watchlists, portfolio, screener, more
+}

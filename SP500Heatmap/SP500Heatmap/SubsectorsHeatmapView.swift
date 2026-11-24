@@ -127,7 +127,6 @@ struct SubsectorsHeatmapView: View {
         }
         .themeScreen()
         .navigationBarHidden(true)
-        .edgesIgnoringSafeArea(.bottom)
         .task(id: indexStore.selectedId) { await metrics.load(index: indexStore.selectedId) }
     }
 }
