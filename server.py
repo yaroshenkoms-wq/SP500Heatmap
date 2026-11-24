@@ -120,11 +120,14 @@ def load_history():
         print("⚠️ history.db не найден — запустите fetch_history.py для загрузки истории цен")
         return
 
+    global history_cache
     fresh = read_history(DB_PATH)
-    history_cache.clear()
-    history_cache.update(fresh)
+    # Подмена одним присваиванием: запрос, который в этот момент обходит старый словарь
+    # в другом потоке, не падает с «dictionary changed size during iteration» (24.11.2026).
+    history_cache = fresh
     _overview_cache["version"] += 1
     print(f"✅ Загружена история цен для {len(history_cache)} тикеров (по {history_last_date(history_cache)})")
+    warm_world_overview()
 
 
 def download_history_db(etag):
@@ -460,12 +463,13 @@ def load_world_history():
     """Читает history_world.db в world_history_cache (кэш заменяется целиком)."""
     if not os.path.exists(WORLD_DB_PATH):
         return False
+    global world_history_cache
     fresh = read_history(WORLD_DB_PATH)
-    world_history_cache.clear()
-    world_history_cache.update(fresh)
+    world_history_cache = fresh  # подмена целиком, см. load_history
     _world_db_mtime["value"] = os.path.getmtime(WORLD_DB_PATH)
     _overview_cache["version"] += 1
     print(f"✅ Загружена мировая история для {len(world_history_cache)} тикеров (по {history_last_date(world_history_cache)})")
+    warm_world_overview()
     return True
 
 
@@ -767,6 +771,15 @@ def build_world_overview():
         if region in regions:
             regions[region].append(build_index_overview(entry))
     return {"asOf": market_today(), "regions": [{"id": r, "indices": regions[r]} for r in OVERVIEW_REGIONS]}
+
+
+def warm_world_overview():
+    """Считает карту мира сразу после перезагрузки истории (в том же фоновом потоке),
+    чтобы первый запрос приложения не ждал несколько секунд."""
+    try:
+        get_world_overview_cached()
+    except Exception as e:
+        print(f"⚠️ Не удалось заранее посчитать карту мира: {e}")
 
 
 def get_world_overview_cached():
