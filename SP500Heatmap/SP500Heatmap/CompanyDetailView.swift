@@ -252,7 +252,9 @@ struct CompanyDetailView: View {
         }
     }
 
-    private var metricsSection: some View {
+    // Без капитализации, P/E и объёма блок пустой — тогда не показываем его вовсе.
+    @ViewBuilder private var metricsSection: some View {
+        if company.marketCap > 0 || company.peRatio != nil || company.volume != nil {
         VStack(alignment: .leading) {
             Text("Metrics")
                 .font(Theme.serif(.title3))
@@ -276,6 +278,7 @@ struct CompanyDetailView: View {
             .panelCard()
         }
         .padding(.horizontal)
+        }
     }
 
     // MARK: Ключевые данные
