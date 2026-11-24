@@ -39,6 +39,8 @@ def yahoo_symbol(symbol):
 
 
 def init_db(conn):
+    # WAL: чтение из сервера не ждёт, пока ночной проход пишет (24.11.2026: «database is locked» → 500 у /metrics)
+    conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("""CREATE TABLE IF NOT EXISTS fundamentals (
         symbol TEXT PRIMARY KEY, name TEXT, pe REAL, forward_pe REAL, div_yield REAL, dividend_rate REAL,
         ex_dividend_date TEXT, earnings_date TEXT, beta REAL, currency TEXT, updated_at REAL NOT NULL,
@@ -158,7 +160,7 @@ def refresh_fundamentals(db_path, symbols, info_fetcher=None, throttle=THROTTLE_
                          max_seconds=None):
     """Скачивает фундаментал по списку наших тикеров, по одному, с паузой. Возвращает {"ok", "failed", "skipped"}.
     max_seconds — остановиться, когда прошло столько секунд (окно ночного прохода)."""
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     init_db(conn)
     started = time.time()
     ok = failed = 0
@@ -186,7 +188,7 @@ def refresh_fundamentals(db_path, symbols, info_fetcher=None, throttle=THROTTLE_
 def stale_symbols(db_path, symbols, max_age=STALE_SECONDS, now=None):
     """Символы без записи или старше max_age — в порядке исходного списка."""
     now = now or time.time()
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     try:
         init_db(conn)
         fresh = {s for (s,) in conn.execute("SELECT symbol FROM fundamentals WHERE updated_at > ?", (now - max_age,))}
@@ -199,7 +201,7 @@ def read_fundamentals(db_path, symbols=None):
     """{symbol: row dict}. symbols=None — все. Для 5000 символов это пара МБ, держим только на время запроса."""
     if not Path(db_path).exists():
         return {}
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     conn.row_factory = sqlite3.Row
     try:
         init_db(conn)
@@ -243,7 +245,7 @@ def fetch_news(symbol, news_fetcher=None):
 def get_cached_company(db_path, symbol, max_age=COMPANY_CACHE_SECONDS, now=None):
     if not Path(db_path).exists():
         return None
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     try:
         init_db(conn)
         row = conn.execute("SELECT payload, updated_at FROM company_cache WHERE symbol = ?", (symbol,)).fetchone()
@@ -255,7 +257,7 @@ def get_cached_company(db_path, symbol, max_age=COMPANY_CACHE_SECONDS, now=None)
 
 
 def put_cached_company(db_path, symbol, payload, now=None):
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     try:
         init_db(conn)
         conn.execute("INSERT OR REPLACE INTO company_cache (symbol, payload, updated_at) VALUES (?,?,?)",

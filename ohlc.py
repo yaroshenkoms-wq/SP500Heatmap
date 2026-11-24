@@ -30,7 +30,7 @@ def get_cached(db_path, ticker, rng, now=None, allow_stale=False):
     """(payload dict, возраст в секундах) или None. Просроченное отдаём только при allow_stale."""
     if not Path(db_path).exists():
         return None
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     try:
         init_db(conn)
         row = conn.execute("SELECT payload, updated_at FROM ohlc_cache WHERE ticker = ? AND range = ?",
@@ -46,7 +46,7 @@ def get_cached(db_path, ticker, rng, now=None, allow_stale=False):
 
 
 def put_cached(db_path, ticker, rng, payload, now=None):
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     try:
         init_db(conn)
         conn.execute("INSERT OR REPLACE INTO ohlc_cache (ticker, range, payload, updated_at) VALUES (?,?,?,?)",

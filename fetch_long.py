@@ -113,7 +113,7 @@ def refresh(db_path=DB_PATH, symbols=None, downloader=None, now=None, force=Fals
     downloader = downloader or default_download
     now = now or datetime.now(timezone.utc).replace(tzinfo=None)
     symbols = all_symbols() if symbols is None else symbols
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     init_db(conn)
     skip = set() if force else fresh_tickers(conn, now)
     todo = [(t, y) for t, y in symbols if t not in skip]

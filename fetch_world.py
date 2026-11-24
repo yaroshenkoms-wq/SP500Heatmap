@@ -185,7 +185,7 @@ def refresh(db_path=DB_PATH, index_ids=None, now=None, downloader=None):
         summary["indices"][iid] = {"symbols": len(syms), "with_data": with_data,
                                    "coverage": round(coverage, 3), "updated": ok}
 
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     init_db(conn)
     for sym in all_symbols:
         if sym not in closes or not (set(owners[sym]) & passing):
@@ -239,7 +239,7 @@ def refresh_fx(db_path=DB_PATH, currencies=None, downloader=None):
     symbols = [fx_symbol(c) for c in currencies]
     notes = []
     closes = download_all(symbols, downloader, notes)
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     init_db(conn)
     n = write_fx(conn, closes, symbols)
     conn.commit()

@@ -109,7 +109,7 @@ history_cache = {}  # ticker -> [{"date": "YYYY-MM-DD", "close": float}, ...] п
 def read_history(db_path):
     """Читает дневные цены закрытия из файла SQLite: ticker -> [{"date", "close"}, ...]"""
     result = {}
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     try:
         cur = conn.execute("SELECT ticker, date, close FROM daily_closes ORDER BY ticker, date")
         for ticker, date, close in cur.fetchall():
@@ -501,7 +501,7 @@ def compute_long_bases(db_path=None, today=None):
     today = today or datetime.now(ZoneInfo("UTC")).date()
     if not os.path.exists(db_path):
         return {}
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     try:
         first = dict(conn.execute("SELECT ticker, MIN(date) FROM weekly_closes GROUP BY ticker"))
         bases = {t: {} for t in first}
@@ -1066,7 +1066,7 @@ def read_long_series(ticker, years, daily=None, db_path=None):
     if not os.path.exists(db_path):
         return []
     target = years_ago(datetime.now(ZoneInfo("UTC")).date(), years).isoformat()
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     try:
         # тикер в базе — как в CSV (BRK.B); запрос мог прийти и в варианте с дефисом
         names = [ticker, ticker.replace("-", ".")] if "-" in ticker and not ticker.endswith("-USD") else [ticker]

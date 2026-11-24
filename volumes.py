@@ -64,7 +64,7 @@ def save_series(db_path, series_by_symbol, skip_dates=None, keep=KEEP_SESSIONS):
     """Пишет {symbol: Series объёмов} в volumes.db и обрезает до keep сессий.
     skip_dates: {symbol: set(дат)} — незаконченные сессии, их не пишем (и стираем, если уже лежат)."""
     skip_dates = skip_dates or {}
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     try:
         init_db(conn)
         n = 0
@@ -88,7 +88,7 @@ def read_stats(db_path, tickers):
     out = {}
     if not Path(db_path).exists():
         return out
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     try:
         init_db(conn)
         tickers = list(tickers)

@@ -70,7 +70,7 @@ def main():
     tickers = load_tickers()
     print(f"Тикеров к загрузке: {len(tickers)}")
 
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=30)
     init_db(conn)
 
     skip_date = unfinished_session_date()

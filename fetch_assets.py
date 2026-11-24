@@ -180,7 +180,7 @@ def refresh_crypto(db_path=WORLD_DB, csv_path=CRYPTO_CSV, markets=None, download
     keep = keep[:TOP_N]
     if len(keep) < TOP_N * 0.8:
         raise RuntimeError(f"Крипта: годных монет только {len(keep)} — ничего не пишем")
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(db_path, timeout=30)
     fetch_world.init_db(conn)
     n = 0
     for c in keep:
