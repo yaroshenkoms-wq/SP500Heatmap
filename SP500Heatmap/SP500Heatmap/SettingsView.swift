@@ -8,6 +8,9 @@ struct SettingsView: View {
     @AppStorage(AlertManager.moveKey) private var moveEnabled = false
     @AppStorage(AlertManager.summaryKey) private var summaryEnabled = false
     @AppStorage(AlertManager.thresholdKey) private var threshold = AlertManager.defaultThreshold
+    @AppStorage(PushManager.newsKey) private var newsEnabled = false
+    @AppStorage(LiveActivityManager.autoStartKey) private var liveAutoStart = false
+    @ObservedObject private var push = PushManager.shared
     @ObservedObject private var metricStore = MetricStore.shared
     @State private var showDenied = false
     @Environment(\.dismiss) private var dismiss
@@ -34,6 +37,7 @@ struct SettingsView: View {
                 mapSection
                 languageSection
                 notificationsSection
+                liveActivitySection
                 aboutSection
             }
             .scrollContentBackground(.hidden)
@@ -125,8 +129,22 @@ struct SettingsView: View {
         }
     }
 
+    private var pushStatusRow: some View {
+        HStack(spacing: 8) {
+            Image(systemName: push.status == .active ? "bolt.fill" : "iphone")
+                .foregroundColor(push.status == .active ? Theme.gold : Theme.muted)
+            Text(LocalizedStringKey(push.status == .active ? "Push active"
+                                    : push.status == .checking ? "Checking push status…"
+                                    : "Push not configured on server — local mode"))
+                .font(Theme.ui(.subheadline))
+                .foregroundColor(Theme.text)
+        }
+        .listRowBackground(Theme.panel)
+    }
+
     private var notificationsSection: some View {
         Section {
+            pushStatusRow
             Toggle(isOn: gatedToggle($moveEnabled)) {
                 Text("Index moved more than the threshold")
                     .font(Theme.ui(.subheadline))
@@ -158,6 +176,13 @@ struct SettingsView: View {
             }
             .tint(Theme.gold)
             .listRowBackground(Theme.panel)
+            Toggle(isOn: gatedToggle($newsEnabled)) {
+                Text("News on my watchlist")
+                    .font(Theme.ui(.subheadline))
+                    .foregroundColor(Theme.text)
+            }
+            .tint(Theme.gold)
+            .listRowBackground(Theme.panel)
             NavigationLink {
                 AlertsView()
             } label: {
@@ -166,10 +191,46 @@ struct SettingsView: View {
                     .foregroundColor(Theme.text)
             }
             .listRowBackground(Theme.panel)
+            Button {
+                Task {
+                    if await AlertManager.requestPermission() { await push.sendTestNotification() }
+                    else { showDenied = true }
+                }
+            } label: {
+                Text("Send test notification")
+                    .font(Theme.ui(.subheadline))
+                    .foregroundColor(Theme.gold)
+            }
+            .listRowBackground(Theme.panel)
         } header: {
             sectionTitle("Notifications")
         } footer: {
-            Text("Alerts are checked in the background. iOS decides when that runs, so alerts may be delayed or skipped, especially if the app has not been opened for a while.")
+            Text(LocalizedStringKey(push.status == .active
+                 ? "Push alerts are sent by our server, even when the app is closed. News alerts need push."
+                 : "Alerts are checked in the background. iOS decides when that runs, so alerts may be delayed or skipped, especially if the app has not been opened for a while. News alerts need push."))
+                .font(Theme.ui(.caption))
+                .foregroundColor(Theme.muted)
+        }
+    }
+
+    private var liveActivitySection: some View {
+        Section {
+            if push.status == .active {
+                Toggle(isOn: $liveAutoStart) {
+                    Text("Start Live Activity at the US open")
+                        .font(Theme.ui(.subheadline))
+                        .foregroundColor(Theme.text)
+                }
+                .tint(Theme.gold)
+                .listRowBackground(Theme.panel)
+                .onChange(of: liveAutoStart) { _, _ in Task { await LiveActivityManager.shared.syncAutoStart() } }
+            }
+        } header: {
+            sectionTitle("Live Activity")
+        } footer: {
+            Text(LocalizedStringKey(push.status == .active
+                 ? "Tap the live icon on an index map to follow it on the Lock Screen and in the Dynamic Island. The server updates it even when the app is closed."
+                 : "Tap the live icon on an index map to follow it on the Lock Screen and in the Dynamic Island. Without push it updates only while the app is open."))
                 .font(Theme.ui(.caption))
                 .foregroundColor(Theme.muted)
         }

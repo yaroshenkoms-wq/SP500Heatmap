@@ -12,6 +12,7 @@ import WidgetKit
 struct SP500HeatmapApp: App {
     @AppStorage(AppLanguage.storageKey) private var language = ""
     @Environment(\.scenePhase) private var scenePhase
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     init() {
         AlertManager.registerBackgroundTask()
@@ -31,9 +32,19 @@ struct SP500HeatmapApp: App {
                     AppSettings.mirrorLanguage()
                     WidgetCenter.shared.reloadAllTimelines()
                 }
+                .task {
+                    PushManager.shared.start()
+                    LiveActivityManager.shared.startObservingTokens()
+                }
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .background { AlertManager.scheduleRefresh() }
+            if phase == .active {
+                Task {
+                    await PushManager.shared.refresh()
+                    await LiveActivityManager.shared.syncAutoStart()
+                }
+            }
         }
     }
 }

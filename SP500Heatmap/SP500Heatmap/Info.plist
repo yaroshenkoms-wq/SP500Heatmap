@@ -19,9 +19,12 @@
 	<array>
 		<string>com.maximyaroshenko.SP500Heatmap2.refresh</string>
 	</array>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>remote-notification</string>
 	</array>
 	<key>CFBundleURLTypes</key>
 	<array>

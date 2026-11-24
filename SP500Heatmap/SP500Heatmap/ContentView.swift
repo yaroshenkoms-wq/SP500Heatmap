@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var path: [String] = []
     @State private var stackToken = UUID()
     @State private var showSettings = false
+    @State private var companyLink: CompanyLink?
     #if DEBUG
     @State private var debugScreen: String?
     #endif
@@ -142,19 +143,17 @@ struct ContentView: View {
         .task {
             webSocketManager.connect()
         }
-        .onOpenURL { url in
-            // sp500heatmap://index/<id> открывает карту индекса, sp500heatmap://home — главный экран.
-            guard url.scheme == "sp500heatmap" else { return }
-            if let host = url.host, let t = AppTab(rawValue: host) {
-                tab = t
-            } else if url.host == "index", let id = url.pathComponents.dropFirst().first, hasWorld {
-                tab = .markets
-                indexStore.selectedId = id
-                if useSplit { splitSelection = id } else { path = [id] }
-            } else if url.host == "home" {
-                tab = .markets
-                goHome()
+        .onOpenURL { url in handleURL(url) }
+        // Нажатие на push-уведомление: ссылка приходит от AppDelegate.
+        .onReceive(DeepLinkRouter.shared.$url.compactMap { $0 }) { _ in processPendingLink() }
+        .onChange(of: worldStore.didFinishFirstLoad) { _, _ in processPendingLink() }
+        .sheet(item: $companyLink) { link in
+            NavigationStack {
+                CompanyDetailView(company: Company(ticker: link.id, name: link.id, marketCap: 0, description: nil, peRatio: nil, volume: nil),
+                                  webSocketManager: webSocketManager)
+                    .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { companyLink = nil } } }
             }
+            .environmentObject(indexStore)
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active && worldStore.didFinishFirstLoad {
@@ -164,6 +163,34 @@ struct ContentView: View {
         .onDisappear {
             webSocketManager.disconnect()
         }
+    }
+
+    /// sp500heatmap://index/<id> открывает карту индекса, company/<тикер> — карточку компании, home — главный экран.
+    private func handleURL(_ url: URL) {
+        guard url.scheme == "sp500heatmap" else { return }
+        if let host = url.host, let t = AppTab(rawValue: host) {
+            tab = t
+        } else if url.host == "index", let id = url.pathComponents.dropFirst().first, hasWorld {
+            tab = .markets
+            indexStore.selectedId = id
+            if useSplit { splitSelection = id } else { path = [id] }
+        } else if url.host == "company", let ticker = url.pathComponents.dropFirst().first {
+            companyLink = CompanyLink(id: ticker)
+        } else if url.host == "home" {
+            tab = .markets
+            goHome()
+        }
+    }
+
+    /// Ссылка из уведомления на индекс ждёт, пока загрузятся индексы (холодный старт).
+    private func processPendingLink() {
+        guard let url = DeepLinkRouter.shared.url else { return }
+        if url.host == "index" && !hasWorld {
+            if worldStore.didFinishFirstLoad { DeepLinkRouter.shared.url = nil }
+            return
+        }
+        DeepLinkRouter.shared.url = nil
+        handleURL(url)
     }
 
     // Rebuilding the stack drops every pushed level at once (pop to root).
@@ -261,6 +288,8 @@ struct IndexFlowView: View {
 #if DEBUG
 private struct DebugScreen: Identifiable { let id: String }
 #endif
+
+struct CompanyLink: Identifiable { let id: String }
 
 enum AppTab: String {
     case markets, watchlists, portfolio, screener, more
