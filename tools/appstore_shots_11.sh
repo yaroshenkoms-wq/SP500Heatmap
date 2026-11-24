@@ -34,7 +34,7 @@ for loc in $locs; do
       sleep ${WAIT:-12}
       xcrun simctl io $id screenshot --type=png $raw > /dev/null
     fi
-    [ -n "$NOCOMPOSE" ] || node $ROOT/tools/appstore_compose11.js $dev $loc $sc $raw $o/$(printf %02d $i)_$sc.png
+    [ -n "$NOCOMPOSE" ] || node $ROOT/tools/appstore_compose11.js $dev $loc $sc $raw $o/$(printf %02d $i)_$sc.png || node $ROOT/tools/appstore_compose11.js $dev $loc $sc $raw $o/$(printf %02d $i)_$sc.png
   done
   ~/.claude/bin/sim-queue touch >/dev/null 2>&1 || true
 done
