@@ -13,6 +13,14 @@
 	<string>$(WEBSOCKET_URL)</string>
 	<key>BASE_URL</key>
 	<string>$(BASE_URL)</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.maximyaroshenko.SP500Heatmap2.refresh</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Geist-Regular.ttf</string>
