@@ -120,6 +120,7 @@ struct CompanyDetailView: View {
             header
             ScrollView {
                 VStack(spacing: 8) {
+                    AIInsightView(ticker: company.ticker)
                     if isRegular {
                         HStack(alignment: .top, spacing: 16) {
                             VStack(spacing: 8) { chartSection; alertsSection; descriptionSection; metricsSection }
