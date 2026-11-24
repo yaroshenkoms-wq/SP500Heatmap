@@ -9,7 +9,7 @@ export NODE_PATH=${NODE_PATH:-$HOME/Desktop/Web/Clipalio/node_modules}
 BUNDLE=com.maximyaroshenko.SP500Heatmap2
 DD=${DD:-/private/tmp/claude-501/dd-shots}; APP=$DD/Build/Products/Debug-iphonesimulator/SP500Heatmap.app
 [ -d $APP ] || xcodebuild -project $ROOT/SP500Heatmap/SP500Heatmap.xcodeproj -scheme SP500Heatmap -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath $DD build > $DD.log 2>&1
-locs=(en-US es-ES es-MX fr-FR de-DE it pt-BR ru uk ja ko zh-Hans ar-SA); [ $# -gt 0 ] && locs=($@)
+locs=($(node -e "console.log(Object.keys(require('$ROOT/tools/appstore_caps11.js').LOCALES).join(' '))")); [ $# -gt 0 ] && locs=($@)
 scenes=(world sector company screener portfolio models news calendar)
 typeset -A ARGS; ARGS=(world "" sector "-openIndex ibex35" company "-openIndex sp500 -openScreen company:AAPL" screener "-openScreen screener" portfolio "-openTab portfolio -demoPortfolio YES" models "-openScreen portfolio:m_dalio" news "-openScreen news" calendar "-openScreen calendar")
 RAW=$ROOT/build/shots11/$dev; mkdir -p $RAW

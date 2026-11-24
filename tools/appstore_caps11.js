@@ -1,7 +1,8 @@
 // Подписи к снимкам App Store 1.1: [строка 1, строка 2 (золотая)].
 // Ключи — имена снимков: world, sector, company, screener, portfolio, models, news, calendar.
 // Первый уровень — локаль App Store; appLanguage (язык интерфейса на снимке) берётся из LOCALES.
-const LOCALES = { 'en-US': 'en', 'es-ES': 'es', 'es-MX': 'es', 'fr-FR': 'fr', 'de-DE': 'de', 'it': 'it', 'pt-BR': 'pt-BR', 'ru': 'ru', 'uk': 'uk', 'ja': 'ja', 'ko': 'ko', 'zh-Hans': 'zh-Hans', 'ar-SA': 'ar' };
+// Локали App Store -> язык приложения (appLanguage).
+const LOCALES = { 'en-US': 'en', 'en-GB': 'en', 'en-AU': 'en', 'en-CA': 'en', 'es-ES': 'es', 'es-MX': 'es', 'fr-FR': 'fr', 'fr-CA': 'fr', 'de-DE': 'de', 'it': 'it', 'pt-BR': 'pt-BR', 'pt-PT': 'pt-PT', 'ru': 'ru', 'uk': 'uk', 'ja': 'ja', 'ko': 'ko', 'zh-Hans': 'zh-Hans', 'zh-Hant': 'zh-Hant', 'ar-SA': 'ar', 'he': 'he', 'hi': 'hi', 'bn-BD': 'bn', 'nl-NL': 'nl', 'ca': 'ca', 'pl': 'pl', 'cs': 'cs', 'sk': 'sk', 'ro': 'ro', 'hu': 'hu', 'el': 'el', 'hr': 'hr', 'sl-SI': 'sl', 'sv': 'sv', 'da': 'da', 'no': 'nb', 'fi': 'fi', 'tr': 'tr', 'id': 'id', 'ms': 'ms', 'vi': 'vi', 'th': 'th' };
 const CAP = {
   'en-US': { world: ['Every market in the world,', 'on one map'], sector: ['Every IBEX 35 sector,', 'at a glance'], company: ['Why is it moving?', 'Answers in seconds'], screener: ['Screen 3,000+ stocks', 'in one tap'], portfolio: ['Your portfolio,', 'as a live map'], models: ['Model portfolios', 'of the legends'], news: ['News that moves', 'the markets'], calendar: ['Earnings and events,', 'never missed'] },
   'es-ES': { world: ['Todos los mercados del mundo,', 'en un solo mapa'], sector: ['Cada sector del IBEX 35,', 'de un vistazo'], company: ['¿Por qué se mueve?', 'Respuestas en segundos'], screener: ['Filtra más de 3.000 acciones', 'con un toque'], portfolio: ['Tu cartera,', 'como un mapa vivo'], models: ['Carteras modelo', 'de los grandes'], news: ['Las noticias que mueven', 'los mercados'], calendar: ['Resultados y eventos,', 'sin perderte ninguno'] },
@@ -16,5 +17,7 @@ const CAP = {
   'zh-Hans': { world: ['全球市场，', '一张地图尽收眼底'], sector: ['IBEX 35 各行业，', '一目了然'], company: ['为什么在涨跌？', '几秒钟给出答案'], screener: ['3000多只股票，', '一键筛选'], portfolio: ['你的投资组合，', '化为实时地图'], models: ['传奇投资人的', '模型投资组合'], news: ['影响市场的', '最新资讯'], calendar: ['财报与事件，', '一个都不错过'] },
   'ar-SA': { world: ['كل أسواق العالم', 'على خريطة واحدة'], sector: ['كل قطاعات IBEX 35', 'في لمحة'], company: ['لماذا يتحرك السهم؟', 'الإجابة في ثوانٍ'], screener: ['فرز أكثر من 3000 سهم', 'بنقرة واحدة'], portfolio: ['محفظتك', 'كخريطة حيّة'], models: ['محافظ نموذجية', 'لأساطير الاستثمار'], news: ['الأخبار التي تحرّك', 'الأسواق'], calendar: ['الأرباح والأحداث،', 'لا يفوتك شيء'] },
 };
-CAP['es-MX'] = CAP['es-ES'];
-module.exports = { CAP, LOCALES };
+// Подписи по языку приложения: из CAP (по первой локали языка) и из appstore_caps11_more.js.
+const BYLANG = Object.assign({}, require('./appstore_caps11_more.js').MORE);
+for (const [loc, lang] of Object.entries(LOCALES)) if (CAP[loc] && !BYLANG[lang]) BYLANG[lang] = CAP[loc];
+module.exports = { CAP, LOCALES, BYLANG };
