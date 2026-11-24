@@ -44,7 +44,7 @@
 - Цвет плиток по P/E, дивидендной доходности, 52-недельному диапазону (`/api/v1/metrics`); карточка компании: ключевые данные и новости (`/api/v1/company/{ticker}`, кэш 6 ч в fundamentals.db).
 - Раздел «Портфели»: 60 моделей Udak (данные `Resources/portfolios_data.json` из `~/Udak/Brokers/site/static/calc/data.json`, обновление — `tools/sync_udak_portfolios.py`), калькулятор, эпохи; цифры совпадают с backtest.py сайта.
 - iPad: список индексов слева, карта справа.
-- ВЫКЛЮЧЕНО до входа владельца в Xcode (Settings → Accounts, Apple ID команды DR8U87NRB8): App Group и iCloud KVS — синхронизация избранного между устройствами и данные избранного в виджете. Полные права — в `*.capabilities.entitlements`: скопировать в `*.entitlements` и собрать с -allowProvisioningUpdates. Ключи API (5D3F7FC37S — не проходит авторизацию в xcodebuild, K77DUS2BFK — «roles ''») для этого не подходят.
+- 24.11.2026 владелец вошёл в Xcode (Settings → Accounts) — App Group и iCloud KVS включены, профили созданы автоматически (-allowProvisioningUpdates). Было выключено до входа — синхронизация избранного между устройствами и данные избранного в виджете. Полные права — в `*.capabilities.entitlements`: скопировать в `*.entitlements` и собрать с -allowProvisioningUpdates. Ключи API (5D3F7FC37S — не проходит авторизацию в xcodebuild, K77DUS2BFK — «roles ''») для этого не подходят.
 - Сервер: FUNDAMENTALS_REFRESH=1 (ночной проход 01–07 UTC, ~1 запрос/с), крипта раз в 6 ч, ETF по закрытию США. 24.11 первый проход фундаментала запущен вручную (/tmp/fund_first.log на сервере).
 - Отладка на симуляторе (только Debug): `-openIndex ibex35`, `-openScreen settings|portfolios|favorites|portfolio:m_dalio|company:AAPL`.
 

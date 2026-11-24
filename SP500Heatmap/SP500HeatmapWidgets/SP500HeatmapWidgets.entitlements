@@ -2,7 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- App Group и iCloud KVS временно выключены: их нельзя зарегистрировать без входа в Xcode.
-	     Полный набор — в *.capabilities.entitlements; после входа владельца скопировать сюда. -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.maximyaroshenko.SP500Heatmap2</string>
+	</array>
 </dict>
 </plist>
