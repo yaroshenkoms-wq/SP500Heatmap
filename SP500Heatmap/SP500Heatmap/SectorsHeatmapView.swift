@@ -114,6 +114,7 @@ struct SectorsHeatmapView: View {
                         }
                     }
                     Spacer()
+                    LiveFollowButton(sectors: sectors)
                     ShareMapButton(title: indexStore.current.name,
                                    subtitle: shareSubtitle(period: indexStore.effectivePeriod(selectedPeriod),
                                                            asOf: indexStore.current.historyThrough)) {

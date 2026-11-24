@@ -9,6 +9,7 @@ struct SP500HeatmapWidgetsBundle: WidgetBundle {
         IndexLockScreenWidget()
         OpenAppControl()
         OpenIndexControl()
+        MarketSessionLiveActivity()
     }
 }
 

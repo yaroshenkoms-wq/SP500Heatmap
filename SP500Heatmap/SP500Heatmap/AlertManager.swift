@@ -64,10 +64,14 @@ enum AlertManager {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
         switch settings.authorizationStatus {
-        case .authorized, .provisional, .ephemeral: return true
+        case .authorized, .provisional, .ephemeral:
+            await MainActor.run { PushManager.shared.permissionGranted() }
+            return true
         case .denied: return false
         default:
-            return (try? await center.requestAuthorization(options: [.alert, .sound])) ?? false
+            let granted = (try? await center.requestAuthorization(options: [.alert, .sound])) ?? false
+            if granted { await MainActor.run { PushManager.shared.permissionGranted() } }
+            return granted
         }
     }
 
@@ -75,6 +79,8 @@ enum AlertManager {
 
     @discardableResult
     static func check() async -> Bool {
+        // Сервер ведёт push сам — локальные дубли не отправляем (напоминания о датах остаются локальными).
+        if await PushManager.checkServerActive() { return true }
         let priceOK = await PriceAlertChecker.run()
         guard moveEnabled || summaryEnabled else { return priceOK }
         guard let overview = try? await NetworkService.shared.fetchWorldOverview() else { return false }
