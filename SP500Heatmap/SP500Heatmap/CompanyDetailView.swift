@@ -121,6 +121,9 @@ struct CompanyDetailView: View {
             ScrollView {
                 VStack(spacing: 8) {
                     AIInsightView(ticker: company.ticker)
+                    AskAIButton(question: .stock(company.ticker),
+                                suggestions: [.stock(company.ticker), .compare(company.ticker, company.ticker == "MSFT" ? "AAPL" : "MSFT"), .marketToday])
+                        .frame(maxWidth: .infinity, alignment: .trailing).padding(.horizontal)
                     if isRegular {
                         HStack(alignment: .top, spacing: 16) {
                             VStack(spacing: 8) { chartSection; alertsSection; descriptionSection; metricsSection }
@@ -397,9 +400,15 @@ struct CompanyDetailView: View {
 
     private var newsSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("News")
-                .font(Theme.serif(.title3))
-                .foregroundColor(Theme.text)
+            HStack(alignment: .firstTextBaseline) {
+                Text("News")
+                    .font(Theme.serif(.title3))
+                    .foregroundColor(Theme.text)
+                Spacer()
+                NavigationLink { NewsView(tickers: [company.ticker]) } label: {
+                    Text("All news").font(Theme.ui(.caption, weight: .medium)).foregroundColor(Theme.gold)
+                }
+            }
             switch infoState {
             case .loading:
                 ProgressView().frame(maxWidth: .infinity).padding(.vertical, 16)

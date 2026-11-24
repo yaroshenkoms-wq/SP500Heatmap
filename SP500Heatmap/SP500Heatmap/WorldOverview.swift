@@ -154,20 +154,30 @@ private struct HomeHeaderButtons<Map: View>: View {
     let shareTitle: String
     let shareSubtitle: String
     @ViewBuilder let map: () -> Map
+    @State private var showAssistant = false
 
     var body: some View {
         HStack(spacing: 6) {
-            NavigationLink { MarketBriefView() } label: {
+            Button { showAssistant = true } label: {
                 Image(systemName: "sparkles")
                     .font(.subheadline)
                     .frame(width: 34, height: 34)
                     .outlinedControl()
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(Text("Market brief"))
+            .accessibilityLabel(Text("AI assistant"))
+            NavigationLink { NewsView() } label: {
+                Image(systemName: "newspaper")
+                    .font(.subheadline)
+                    .frame(width: 34, height: 34)
+                    .outlinedControl()
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("News"))
             ShareMapButton(title: shareTitle, subtitle: shareSubtitle, map: map)
             LanguageMenu()
         }
+        .sheet(isPresented: $showAssistant) { AIAssistantView(initialTab: .brief) }
     }
 }
 
