@@ -8,10 +8,10 @@ import urllib.error
 import urllib.request
 import websockets
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import date, datetime
 from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, Query, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 import sys
 import time
@@ -65,6 +65,8 @@ MARKET_TZ = ZoneInfo("America/New_York")
 FUNDAMENTALS_DB_PATH = os.path.join(BASE_DIR, "fundamentals.db")
 VOLUMES_DB_PATH = os.path.join(BASE_DIR, "volumes.db")
 OHLC_DB_PATH = os.path.join(BASE_DIR, "ohlc_cache.db")
+FINANCIALS_DB_PATH = os.path.join(BASE_DIR, "financials_cache.db")
+GURU_HOLDINGS_PATH = os.path.join(BASE_DIR, "data", "guru_holdings.json")
 # Недельный проход по всем тикерам: только ночью (UTC), не чаще ~1 запроса/сек (FUNDAMENTALS_REFRESH=1 включает)
 FUNDAMENTALS_REFRESH = os.getenv("FUNDAMENTALS_REFRESH", "0").strip().lower() not in ("0", "false", "no", "")
 FUNDAMENTALS_NIGHT_HOURS_UTC = (1, 7)  # [с, до)
@@ -1301,6 +1303,290 @@ async def get_company(ticker: str):
         _company_semaphore = asyncio.Semaphore(2)  # не больше двух одновременных запросов к Yahoo
     async with _company_semaphore:
         return await asyncio.to_thread(build_company_payload, t)
+
+
+# ---------------------------------------------------------------- отчётность, календарь, скринер, дайджест
+
+_financials_semaphore = None
+FIN_EMPTY_RETRY_SECONDS = 3600  # пустой ответ Yahoo (ETF, крипта или сбой) помним 1 час, а не сутки
+
+
+def ticker_currency(ticker):
+    for entry in get_registry():
+        match = next((r for r in load_index_rows(entry) if r["ticker"] == ticker), None)
+        if match:
+            return match["currency"]
+    return None
+
+
+def build_financials_payload(ticker):
+    """Синхронно (в потоке): Yahoo -> компактный JSON (без holders). Исключение — Yahoo недоступен."""
+    import fin
+    import fetch_fundamentals
+    data = fin.build_financials(ticker, fetch_fundamentals.yahoo_symbol(ticker), fallback_currency=ticker_currency(ticker))
+    empty = not data["annual"] and not data["quarterly"]
+    fin.put_cached(FINANCIALS_DB_PATH, ticker, data,
+                   now=time.time() - (fin.CACHE_SECONDS - FIN_EMPTY_RETRY_SECONDS if empty else 0))
+    return data
+
+
+@app.get("/api/v1/financials/{ticker}")
+async def get_financials(ticker: str):
+    """Отчётность: до 4 лет и 6 кварталов, коэффициенты, мнения аналитиков (Yahoo) и держатели из 13F гуру.
+    Кэш 24 ч в financials_cache.db; не больше двух одновременных запросов к Yahoo; Yahoo упал — отдаём устаревший кэш."""
+    global _financials_semaphore
+    import fin
+    t = ticker.strip().upper()
+    if not (t in known_company_names() or lookup_series(t) or t in history_cache):
+        raise HTTPException(status_code=404, detail="unknown ticker")
+    cached, fresh = await asyncio.to_thread(fin.get_cached, FINANCIALS_DB_PATH, t)
+    data = cached if fresh else None
+    if data is None:
+        if _financials_semaphore is None:
+            _financials_semaphore = asyncio.Semaphore(2)
+        async with _financials_semaphore:
+            try:
+                data = await asyncio.to_thread(build_financials_payload, t)
+            except Exception as e:
+                print(f"⚠️ /financials {t}: {e}")
+                data = cached  # устаревшее лучше ошибки
+        if data is None:
+            raise HTTPException(status_code=502, detail="financial data unavailable")
+    return {**data, "holders": fin.holders_for(t, GURU_HOLDINGS_PATH)}
+
+
+SCREENER_PERIOD_DAYS = {"1d": 1, "3d": 3, "7d": 5, "30d": 21, "180d": 126, "1y": 252}  # торговых дней назад
+
+
+def period_change(entry, ticker, series, period):
+    """% изменения за период теми же функциями, что /performance (длинные 3y/5y/10y — из недельных баз)."""
+    if period == "ytd":
+        return compute_ytd_return(series)
+    if period in LONG_PERIODS:
+        return long_returns(ticker, series)[period]
+    days = (CONTINUOUS_PERIOD_DAYS if entry.get("continuous") else SCREENER_PERIOD_DAYS)[period]
+    return compute_return(series, days)
+
+
+def rel_volume(vol, avg_volume):
+    if not vol:
+        return None
+    avg = avg_volume if avg_volume and avg_volume > 0 else (vol["mean"] if vol["n"] >= 5 else None)
+    return vol["volume"] / avg if avg else None
+
+
+def screener_candidates(index):
+    """[(entry, row, series)] без повторов: тикер из нескольких индексов — один раз, по первому индексу реестра.
+    index: None/'sp500', id индекса или 'all'. Замёрзшие и бесхистории тикеры не показываем (как на карте)."""
+    if index == "all":
+        entries = list(get_registry())
+    else:
+        entry = find_index(index or "sp500")
+        if entry is None:
+            raise HTTPException(status_code=404, detail="unknown index")
+        entries = [entry]
+    latest_hist = history_last_date(history_cache)
+    latest_world = history_last_date(world_history_cache)
+    seen, out = set(), []
+    for entry in entries:
+        legacy = entry["id"] == "sp500"
+        latest = latest_hist if legacy else latest_world
+        for row in load_index_rows(entry):
+            t = row["ticker"]
+            if t in seen:
+                continue
+            seen.add(t)
+            if not _overview_row_shown(entry, row, latest):
+                continue
+            out.append((entry, row, history_cache.get(t) if legacy else lookup_series(t)))
+    return out
+
+
+def screener_row(entry, row, series, f, period, vol=None):
+    pos = compute_52w(series)[0]
+    rate = fx_rate(row["currency"])
+    return {
+        "ticker": row["ticker"], "name": row["name"], "index": entry["id"], "sector": row["sector"],
+        "capUSD": row["cap"] * rate if rate is not None and row["cap"] > 0 else None,
+        "change": period_change(entry, row["ticker"], series, period),
+        "pe": f.get("pe"), "ps": f.get("ps"), "pb": f.get("pb"), "divYield": f.get("div_yield"),
+        "beta": f.get("beta"), "revGrowth": f.get("rev_growth"), "pos52w": pos,
+        "relVolume": rel_volume(vol, f.get("avg_volume")),
+    }
+
+
+def build_screener(index, params, period, limit):
+    import fetch_fundamentals
+    import screener
+    import volumes
+    filters, sort, order = screener.effective(params)
+    cands = screener_candidates(index)
+    tickers = [row["ticker"] for _, row, _ in cands]
+    fund = fetch_fundamentals.read_fundamentals(FUNDAMENTALS_DB_PATH, tickers)
+    vols = volumes.read_stats(VOLUMES_DB_PATH, tickers) if screener.needs_volume(filters, sort) else {}
+    rows = []
+    for entry, row, series in cands:
+        r = screener_row(entry, row, series, fund.get(row["ticker"]) or {}, period, vols.get(row["ticker"]))
+        if screener.passes(r, filters, params.get("sector")):
+            rows.append(r)
+    rows = screener.sort_rows(rows, sort, order)
+    shown = rows[:limit]
+    if not vols and shown:  # объёмы нужны только для выдачи
+        vols = volumes.read_stats(VOLUMES_DB_PATH, [r["ticker"] for r in shown])
+        for r in shown:
+            r["relVolume"] = rel_volume(vols.get(r["ticker"]), (fund.get(r["ticker"]) or {}).get("avg_volume"))
+    return {"total": len(rows), "rows": shown}
+
+
+@app.get("/api/v1/screener")
+async def get_screener(index: Optional[str] = None, sector: Optional[str] = None,
+                       minCap: Optional[float] = None, maxCap: Optional[float] = None,
+                       peMin: Optional[float] = None, peMax: Optional[float] = None,
+                       psMax: Optional[float] = None, pbMax: Optional[float] = None,
+                       divMin: Optional[float] = None, betaMax: Optional[float] = None,
+                       revGrowthMin: Optional[float] = None, period: str = "1d",
+                       chgMin: Optional[float] = None, chgMax: Optional[float] = None,
+                       pos52Min: Optional[float] = None, pos52Max: Optional[float] = None,
+                       relVolMin: Optional[float] = None, sort: Optional[str] = None, order: Optional[str] = None,
+                       limit: int = 100, preset: Optional[str] = None):
+    """Фильтр акций по индексу или по всем индексам сразу (index=all, повторы тикеров убраны).
+    Капитализация — в долларах; pos52w/pos52Min/pos52Max — 0..1 (1 = у годового максимума); divYield, revGrowth,
+    change — в процентах. Строки с пустым значением фильтруемого поля исключаются; в сортировке пустые — в конце.
+    Считается на лету из кэшей в памяти и SQLite, лимит выдачи 500."""
+    import screener
+    if period not in screener.PERIODS:
+        raise HTTPException(status_code=400, detail="period must be one of " + ", ".join(screener.PERIODS))
+    if preset is not None and preset not in screener.PRESETS:
+        raise HTTPException(status_code=400, detail="preset must be one of " + ", ".join(screener.PRESETS))
+    if sort is not None and sort not in screener.SORT_FIELDS:
+        raise HTTPException(status_code=400, detail="sort must be one of " + ", ".join(screener.SORT_FIELDS))
+    if order is not None and order not in ("asc", "desc"):
+        raise HTTPException(status_code=400, detail="order must be asc or desc")
+    params = {"sector": sector, "minCap": minCap, "maxCap": maxCap, "peMin": peMin, "peMax": peMax, "psMax": psMax,
+              "pbMax": pbMax, "divMin": divMin, "betaMax": betaMax, "revGrowthMin": revGrowthMin, "chgMin": chgMin,
+              "chgMax": chgMax, "pos52Min": pos52Min, "pos52Max": pos52Max, "relVolMin": relVolMin, "sort": sort,
+              "order": order, "preset": preset}
+    return await asyncio.to_thread(build_screener, index, params, period, max(1, min(limit, 500)))
+
+
+CALENDAR_MAX_DAYS = 366
+CALENDAR_MAX_EVENTS = 5000
+
+
+def build_calendar(index, tickers, start, end):
+    import fetch_fundamentals
+    import screener
+    cands = screener_candidates(index) if index else screener_candidates("sp500")
+    if tickers:
+        wanted = set(tickers)
+        cands = [c for c in cands if c[1]["ticker"] in wanted]
+    fund = fetch_fundamentals.read_fundamentals(FUNDAMENTALS_DB_PATH, [row["ticker"] for _, row, _ in cands])
+    rows = []
+    for entry, row, _ in cands:
+        f = fund.get(row["ticker"])
+        if f:
+            rows.append({"ticker": row["ticker"], "name": f.get("name") or row["name"], "index": entry["id"],
+                         "earnings_date": f.get("earnings_date"), "ex_dividend_date": f.get("ex_dividend_date"),
+                         "dividend_date": f.get("dividend_date"), "dividend_rate": f.get("dividend_rate")})
+    return {"events": screener.calendar_events(rows, start, end)[:CALENDAR_MAX_EVENTS]}
+
+
+@app.get("/api/v1/calendar")
+async def get_calendar(index: Optional[str] = None, tickers: Optional[str] = None,
+                       from_: Optional[str] = Query(None, alias="from"), to: Optional[str] = None):
+    """События в диапазоне дат (по умолчанию ближайшие 14 дней): earnings (отчёт), exDividend (отсечка),
+    dividendPay (выплата) из fundamentals.db. index = id или all; tickers=A,B сужает список. Диапазон до 366 дней."""
+    import screener
+    try:
+        start = date.fromisoformat(from_) if from_ else None
+        end = date.fromisoformat(to) if to else None
+    except ValueError:
+        raise HTTPException(status_code=400, detail="from/to must be YYYY-MM-DD")
+    start, end = screener.default_range(start, end, datetime.now(MARKET_TZ).date())
+    if end < start or (end - start).days > CALENDAR_MAX_DAYS:
+        raise HTTPException(status_code=400, detail=f"range must be 0..{CALENDAR_MAX_DAYS} days")
+    wanted = [t.strip().upper() for t in tickers.split(",") if t.strip()][:200] if tickers else None
+    return await asyncio.to_thread(build_calendar, index, wanted, start, end)
+
+
+BRIEF_TTL_SECONDS = 900
+BRIEF_HEADLINES = 8
+_brief_cache = {"at": 0.0, "version": None, "data": None}
+
+
+def brief_headlines(movers):
+    """Заголовки из кэша /company у самых заметных бумаг (нет в кэше — докачиваем, не больше двух параллельно)."""
+    import fetch_fundamentals
+    from concurrent.futures import ThreadPoolExecutor
+
+    def news_for(t):
+        payload = fetch_fundamentals.get_cached_company(FUNDAMENTALS_DB_PATH, t, max_age=24 * 3600)
+        if payload is None:
+            try:
+                payload = build_company_payload(t)
+            except Exception as e:
+                print(f"⚠️ brief news {t}: {e}")
+                return []
+        return payload.get("news") or []
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        per_ticker = list(pool.map(news_for, movers))
+    out, seen = [], set()
+    for rank in range(3):
+        for t, news in zip(movers, per_ticker):
+            if rank < len(news) and news[rank].get("url") not in seen and len(out) < BRIEF_HEADLINES:
+                n = news[rank]
+                seen.add(n["url"])
+                out.append({"title": n.get("title"), "publisher": n.get("publisher"), "url": n["url"], "ticker": t})
+    return out
+
+
+def build_brief():
+    import fetch_fundamentals
+    cands = screener_candidates("sp500")
+    fund = fetch_fundamentals.read_fundamentals(FUNDAMENTALS_DB_PATH, [row["ticker"] for _, row, _ in cands])
+    rows = [screener_row(e, r, s, fund.get(r["ticker"]) or {}, "1d") for e, r, s in cands]
+    movers = [r for r in rows if r["change"] is not None]
+    movers.sort(key=lambda r: r["change"], reverse=True)
+    brief_cols = ("ticker", "name", "sector", "capUSD", "change")
+    top = lambda lst: [{k: r[k] for k in brief_cols} for r in lst]  # noqa: E731
+    gainers, losers = top(movers[:5]), top(movers[::-1][:5])
+    sectors = {}
+    for r in movers:
+        if r["capUSD"]:
+            w = start_weight(r["capUSD"], r["change"])
+            acc = sectors.setdefault(r["sector"], [0.0, 0.0])
+            acc[0] += w * r["change"]
+            acc[1] += w
+    sector_rows = sorted(({"name": n, "change": a[0] / a[1]} for n, a in sectors.items() if a[1] > 0),
+                         key=lambda x: x["change"], reverse=True)
+    overview = get_world_overview_cached()
+    indices = [{"id": i["id"], "change1d": (i.get("changes") or {}).get("1d")}
+               for reg in overview["regions"] for i in reg["indices"] if reg["id"] != "assets"]
+    # заголовки: по два самых сильных роста и падения плюс крупнейшие компании среди движущихся
+    focus = [r["ticker"] for r in gainers[:3] + losers[:3]]
+    focus += [r["ticker"] for r in sorted(movers, key=lambda r: -(r["capUSD"] or 0))[:2] if r["ticker"] not in focus]
+    return {"date": history_last_date(history_cache), "indices": indices, "topGainers": gainers, "topLosers": losers,
+            "sectors": sector_rows, "headlines": brief_headlines(focus)}
+
+
+@app.get("/api/v1/brief")
+async def get_brief(date: str = "today"):
+    """Сырьё для ИИ-дайджеста дня: индексы, 5 лидеров роста и падения S&P 500, секторы, до 8 заголовков.
+    Данные всегда за последнюю торговую сессию в истории; ?date принимает today или YYYY-MM-DD (проверяется формат).
+    Кэш 15 минут."""
+    if date != "today":
+        try:
+            datetime.strptime(date, "%Y-%m-%d")
+        except ValueError:
+            raise HTTPException(status_code=400, detail="date must be today or YYYY-MM-DD")
+    version = (_overview_cache["version"], history_last_date(history_cache))
+    now = time.time()
+    if _brief_cache["data"] and _brief_cache["version"] == version and now - _brief_cache["at"] < BRIEF_TTL_SECONDS:
+        return _brief_cache["data"]
+    data = await asyncio.to_thread(build_brief)
+    _brief_cache.update(at=now, version=version, data=data)
+    return data
 
 
 # ---------------------------------------------------------------- фоновые задачи: крипта, ETF, фундаментал

@@ -47,11 +47,12 @@ def init_db(conn):
     conn.execute("""CREATE TABLE IF NOT EXISTS fundamentals (
         symbol TEXT PRIMARY KEY, name TEXT, pe REAL, forward_pe REAL, div_yield REAL, dividend_rate REAL,
         ex_dividend_date TEXT, earnings_date TEXT, beta REAL, currency TEXT, updated_at REAL NOT NULL,
-        ps REAL, pb REAL, rev_growth REAL, avg_volume REAL)""")
+        ps REAL, pb REAL, rev_growth REAL, avg_volume REAL, dividend_date TEXT)""")
     have = {r[1] for r in conn.execute("PRAGMA table_info(fundamentals)")}
-    for col in ("ps", "pb", "rev_growth", "avg_volume"):  # база с прежней схемой (на сервере) — докидываем колонки
+    for col, typ in (("ps", "REAL"), ("pb", "REAL"), ("rev_growth", "REAL"), ("avg_volume", "REAL"),
+                     ("dividend_date", "TEXT")):  # база с прежней схемой (на сервере) — докидываем колонки
         if col not in have:
-            conn.execute(f"ALTER TABLE fundamentals ADD COLUMN {col} REAL")
+            conn.execute(f"ALTER TABLE fundamentals ADD COLUMN {col} {typ}")
     conn.execute("""CREATE TABLE IF NOT EXISTS company_cache (
         symbol TEXT PRIMARY KEY, payload TEXT NOT NULL, updated_at REAL NOT NULL)""")
     conn.commit()
@@ -114,6 +115,7 @@ def parse_info(info, now=None):
         "div_yield": yld,
         "dividend_rate": rate,
         "ex_dividend_date": _date(info.get("exDividendDate")),
+        "dividend_date": _date(info.get("dividendDate")),  # дата выплаты
         "earnings_date": earn,
         "beta": _num(info.get("beta")),
         "ps": _positive(info.get("priceToSalesTrailing12Months")),
@@ -152,11 +154,11 @@ def fetch_one(symbol, info_fetcher=None, retries=2, sleep=time.sleep):
 def save_one(conn, symbol, fields, now=None):
     conn.execute(
         "INSERT OR REPLACE INTO fundamentals (symbol, name, pe, forward_pe, div_yield, dividend_rate, "
-        "ex_dividend_date, earnings_date, beta, currency, updated_at, ps, pb, rev_growth, avg_volume) "
-        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "ex_dividend_date, earnings_date, beta, currency, updated_at, ps, pb, rev_growth, avg_volume, dividend_date) "
+        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         (symbol, fields["name"], fields["pe"], fields["forward_pe"], fields["div_yield"], fields["dividend_rate"],
          fields["ex_dividend_date"], fields["earnings_date"], fields["beta"], fields["currency"], now or time.time(),
-         fields["ps"], fields["pb"], fields["rev_growth"], fields["avg_volume"]))
+         fields["ps"], fields["pb"], fields["rev_growth"], fields["avg_volume"], fields.get("dividend_date")))
 
 
 def refresh_fundamentals(db_path, symbols, info_fetcher=None, throttle=THROTTLE_SECONDS, sleep=time.sleep,
