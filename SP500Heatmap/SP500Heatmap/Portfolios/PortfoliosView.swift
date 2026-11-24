@@ -42,6 +42,7 @@ struct PortfoliosView: View {
         }
         .sheet(isPresented: $showCalculator) {
             PortfolioCalculatorView(initialKeys: [store.models.first?.key ?? ""])
+                .presentationSizing(.form)
         }
     }
 

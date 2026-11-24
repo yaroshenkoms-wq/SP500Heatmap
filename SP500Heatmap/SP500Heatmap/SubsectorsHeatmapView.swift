@@ -6,6 +6,17 @@ struct SubsectorsHeatmapView: View {
     @ObservedObject var performanceStore: PerformanceStore
     @State private var selectedPeriod = "SC"
     @EnvironmentObject private var indexStore: IndexStore
+    @AppStorage(ColorMetric.storageKey) private var metricRaw = "change"
+    @ObservedObject private var metrics = MetricStore.shared
+
+    private var metricOptions: [ColorMetric] { metrics.available(for: indexStore.selectedId) }
+    private var metric: ColorMetric {
+        let m = ColorMetric(rawValue: metricRaw) ?? .change
+        return metricOptions.contains(m) ? m : .change
+    }
+    private var metricBinding: Binding<ColorMetric> {
+        Binding(get: { metric }, set: { metricRaw = $0.rawValue })
+    }
     @Environment(\.dismiss) private var dismiss
 
     private func changePercent(for ticker: String) -> Double? {
@@ -47,7 +58,9 @@ struct SubsectorsHeatmapView: View {
                 }
             }
             let avgChange = totalWeight > 0 ? weightedChange / totalWeight : 0
-            return SubsectorStat(name: subsector.name, totalMarketCap: totalCap, changePercent: avgChange, subsector: subsector)
+            let value = metric == .change ? avgChange
+                : metrics.aggregate(metric, companies: companies, index: indexStore.selectedId)
+            return SubsectorStat(name: subsector.name, totalMarketCap: totalCap, changePercent: value, subsector: subsector)
         }
     }
     
@@ -83,7 +96,7 @@ struct SubsectorsHeatmapView: View {
                                    subtitle: shareSubtitle(period: indexStore.effectivePeriod(selectedPeriod),
                                                            asOf: indexStore.current.historyThrough)) {
                         TreemapLayout(weights: sortedSubsectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
-                            ForEach(sortedSubsectorStats) { stat in SubsectorTile(stat: stat) }
+                            ForEach(sortedSubsectorStats) { stat in SubsectorTile(stat: stat, metric: metric) }
                         }
                     }
                     Text(formatPercent(sectorChange))
@@ -91,7 +104,8 @@ struct SubsectorsHeatmapView: View {
                         .foregroundColor(Theme.changeColor(sectorChange))
                 }
                 .padding(.horizontal)
-                PeriodSwitchView(selectedPeriod: $selectedPeriod)
+                MetricPeriodRow(period: $selectedPeriod, metric: metricBinding, options: metricOptions)
+                MetricLegend(metric: metric)
                 ClosingPricesNote()
             }
             .padding(.top, 8)
@@ -101,7 +115,7 @@ struct SubsectorsHeatmapView: View {
                 TreemapLayout(weights: sortedSubsectorStats.map { SizeMode.weight($0.totalMarketCap) }) {
                     ForEach(sortedSubsectorStats) { stat in
                         NavigationLink(destination: CompaniesHeatmapView(subsector: stat.subsector, webSocketManager: webSocketManager, performanceStore: performanceStore)) {
-                            SubsectorTile(stat: stat)
+                            SubsectorTile(stat: stat, metric: metric)
                         }
                     }
                 }
@@ -111,6 +125,7 @@ struct SubsectorsHeatmapView: View {
         .themeScreen()
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.bottom)
+        .task(id: indexStore.selectedId) { await metrics.load(index: indexStore.selectedId) }
     }
 }
 
@@ -118,12 +133,13 @@ struct SubsectorStat: Identifiable {
     let id = UUID()
     let name: String
     let totalMarketCap: Double
-    let changePercent: Double
+    let changePercent: Double?   // значение выбранного показателя
     let subsector: Subsector
 }
 
 struct SubsectorTile: View {
     let stat: SubsectorStat
+    var metric: ColorMetric = .change
 
     var body: some View {
         TileContainer {
@@ -134,15 +150,17 @@ struct SubsectorTile: View {
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.5)
-                Text(formatPercent(stat.changePercent))
-                    .font(Theme.ui(.caption))
-                    .foregroundColor(HeatmapColor.tileText.opacity(0.9))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.6)
+                if let value = stat.changePercent {
+                    Text(metric.format(value))
+                        .font(Theme.ui(.caption))
+                        .foregroundColor(HeatmapColor.tileText.opacity(0.9))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                }
             }
             .padding(.horizontal, 3)
         }
-        .background(HeatmapColor.color(for: stat.changePercent))
+        .background(metric.color(stat.changePercent))
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(1)
     }

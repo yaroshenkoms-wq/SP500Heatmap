@@ -57,6 +57,7 @@ struct PortfolioDetailView: View {
         .themeNavBar()
         .sheet(isPresented: $showCalculator) {
             PortfolioCalculatorView(initialKeys: [info.key])
+                .presentationSizing(.form)
         }
     }
 
