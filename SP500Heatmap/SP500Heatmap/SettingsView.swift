@@ -142,6 +142,14 @@ struct SettingsView: View {
             }
             .tint(Theme.gold)
             .listRowBackground(Theme.panel)
+            NavigationLink {
+                AlertsView()
+            } label: {
+                Text("Stock alerts")
+                    .font(Theme.ui(.subheadline))
+                    .foregroundColor(Theme.text)
+            }
+            .listRowBackground(Theme.panel)
         } header: {
             sectionTitle("Notifications")
         } footer: {
