@@ -286,10 +286,10 @@ class TestWorldOverview:
     def test_fx_conversion_weighted_change_and_shape(self, world, client):
         self.add_fx(1.10)
         data = client.get("/api/v1/world-overview").json()
-        assert [r["id"] for r in data["regions"]] == ["americas", "europe", "asia_pacific"]
+        assert [r["id"] for r in data["regions"]] == ["americas", "europe", "asia_pacific", "assets"]
         assert data["asOf"] == server.market_today()
-        americas, europe, asia = data["regions"]
-        assert [i["id"] for i in americas["indices"]] == ["sp500"] and asia["indices"] == []
+        americas, europe, asia, assets = data["regions"]
+        assert [i["id"] for i in americas["indices"]] == ["sp500"] and asia["indices"] == [] and assets["indices"] == []
         spx = americas["indices"][0]
         assert spx["capUSD"] == 3e12 and spx["count"] == 1 and spx["currency"] == "USD" and spx["live"] is True
         assert spx["changes"]["1d"] == 10.0

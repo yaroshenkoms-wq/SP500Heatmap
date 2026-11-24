@@ -478,5 +478,31 @@
   "live": false,
   "constituents": "indices/nzx50.csv",
   "history": "history_world.db"
+ },
+ {
+  "id": "crypto50",
+  "name": "Crypto Top 50",
+  "region": "assets",
+  "country": "",
+  "exchange_tz": "UTC",
+  "close": "00:00",
+  "currency": "USD",
+  "live": false,
+  "continuous": true,
+  "source": "Data: CoinGecko",
+  "constituents": "indices/crypto50.csv",
+  "history": "history_world.db"
+ },
+ {
+  "id": "etf50",
+  "name": "Top 50 US ETFs",
+  "region": "assets",
+  "country": "US",
+  "exchange_tz": "America/New_York",
+  "close": "16:00",
+  "currency": "USD",
+  "live": false,
+  "constituents": "indices/etf50.csv",
+  "history": "history_world.db"
  }
 ]

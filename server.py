@@ -52,6 +52,16 @@ WORLD_DB_MAX_AGE_SECONDS = int(os.getenv("WORLD_DB_MAX_AGE_SECONDS", "86400"))
 
 MARKET_TZ = ZoneInfo("America/New_York")
 
+# Фундаментал и новости (SQLite, не в памяти) — см. fetch_fundamentals.py
+FUNDAMENTALS_DB_PATH = os.path.join(BASE_DIR, "fundamentals.db")
+# Недельный проход по всем тикерам: только ночью (UTC), не чаще ~1 запроса/сек (FUNDAMENTALS_REFRESH=1 включает)
+FUNDAMENTALS_REFRESH = os.getenv("FUNDAMENTALS_REFRESH", "0").strip().lower() not in ("0", "false", "no", "")
+FUNDAMENTALS_NIGHT_HOURS_UTC = (1, 7)  # [с, до)
+FUNDAMENTALS_CHECK_SECONDS = 600
+# Крипта 24/7: состав и закрытия раз в ~6 часов (CRYPTO_REFRESH=0 выключает)
+CRYPTO_REFRESH = os.getenv("CRYPTO_REFRESH", "1").strip().lower() not in ("0", "false", "no", "")
+CRYPTO_REFRESH_SECONDS = int(os.getenv("CRYPTO_REFRESH_SECONDS", str(6 * 3600)))
+
 
 def market_today() -> str:
     """Сегодняшняя дата по Нью-Йорку в формате YYYY-MM-DD (как в history.db)."""
@@ -492,10 +502,15 @@ def build_world_hierarchy(entry):
     return result
 
 
-def performance_entry(series):
-    return_1m = compute_return(series, 21)
-    return_6m = compute_return(series, 126)
-    return_1y = compute_return(series, 252)
+# Рынок 24/7 (крипта): в году ~365 дневных свечей, поэтому периоды — календарные дни
+CONTINUOUS_PERIOD_DAYS = {"1d": 1, "3d": 3, "7d": 7, "30d": 30, "180d": 180, "1y": 365}
+
+
+def performance_entry(series, continuous=False):
+    days_of = CONTINUOUS_PERIOD_DAYS if continuous else {"30d": 21, "180d": 126, "1y": 252}
+    return_1m = compute_return(series, days_of["30d"])
+    return_6m = compute_return(series, days_of["180d"])
+    return_1y = compute_return(series, days_of["1y"])
     entry = {
         "return1M": return_1m,
         "return6M": return_6m,
@@ -506,7 +521,7 @@ def performance_entry(series):
         "1y": return_1y,
     }
     for period, days in EXTRA_PERIOD_TRADING_DAYS.items():
-        entry[period] = compute_return(series, days)
+        entry[period] = compute_return(series, CONTINUOUS_PERIOD_DAYS[period] if continuous else days)
     return entry
 
 
@@ -516,8 +531,8 @@ def indices_due(registry, now, last_refreshed, delay_minutes=30):
     last_refreshed: id -> 'YYYY-MM-DD' (дата сессии, которую уже обновили). now — aware datetime."""
     due = []
     for entry in registry:
-        if entry.get("history") != "history_world.db":
-            continue
+        if entry.get("history") != "history_world.db" or entry.get("continuous"):
+            continue  # круглосуточные (крипта) обновляет crypto_refresher
         try:
             local = now.astimezone(ZoneInfo(entry["exchange_tz"]))
             hh, mm = entry["close"].split(":")
@@ -588,6 +603,17 @@ async def world_refresher():
             await asyncio.to_thread(load_world_history)
         except Exception as e:
             print(f"⚠️ Стартовое обновление мировых данных не удалось: {e}")
+    elif startup_ids:
+        # новые индексы (например, etf50 после выкладки) без единой цены в базе — догружаем сразу, не ждём закрытия
+        empty = [e["id"] for e in registry if e.get("history") == "history_world.db" and not e.get("continuous")
+                 and not any(r["ticker"] in world_history_cache for r in load_index_rows(e))]
+        if empty:
+            try:
+                print(f"🌍 Нет данных для новых индексов: {', '.join(empty)}")
+                await asyncio.to_thread(run_world_refresh, empty)
+                await asyncio.to_thread(load_world_history)
+            except Exception as e:
+                print(f"⚠️ Догрузка новых индексов не удалась: {e}")
     if os.path.exists(WORLD_DB_PATH):
         # то, что файл уже покрывает, повторно не качаем
         mtime = datetime.fromtimestamp(os.path.getmtime(WORLD_DB_PATH), ZoneInfo("UTC"))
@@ -624,7 +650,7 @@ async def world_refresher():
 async def get_indices():
     result = []
     for entry in get_registry():
-        result.append({
+        item = {
             "id": entry["id"],
             "name": entry.get("name", entry["id"]),
             "region": entry.get("region", ""),
@@ -633,13 +659,16 @@ async def get_indices():
             "live": bool(entry.get("live", False)),
             "count": len(load_index_rows(entry)),
             "historyThrough": index_history_through(entry) if entry["id"] != "sp500" else history_last_date(history_cache),
-        })
+        }
+        if entry.get("source"):
+            item["source"] = entry["source"]
+        result.append(item)
     return result
 
 
 # ---------------------------------------------------------------- обзор мира (главный экран)
 
-OVERVIEW_REGIONS = ["americas", "europe", "asia_pacific"]
+OVERVIEW_REGIONS = ["americas", "europe", "asia_pacific", "assets"]
 OVERVIEW_PERIODS = {"1d": 1, "3d": 3, "7d": 5, "30d": 21, "180d": 126, "1y": 252}  # торговых дней назад
 OVERVIEW_TTL_SECONDS = int(os.getenv("OVERVIEW_TTL_SECONDS", "300"))
 FX_STARTUP_REFRESH = os.getenv("FX_STARTUP_REFRESH", "1").strip().lower() not in ("0", "false", "no", "")
@@ -697,6 +726,7 @@ def build_index_overview(entry):
     если не осталось ни одной — capUSD = None и changes = None (плитку клиент не рисует)."""
     total = 0.0
     shown = 0
+    days_of = CONTINUOUS_PERIOD_DAYS if entry.get("continuous") else OVERVIEW_PERIODS
     weighted = {p: [0.0, 0.0] for p in OVERVIEW_PERIODS}  # period -> [сумма cap*ret, сумма cap]
     through = ""
     latest = history_last_date(history_cache if entry["id"] == "sp500" else world_history_cache)
@@ -712,19 +742,22 @@ def build_index_overview(entry):
         shown += 1
         if series and series[-1]["date"] > through:
             through = series[-1]["date"]
-        for period, days in OVERVIEW_PERIODS.items():
-            ret = compute_return(series, days)
+        for period in OVERVIEW_PERIODS:
+            ret = compute_return(series, days_of[period])
             if ret is not None:
                 weighted[period][0] += cap_usd * ret
                 weighted[period][1] += cap_usd
     ok = shown > 0 and total > 0
-    return {
+    result = {
         "id": entry["id"], "name": entry.get("name", entry["id"]), "country": entry.get("country", ""),
         "currency": entry.get("currency", ""), "live": bool(entry.get("live", False)), "count": shown,
         "capUSD": total if ok else None, "historyThrough": through,
         "changes": {p: (w[0] / w[1] if w[1] > 0 else None) for p, w in weighted.items()} if ok
                    else {p: None for p in OVERVIEW_PERIODS},
     }
+    if entry.get("source"):
+        result["source"] = entry["source"]  # атрибуция данных (крипта: "Data: CoinGecko")
+    return result
 
 
 def build_world_overview():
@@ -927,7 +960,8 @@ async def get_performance(index: Optional[str] = None):
     совпадают с кнопками в UI)."""
     entry_ = resolve_index(index)
     if entry_ is not None:
-        return {t: performance_entry(s) for t, s in index_series(entry_).items()}
+        continuous = bool(entry_.get("continuous"))
+        return {t: performance_entry(s, continuous) for t, s in index_series(entry_).items()}
     result = {}
     for ticker, series in history_cache.items():
         return1M = compute_return(series, 21)
@@ -946,6 +980,178 @@ async def get_performance(index: Optional[str] = None):
             entry[period] = compute_return(series, days)
         result[ticker] = entry
     return result
+
+
+# ---------------------------------------------------------------- метрики и карточка компании
+
+_metrics_cache = {}  # id индекса -> (версия истории, время, dict) — сбрасывается при перезагрузке истории
+METRICS_TTL_SECONDS = int(os.getenv("METRICS_TTL_SECONDS", "3600"))
+
+
+def compute_52w(series):
+    """(pos52w, high52w, low52w) по последним ~год закрытиям ряда (в кэше и так 1 год).
+    pos52w в 0..1: где последнее закрытие между минимумом и максимумом; плоский ряд/нет данных — None."""
+    closes = [p["close"] for p in series[-366:] if p["close"] and p["close"] > 0] if series else []
+    if not closes:
+        return None, None, None
+    high, low, last = max(closes), min(closes), closes[-1]
+    pos = (last - low) / (high - low) if high > low else None
+    return pos, high, low
+
+
+def build_metrics(entry):
+    import fetch_fundamentals
+    rows = load_index_rows(entry)
+    legacy = entry["id"] == "sp500"
+    fund = fetch_fundamentals.read_fundamentals(FUNDAMENTALS_DB_PATH, [r["ticker"] for r in rows])
+    result = {}
+    for row in rows:
+        t = row["ticker"]
+        series = history_cache.get(t) if legacy else lookup_series(t)
+        pos, high, low = compute_52w(series)
+        f = fund.get(t) or {}
+        result[t] = {"pe": f.get("pe"), "divYield": f.get("div_yield"),
+                     "pos52w": pos, "high52w": high, "low52w": low}
+    return result
+
+
+@app.get("/api/v1/metrics")
+async def get_metrics(index: Optional[str] = None):
+    """P/E, дивидендная доходность (%, из fundamentals.db; нет — null) и положение цены в 52-недельном диапазоне
+    (из годовой истории в памяти) для всех тикеров индекса. Кэш на индекс, сбрасывается при перезагрузке истории."""
+    entry = find_index(index or "sp500")
+    if entry is None:
+        raise HTTPException(status_code=404, detail="unknown index")
+    cached = _metrics_cache.get(entry["id"])
+    now = time.time()
+    if cached and cached[0] == _overview_cache["version"] and now - cached[1] < METRICS_TTL_SECONDS:
+        return cached[2]
+    data = await asyncio.to_thread(build_metrics, entry)
+    _metrics_cache[entry["id"]] = (_overview_cache["version"], now, data)
+    return data
+
+
+_company_names = {"mtime": None, "data": {}}
+_company_semaphore = None
+
+
+def known_company_names():
+    """ticker -> название из CSV всех индексов (строится при первом обращении, ~5000 строк)."""
+    if not _company_names["data"]:
+        names = {}
+        for entry in get_registry():
+            for row in load_index_rows(entry):
+                names.setdefault(row["ticker"], row["name"])
+        _company_names["data"] = names
+    return _company_names["data"]
+
+
+def build_company_payload(ticker):
+    """Синхронно (в потоке): кэш SQLite >= 6 ч, иначе Yahoo; сбой Yahoo — null-поля и пустые новости (не кэшируем)."""
+    import fetch_fundamentals
+    cached = fetch_fundamentals.get_cached_company(FUNDAMENTALS_DB_PATH, ticker)
+    if cached is not None:
+        return cached
+    try:
+        data = fetch_fundamentals.build_company(FUNDAMENTALS_DB_PATH, ticker)
+        ok = True
+    except Exception as e:
+        print(f"⚠️ /company {ticker}: {e}")
+        data, ok = {}, False
+    series = lookup_series(ticker)
+    _, high, low = compute_52w(series)
+    payload = {
+        "ticker": ticker, "name": data.get("name") or known_company_names().get(ticker),
+        "pe": data.get("pe"), "forwardPe": data.get("forwardPe"), "divYield": data.get("divYield"),
+        "dividendRate": data.get("dividendRate"), "exDividendDate": data.get("exDividendDate"),
+        "earningsDate": data.get("earningsDate"), "high52w": high, "low52w": low,
+        "beta": data.get("beta"), "currency": data.get("currency"), "news": data.get("news") or [],
+    }
+    if ok and (payload["news"] or payload["pe"] is not None or payload["divYield"] is not None or payload["name"]):
+        fetch_fundamentals.put_cached_company(FUNDAMENTALS_DB_PATH, ticker, payload)
+    return payload
+
+
+@app.get("/api/v1/company/{ticker}")
+async def get_company(ticker: str):
+    """Карточка компании: фундаментал + заголовки новостей Yahoo. Кэш в SQLite >= 6 ч; не блокирует цикл событий."""
+    global _company_semaphore
+    t = ticker.strip().upper()
+    if not (t in known_company_names() or lookup_series(t) or t in history_cache):
+        raise HTTPException(status_code=404, detail="unknown ticker")
+    if _company_semaphore is None:
+        _company_semaphore = asyncio.Semaphore(2)  # не больше двух одновременных запросов к Yahoo
+    async with _company_semaphore:
+        return await asyncio.to_thread(build_company_payload, t)
+
+
+# ---------------------------------------------------------------- фоновые задачи: крипта, ETF, фундаментал
+
+def all_fundamental_symbols():
+    """Тикеры всех индексов (кроме крипты) в порядке реестра; S&P 500 первым."""
+    seen = {}
+    for entry in get_registry():
+        if entry.get("continuous"):
+            continue
+        for row in load_index_rows(entry):
+            seen.setdefault(row["ticker"], None)
+    return list(seen)
+
+
+def run_crypto_refresh():
+    try:
+        import fetch_assets
+    except ImportError:
+        return None
+    return fetch_assets.refresh_crypto(WORLD_DB_PATH)
+
+
+async def crypto_refresher():
+    """Каждые ~6 часов, 24/7: состав/капитализация CoinGecko + закрытия Yahoo -> history_world.db."""
+    while True:
+        try:
+            fresh = (os.path.exists(WORLD_DB_PATH)
+                     and time.time() - os.path.getmtime(WORLD_DB_PATH) < CRYPTO_REFRESH_SECONDS / 2)
+            result = None if fresh and world_history_cache.get("BTC-USD") else await asyncio.to_thread(run_crypto_refresh)
+            if result:
+                print(f"🪙 Крипта обновлена: {result['coins']} монет")
+                await asyncio.to_thread(load_world_history)
+        except Exception as e:
+            print(f"⚠️ Обновление крипты не удалось: {e}")
+        await asyncio.sleep(CRYPTO_REFRESH_SECONDS)
+
+
+def run_fundamentals_pass(max_seconds):
+    import fetch_fundamentals
+    todo = fetch_fundamentals.stale_symbols(FUNDAMENTALS_DB_PATH, all_fundamental_symbols())
+    if not todo:
+        return None
+    return fetch_fundamentals.refresh_fundamentals(FUNDAMENTALS_DB_PATH, todo, max_seconds=max_seconds)
+
+
+def in_night_window(now_utc):
+    lo, hi = FUNDAMENTALS_NIGHT_HOURS_UTC
+    return lo <= now_utc.hour < hi
+
+
+async def fundamentals_refresher():
+    """Недельный проход: ночью (UTC 01–07) докачивает фундаментал у тикеров, которым >7 дней (или данных нет),
+    по ~1 запросу/сек; что не успели — на следующую ночь. Раз в неделю обновляет AUM у ETF."""
+    last_etf = 0.0
+    while True:
+        try:
+            if in_night_window(datetime.now(ZoneInfo("UTC"))):
+                result = await asyncio.to_thread(run_fundamentals_pass, 3300)
+                if result:
+                    print(f"📊 Фундаментал: ок {result['ok']}, сбоев {result['failed']}, осталось {result['skipped']}")
+                if time.time() - last_etf > 7 * 86400:
+                    import fetch_assets
+                    etf = await asyncio.to_thread(fetch_assets.refresh_etf_aum)
+                    last_etf = time.time()
+                    print(f"📊 AUM ETF: {etf['live_aum']}/{etf['etfs']}")
+        except Exception as e:
+            print(f"⚠️ Обновление фундаментала не удалось: {e}")
+        await asyncio.sleep(FUNDAMENTALS_CHECK_SECONDS)
 
 
 async def finnhub_listener():
@@ -1054,6 +1260,10 @@ async def lifespan(_: FastAPI):
         asyncio.create_task(fx_startup_refresher())
     if WORLD_REFRESH:
         asyncio.create_task(world_refresher())
+    if CRYPTO_REFRESH and WORLD_REFRESH:
+        asyncio.create_task(crypto_refresher())
+    if FUNDAMENTALS_REFRESH:
+        asyncio.create_task(fundamentals_refresher())
 
     yield
 
