@@ -13,3 +13,5 @@ history_world.db.*
 fundamentals.db*
 history_long.db
 history_long.db.*
+volumes.db*
+ohlc_cache.db*

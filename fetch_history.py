@@ -13,6 +13,8 @@ from zoneinfo import ZoneInfo
 
 import yfinance as yf
 
+import volumes
+
 DB_PATH = "history.db"
 CSV_PATH = "SP500_with_market_cap.csv"
 CHUNK_SIZE = 80
@@ -100,6 +102,7 @@ def main():
             continue
 
         rows = []
+        vol_series = {}
         for ticker, yahoo_symbol in zip(chunk, yahoo_symbols):
             try:
                 if len(chunk) == 1:
@@ -116,6 +119,9 @@ def main():
                         continue
                     rows.append((ticker, day, float(close)))
                 ok_count += 1
+                vs = volumes.extract_volumes(data, yahoo_symbol, single=len(chunk) == 1)
+                if not vs.empty:
+                    vol_series[ticker] = vs
             except Exception:
                 failed.append(ticker)
 
@@ -124,6 +130,11 @@ def main():
             rows,
         )
         conn.commit()
+        try:  # объёмы — дополнительные данные: их сбой не должен ломать проход по ценам
+            volumes.save_series(volumes.path_next_to(DB_PATH), vol_series,
+                                {t: {skip_date} for t in vol_series} if skip_date else None)
+        except Exception as e:
+            print(f"  Объёмы не записаны: {e}")
         time.sleep(0.5)
 
     print(f"\n✅ Успешно загружено тикеров: {ok_count}")

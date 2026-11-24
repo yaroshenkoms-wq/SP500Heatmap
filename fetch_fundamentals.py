@@ -3,7 +3,7 @@
 
 Таблицы:
   fundamentals(symbol PK, name, pe, forward_pe, div_yield, dividend_rate, ex_dividend_date,
-               earnings_date, beta, currency, updated_at)   -- наш тикер (BRK.B), не Yahoo (BRK-B)
+               earnings_date, beta, ps, pb, rev_growth, avg_volume, currency, updated_at)   -- наш тикер (BRK.B), не Yahoo (BRK-B)
   company_cache(symbol PK, payload TEXT(json), updated_at)  -- готовый ответ /api/v1/company, кэш >= 6 ч
 
 Память: в RAM ничего не держим — всё в SQLite, по одному символу за раз.
@@ -41,7 +41,12 @@ def yahoo_symbol(symbol):
 def init_db(conn):
     conn.execute("""CREATE TABLE IF NOT EXISTS fundamentals (
         symbol TEXT PRIMARY KEY, name TEXT, pe REAL, forward_pe REAL, div_yield REAL, dividend_rate REAL,
-        ex_dividend_date TEXT, earnings_date TEXT, beta REAL, currency TEXT, updated_at REAL NOT NULL)""")
+        ex_dividend_date TEXT, earnings_date TEXT, beta REAL, currency TEXT, updated_at REAL NOT NULL,
+        ps REAL, pb REAL, rev_growth REAL, avg_volume REAL)""")
+    have = {r[1] for r in conn.execute("PRAGMA table_info(fundamentals)")}
+    for col in ("ps", "pb", "rev_growth", "avg_volume"):  # база с прежней схемой (на сервере) — докидываем колонки
+        if col not in have:
+            conn.execute(f"ALTER TABLE fundamentals ADD COLUMN {col} REAL")
     conn.execute("""CREATE TABLE IF NOT EXISTS company_cache (
         symbol TEXT PRIMARY KEY, payload TEXT NOT NULL, updated_at REAL NOT NULL)""")
     conn.commit()
@@ -53,6 +58,16 @@ def _num(v):
     except (TypeError, ValueError):
         return None
     return f if f == f and abs(f) != float("inf") else None
+
+
+def _positive(v):
+    n = _num(v)
+    return n if n is not None and n > 0 else None
+
+
+def _pct(v):
+    n = _num(v)
+    return n * 100 if n is not None else None
 
 
 def _date(ts):
@@ -96,6 +111,10 @@ def parse_info(info, now=None):
         "ex_dividend_date": _date(info.get("exDividendDate")),
         "earnings_date": earn,
         "beta": _num(info.get("beta")),
+        "ps": _positive(info.get("priceToSalesTrailing12Months")),
+        "pb": _positive(info.get("priceToBook")),
+        "rev_growth": _pct(info.get("revenueGrowth")),  # Yahoo: 0.12 = 12% -> отдаём 12.0
+        "avg_volume": _positive(info.get("averageVolume")),
         "currency": info.get("currency") or info.get("financialCurrency"),
     }
 
@@ -128,9 +147,11 @@ def fetch_one(symbol, info_fetcher=None, retries=2, sleep=time.sleep):
 def save_one(conn, symbol, fields, now=None):
     conn.execute(
         "INSERT OR REPLACE INTO fundamentals (symbol, name, pe, forward_pe, div_yield, dividend_rate, "
-        "ex_dividend_date, earnings_date, beta, currency, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        "ex_dividend_date, earnings_date, beta, currency, updated_at, ps, pb, rev_growth, avg_volume) "
+        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         (symbol, fields["name"], fields["pe"], fields["forward_pe"], fields["div_yield"], fields["dividend_rate"],
-         fields["ex_dividend_date"], fields["earnings_date"], fields["beta"], fields["currency"], now or time.time()))
+         fields["ex_dividend_date"], fields["earnings_date"], fields["beta"], fields["currency"], now or time.time(),
+         fields["ps"], fields["pb"], fields["rev_growth"], fields["avg_volume"]))
 
 
 def refresh_fundamentals(db_path, symbols, info_fetcher=None, throttle=THROTTLE_SECONDS, sleep=time.sleep,

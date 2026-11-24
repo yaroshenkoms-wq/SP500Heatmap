@@ -21,6 +21,8 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 
+import volumes
+
 BASE_DIR = Path(__file__).resolve().parent
 REGISTRY_PATH = BASE_DIR / "indices" / "registry.json"
 DB_PATH = "history_world.db"
@@ -119,8 +121,9 @@ def extract_closes(data, symbol, single):
         return pd.Series(dtype=float)
 
 
-def download_all(symbols, downloader, report):
-    """{symbol: Series закрытий}; символы без данных в словарь не попадают."""
+def download_all(symbols, downloader, report, vol_out=None):
+    """{symbol: Series закрытий}; символы без данных в словарь не попадают.
+    vol_out — словарь, куда складываем {symbol: Series объёмов} (если передан)."""
     result = {}
     for chunk in chunked(symbols, CHUNK_SIZE):
         data = None
@@ -137,6 +140,10 @@ def download_all(symbols, downloader, report):
             series = extract_closes(data, sym, single=len(chunk) == 1)
             if not series.empty:
                 result[sym] = series
+                if vol_out is not None:
+                    vs = volumes.extract_volumes(data, sym, single=len(chunk) == 1)
+                    if not vs.empty:
+                        vol_out[sym] = vs
         time.sleep(0.5)
     return result
 
@@ -161,7 +168,8 @@ def refresh(db_path=DB_PATH, index_ids=None, now=None, downloader=None):
     all_symbols = sorted(owners)
 
     fx_symbols = [fx_symbol(c) for c in load_currencies(registry)]
-    closes = download_all(all_symbols + fx_symbols, downloader, notes)
+    vol_series = {}
+    closes = download_all(all_symbols + fx_symbols, downloader, notes, vol_series)
 
     summary = {"indices": {}, "rows_written": 0, "rows_removed": 0,
                "skipped_dates": {i: d for i, d in skip_of_index.items() if d}, "notes": notes}
@@ -195,6 +203,12 @@ def refresh(db_path=DB_PATH, index_ids=None, now=None, downloader=None):
         conn.executemany("INSERT OR REPLACE INTO daily_closes (ticker, date, close) VALUES (?, ?, ?)", rows)
         summary["rows_written"] += len(rows)
     summary["fx_written"] = write_fx(conn, closes, fx_symbols)
+    try:  # объёмы (последние 30 сессий) — рядом с базой цен; сбой не ломает цены
+        vol_skip = {s: {skip_of_index[i] for i in owners[s] if skip_of_index[i]} for s in all_symbols}
+        vol_ok = {s: v for s, v in vol_series.items() if s in owners and set(owners[s]) & passing}
+        summary["volumes_written"] = volumes.save_series(volumes.path_next_to(db_path), vol_ok, vol_skip)
+    except Exception as e:
+        notes.append(f"объёмы не записаны: {e}")
     # даже для символов без новых данных стираем незаконченную сессию, если она вдруг уже в базе
     for iid, d in skip_of_index.items():
         if d:

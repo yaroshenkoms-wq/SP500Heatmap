@@ -162,7 +162,8 @@ class TestMetricsEndpoint:
                                                 throttle=0, sleep=lambda s: None)
         data = client.get("/api/v1/metrics?index=sp500").json()
         assert set(data) == {"AAPL", "BRK.B"}
-        assert set(data["AAPL"]) == {"pe", "divYield", "pos52w", "high52w", "low52w"}
+        assert set(data["AAPL"]) == {"pe", "divYield", "pos52w", "high52w", "low52w", "ps", "pb", "beta", "revGrowth",
+                                     "volume", "avgVolume", "relVolume", "turnoverUSD"}
         assert data["AAPL"]["pe"] == 20.5 and data["AAPL"]["divYield"] == pytest.approx(2.0)
         assert data["AAPL"]["pos52w"] == 0.5 and data["AAPL"]["high52w"] == 200 and data["AAPL"]["low52w"] == 100
         assert data["BRK.B"]["pe"] is None and data["BRK.B"]["pos52w"] == 1.0

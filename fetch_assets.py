@@ -164,7 +164,9 @@ def refresh_crypto(db_path=WORLD_DB, csv_path=CRYPTO_CSV, markets=None, download
     markets = markets if markets is not None else fetch_markets()
     cand = build_crypto_rows(markets, candidates=CANDIDATES)
     notes = []
-    closes = fetch_world.download_all([c["Symbol"] for c in cand], downloader or fetch_world.default_download, notes)
+    vol_series = {}
+    closes = fetch_world.download_all([c["Symbol"] for c in cand], downloader or fetch_world.default_download,
+                                      notes, vol_series)
     keep, dropped = [], []
     for c in cand:
         s = closes.get(c["Symbol"])
@@ -187,6 +189,12 @@ def refresh_crypto(db_path=WORLD_DB, csv_path=CRYPTO_CSV, markets=None, download
         n += len(rows)
     conn.commit()
     conn.close()
+    try:  # объём крипты у Yahoo — уже в долларах за сутки
+        import volumes
+        volumes.save_series(volumes.path_next_to(db_path), {c["Symbol"]: vol_series[c["Symbol"]] for c in keep
+                                                            if c["Symbol"] in vol_series})
+    except Exception as e:
+        notes.append(f"объёмы не записаны: {e}")
     write_csv(csv_path, keep)
     return {"coins": len(keep), "dropped": dropped, "rows_written": n, "notes": notes}
 

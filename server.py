@@ -63,6 +63,8 @@ MARKET_TZ = ZoneInfo("America/New_York")
 
 # Фундаментал и новости (SQLite, не в памяти) — см. fetch_fundamentals.py
 FUNDAMENTALS_DB_PATH = os.path.join(BASE_DIR, "fundamentals.db")
+VOLUMES_DB_PATH = os.path.join(BASE_DIR, "volumes.db")
+OHLC_DB_PATH = os.path.join(BASE_DIR, "ohlc_cache.db")
 # Недельный проход по всем тикерам: только ночью (UTC), не чаще ~1 запроса/сек (FUNDAMENTALS_REFRESH=1 включает)
 FUNDAMENTALS_REFRESH = os.getenv("FUNDAMENTALS_REFRESH", "0").strip().lower() not in ("0", "false", "no", "")
 FUNDAMENTALS_NIGHT_HOURS_UTC = (1, 7)  # [с, до)
@@ -1140,11 +1142,48 @@ def compute_52w(series):
     return pos, high, low
 
 
+MINOR_UNIT_SUFFIXES = {".L": "GBP", ".TA": "ILS", ".JO": "ZAR"}  # Yahoo даёт цену в пенсах/агоротах/центах
+
+
+def price_unit_divisor(ticker, currency):
+    """100 для бирж, где Yahoo отдаёт цену в сотых долях валюты (Лондон, Тель-Авив, Йоханнесбург), иначе 1."""
+    for suffix, cur in MINOR_UNIT_SUFFIXES.items():
+        if ticker.endswith(suffix) and currency == cur:
+            return 100.0
+    return 1.0
+
+
+def volume_fields(ticker, entry, row, series, vol, avg_volume):
+    """volume, avgVolume, relVolume, turnoverUSD (null, если данных нет).
+    avgVolume: 3-месячное среднее Yahoo (из фундаментала), иначе среднее по хранимым сессиям (>= 5).
+    turnoverUSD = объём × последнее закрытие × курс к доллару; у крипты объём Yahoo уже в долларах."""
+    out = {"volume": None, "avgVolume": None, "relVolume": None, "turnoverUSD": None}
+    if not vol:
+        return out
+    volume = vol["volume"]
+    avg = avg_volume if avg_volume and avg_volume > 0 else (vol["mean"] if vol["n"] >= 5 else None)
+    out["volume"] = volume
+    out["avgVolume"] = avg
+    if avg:
+        out["relVolume"] = volume / avg
+    if entry.get("continuous"):
+        out["turnoverUSD"] = volume
+    else:
+        last = series[-1]["close"] if series else None
+        rate = fx_rate(row["currency"])
+        if last and last > 0 and rate:
+            out["turnoverUSD"] = volume * last / price_unit_divisor(ticker, row["currency"]) * rate
+    return out
+
+
 def build_metrics(entry):
     import fetch_fundamentals
+    import volumes
     rows = load_index_rows(entry)
     legacy = entry["id"] == "sp500"
-    fund = fetch_fundamentals.read_fundamentals(FUNDAMENTALS_DB_PATH, [r["ticker"] for r in rows])
+    tickers = [r["ticker"] for r in rows]
+    fund = fetch_fundamentals.read_fundamentals(FUNDAMENTALS_DB_PATH, tickers)
+    vols = volumes.read_stats(VOLUMES_DB_PATH, tickers)
     result = {}
     for row in rows:
         t = row["ticker"]
@@ -1152,14 +1191,17 @@ def build_metrics(entry):
         pos, high, low = compute_52w(series)
         f = fund.get(t) or {}
         result[t] = {"pe": f.get("pe"), "divYield": f.get("div_yield"),
-                     "pos52w": pos, "high52w": high, "low52w": low}
+                     "pos52w": pos, "high52w": high, "low52w": low,
+                     "ps": f.get("ps"), "pb": f.get("pb"), "beta": f.get("beta"), "revGrowth": f.get("rev_growth"),
+                     **volume_fields(t, entry, row, series, vols.get(t), f.get("avg_volume"))}
     return result
 
 
 @app.get("/api/v1/metrics")
 async def get_metrics(index: Optional[str] = None):
-    """P/E, дивидендная доходность (%, из fundamentals.db; нет — null) и положение цены в 52-недельном диапазоне
-    (из годовой истории в памяти) для всех тикеров индекса. Кэш на индекс, сбрасывается при перезагрузке истории."""
+    """P/E, P/S, P/B, beta, рост выручки (%), дивидендная доходность (%, из fundamentals.db; нет — null),
+    положение цены в 52-недельном диапазоне (из годовой истории в памяти) и объёмы (volumes.db: volume, avgVolume,
+    relVolume, turnoverUSD) для всех тикеров индекса. Кэш на индекс, сбрасывается при перезагрузке истории."""
     entry = find_index(index or "sp500")
     if entry is None:
         raise HTTPException(status_code=404, detail="unknown index")
@@ -1170,6 +1212,41 @@ async def get_metrics(index: Optional[str] = None):
     data = await asyncio.to_thread(build_metrics, entry)
     _metrics_cache[entry["id"]] = (_overview_cache["version"], now, data)
     return data
+
+
+_ohlc_semaphore = None
+
+
+@app.get("/api/v1/ohlc/{ticker}")
+async def get_ohlc(ticker: str, range: str = "1y"):
+    """Свечи для графика: ?range=1m|3m|6m|1y (дневные) или 3y|5y|10y (недельные).
+    Yahoo по запросу, кэш в SQLite ohlc_cache.db (6 ч / 3 дня); не больше двух одновременных запросов к Yahoo."""
+    global _ohlc_semaphore
+    import ohlc
+    import fetch_fundamentals
+    if range not in ohlc.RANGES:
+        raise HTTPException(status_code=400, detail="range must be one of " + ", ".join(ohlc.RANGES))
+    t = ticker.strip().upper()
+    if not (t in known_company_names() or lookup_series(t) or t in history_cache):
+        raise HTTPException(status_code=404, detail="unknown ticker")
+    cached = await asyncio.to_thread(ohlc.get_cached, OHLC_DB_PATH, t, range)
+    if cached is not None:
+        return cached
+    currency = "USD"
+    for entry in get_registry():
+        match = next((r for r in load_index_rows(entry) if r["ticker"] == t), None)
+        if match:
+            currency = match["currency"]
+            break
+    if _ohlc_semaphore is None:
+        _ohlc_semaphore = asyncio.Semaphore(2)
+    async with _ohlc_semaphore:
+        try:
+            return await asyncio.to_thread(ohlc.build_ohlc, t, range, fetch_fundamentals.yahoo_symbol(t), currency,
+                                           OHLC_DB_PATH)
+        except Exception as e:
+            print(f"⚠️ /ohlc {t} {range}: {e}")
+            raise HTTPException(status_code=502, detail="price data unavailable")
 
 
 _company_names = {"mtime": None, "data": {}}
