@@ -63,8 +63,7 @@ final class LiveActivityManager: ObservableObject {
         if let current {
             await current.end(nil, dismissalPolicy: .immediate)
             if let token = lastUpdateToken {
-                await PushAPI.send("DELETE", "/api/v1/push/liveactivity",
-                                   body: ["token": token, "kind": "update"])
+                await PushAPI.send("DELETE", "/api/v1/push/liveactivity/\(token)", body: nil)
             }
         }
         lastUpdateToken = nil
@@ -113,7 +112,7 @@ final class LiveActivityManager: ObservableObject {
             await PushAPI.send("POST", "/api/v1/push/liveactivity",
                                body: extra(["token": token, "kind": "start", "indexId": id, "tickers": topTickers()]))
         } else {
-            await PushAPI.send("DELETE", "/api/v1/push/liveactivity", body: ["token": token, "kind": "start"])
+            await PushAPI.send("DELETE", "/api/v1/push/liveactivity/\(token)", body: nil)
         }
     }
 
