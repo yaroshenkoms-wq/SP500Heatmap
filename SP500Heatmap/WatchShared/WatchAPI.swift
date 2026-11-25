@@ -5,7 +5,7 @@ import Foundation
 
 enum WatchConfig {
     static let baseURL: String = {
-        (Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String) ?? "https://217-160-93-254.sslip.io/sp500"
+        (Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String) ?? "https://check.udak.eu/sp500"
     }()
 }
 

@@ -643,10 +643,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				BASE_URL = "https://217-160-93-254.sslip.io/sp500";
+				BASE_URL = "https://check.udak.eu/sp500";
 				CODE_SIGN_ENTITLEMENTS = WatchSupport/SP500HeatmapWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WatchSupport/WatchApp-Info.plist";
@@ -670,10 +670,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				BASE_URL = "https://217-160-93-254.sslip.io/sp500";
+				BASE_URL = "https://check.udak.eu/sp500";
 				CODE_SIGN_ENTITLEMENTS = WatchSupport/SP500HeatmapWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WatchSupport/WatchApp-Info.plist";
@@ -822,7 +822,7 @@
 				BASE_URL = "http://127.0.0.1:8000";
 				CODE_SIGN_ENTITLEMENTS = SP500Heatmap/SP500Heatmap.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -852,10 +852,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				APS_ENVIRONMENT = production;
-				BASE_URL = "https://217-160-93-254.sslip.io/sp500";
+				BASE_URL = "https://check.udak.eu/sp500";
 				CODE_SIGN_ENTITLEMENTS = SP500Heatmap/SP500Heatmap.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -875,7 +875,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				WEBSOCKET_URL = "wss://217-160-93-254.sslip.io/sp500/ws";
+				WEBSOCKET_URL = "wss://check.udak.eu/sp500/ws";
 			};
 			name = Release;
 		};
@@ -884,7 +884,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
@@ -903,7 +903,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
@@ -921,7 +921,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.1;
@@ -938,7 +938,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.1;
@@ -955,10 +955,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				BASE_URL = "https://217-160-93-254.sslip.io/sp500";
+				BASE_URL = "https://check.udak.eu/sp500";
 				CODE_SIGN_ENTITLEMENTS = WatchSupport/SP500HeatmapWatchWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WatchSupport/WatchWidgets-Info.plist";
@@ -985,10 +985,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				BASE_URL = "https://217-160-93-254.sslip.io/sp500";
+				BASE_URL = "https://check.udak.eu/sp500";
 				CODE_SIGN_ENTITLEMENTS = WatchSupport/SP500HeatmapWatchWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WatchSupport/WatchWidgets-Info.plist";
@@ -1016,10 +1016,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				BASE_URL = "https://217-160-93-254.sslip.io/sp500";
+				BASE_URL = "https://check.udak.eu/sp500";
 				CODE_SIGN_ENTITLEMENTS = SP500HeatmapWidgets/SP500HeatmapWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SP500HeatmapWidgets/Info.plist;
@@ -1046,7 +1046,7 @@
 				BASE_URL = "http://127.0.0.1:8000";
 				CODE_SIGN_ENTITLEMENTS = SP500HeatmapWidgets/SP500HeatmapWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DR8U87NRB8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SP500HeatmapWidgets/Info.plist;
