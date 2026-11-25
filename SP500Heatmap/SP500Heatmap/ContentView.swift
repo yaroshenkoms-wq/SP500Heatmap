@@ -307,7 +307,7 @@ enum AppTab: String {
 enum DebugDemoData {
     static func seedPortfolio() {
         let store = MyPortfolioStore.shared
-        for p in store.all where p.name == "Mi cartera" || p.name == "My portfolio" || p.name == AppLanguage.string("My portfolio") { store.delete(p.id) }
+        for p in store.all { store.delete(p.id) }
         let cal = Calendar(identifier: .gregorian)
         func d(_ monthsAgo: Int) -> Date { cal.date(byAdding: .month, value: -monthsAgo, to: Date()) ?? Date() }
         // (тикер, индекс, валюта, количество, цена покупки, месяцев назад)
