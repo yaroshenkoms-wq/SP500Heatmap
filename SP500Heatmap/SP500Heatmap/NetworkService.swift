@@ -21,10 +21,31 @@ class NetworkService: ObservableObject {
         return url
     }
 
-    func fetchData(_ url: URL, timeout: TimeInterval = 60) async throws -> Data {
+    // Своя сессия: запрос не висит дольше 45 с целиком (timeoutInterval считает только паузы),
+    // и не ждёт сеть молча — при её отсутствии сразу ошибка, экран показывает «Повторить».
+    private static let session: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 30
+        config.timeoutIntervalForResource = 45
+        config.waitsForConnectivity = false
+        return URLSession(configuration: config)
+    }()
+
+    // Одна повторная попытка через секунду: сервер или сеть могли подвиснуть на мгновение.
+    func fetchData(_ url: URL, timeout: TimeInterval = 30) async throws -> Data {
+        do {
+            return try await fetchOnce(url, timeout: timeout)
+        } catch {
+            if error is CancellationError || (error as? URLError)?.code == .cancelled || Task.isCancelled { throw error }
+            try await Task.sleep(for: .seconds(1))
+            return try await fetchOnce(url, timeout: timeout)
+        }
+    }
+
+    private func fetchOnce(_ url: URL, timeout: TimeInterval) async throws -> Data {
         var request = URLRequest(url: url)
         request.timeoutInterval = timeout
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await Self.session.data(for: request)
         if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
             throw NetworkError.noData
         }

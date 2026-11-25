@@ -56,14 +56,24 @@ final class WorldStore: ObservableObject {
             .sorted { $0.totalCap > $1.totalCap }
     }
 
+    private var inFlight: Task<Void, Never>?
+
     // On failure keeps previously loaded data; with none the app falls back to the S&P 500 map.
+    // Загрузка идёт в своей задаче: отмена вызвавшего экрана её не обрывает, поэтому
+    // didFinishFirstLoad всегда становится true и экран загрузки не может зависнуть.
     func load() async {
+        if let inFlight { await inFlight.value; return }
+        let task = Task { await self.fetch() }
+        inFlight = task
+        await task.value
+        inFlight = nil
+    }
+
+    private func fetch() async {
         do {
             let fetched = try await NetworkService.shared.fetchWorldOverview()
             overview = fetched.regions.contains { !$0.drawable.isEmpty } ? fetched : nil
             if let overview { WidgetBridge.publish(overview: overview) }
-        } catch is CancellationError {
-            return
         } catch {
             // keep old value
         }

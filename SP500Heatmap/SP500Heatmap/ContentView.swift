@@ -73,19 +73,16 @@ struct ContentView: View {
         NavigationStack(path: $path) {
             Group {
                 if !worldStore.didFinishFirstLoad {
-                    ProgressView("Loading data...")
-                        .font(Theme.ui(.footnote))
-                        .foregroundColor(Theme.muted)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .themeScreen()
+                    LoadingScreen { await worldStore.load() }
                 } else if hasWorld {
                     WorldOverviewView(store: worldStore, onSelect: { index in
                         indexStore.selectedId = index.id
                         path.append(index.id)
                     })
                 } else {
-                    // Old server without world-overview: open the S&P 500 map directly.
-                    IndexFlowView(webSocketManager: webSocketManager)
+                    // Карта мира не загрузилась (нет связи с сервером): ошибка и «Повторить»,
+                    // а не вторая долгая загрузка карты S&P 500.
+                    ErrorScreen { await worldStore.load() }
                 }
             }
             .navigationDestination(for: String.self) { _ in
@@ -126,8 +123,10 @@ struct ContentView: View {
         .environment(\.goHome, hasWorld ? { tab = .markets; goHome() } : nil)
         .environmentObject(indexStore)
         .task {
-            await indexStore.loadIfNeeded()
-            await worldStore.load()
+            // Список индексов и карта мира грузятся одновременно.
+            async let indices: Void = indexStore.loadIfNeeded()
+            async let world: Void = worldStore.load()
+            _ = await (indices, world)
             #if DEBUG
             // Для проверки на симуляторе: `-openIndex ibex35` сразу открывает карту индекса.
             if let id = UserDefaults.standard.string(forKey: "openIndex"), hasWorld {
@@ -229,10 +228,7 @@ struct IndexFlowView: View {
                     HStack { HomeButton(); Spacer() }
                         .padding(.horizontal)
                         .padding(.top, 8)
-                    ProgressView("Loading data...")
-                        .font(Theme.ui(.footnote))
-                        .foregroundColor(Theme.muted)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    LoadingScreen { await loadData() }
                 }
                 .themeScreen()
                 .navigationBarHidden(true)
@@ -296,6 +292,62 @@ private struct DebugScreen: Identifiable { let id: String }
 #endif
 
 struct CompanyLink: Identifiable { let id: String }
+
+// Ошибка загрузки с кнопкой «Повторить»; во время повтора — снова «Загрузка».
+struct ErrorScreen: View {
+    let retry: () async -> Void
+    @State private var retrying = false
+
+    var body: some View {
+        if retrying {
+            LoadingScreen(retry: retry)
+        } else {
+            VStack(spacing: 12) {
+                Text("Error")
+                    .font(Theme.serif(.title2))
+                    .foregroundColor(Theme.text)
+                Button("Retry") {
+                    retrying = true
+                    Task {
+                        await retry()
+                        retrying = false
+                    }
+                }
+                .buttonStyle(OutlinedButtonStyle())
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .themeScreen()
+        }
+    }
+}
+
+// «Загрузка» с кнопкой «Повторить», которая появляется через 10 секунд ожидания.
+struct LoadingScreen: View {
+    let retry: () async -> Void
+    @State private var showRetry = false
+
+    var body: some View {
+        VStack(spacing: 16) {
+            ProgressView("Loading data...")
+                .font(Theme.ui(.footnote))
+                .foregroundColor(Theme.muted)
+            if showRetry {
+                Button("Retry") {
+                    showRetry = false
+                    Task { await retry() }
+                }
+                .buttonStyle(OutlinedButtonStyle())
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .themeScreen()
+        .task(id: showRetry) {
+            guard !showRetry else { return }
+            try? await Task.sleep(for: .seconds(10))
+            if !Task.isCancelled { showRetry = true }
+        }
+    }
+}
 
 enum AppTab: String {
     case markets, watchlists, portfolio, screener, more
