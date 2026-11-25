@@ -252,14 +252,18 @@ struct CompanyDetailView: View {
         }
     }
 
-    private var metricsSection: some View {
+    // Без капитализации, P/E и объёма блок пустой — тогда не показываем его вовсе.
+    @ViewBuilder private var metricsSection: some View {
+        if company.marketCap > 0 || company.peRatio != nil || company.volume != nil {
         VStack(alignment: .leading) {
             Text("Metrics")
                 .font(Theme.serif(.title3))
                 .foregroundColor(Theme.text)
             // P/E и прочее — в «Ключевых данных» (/company); здесь только капитализация, без пустых «Н/Д».
             HStack {
-                MetricItem(title: "Market Cap", value: formatMarketCap(company.marketCap))
+                if company.marketCap > 0 {  // карточка, открытая не с карты (поиск, ссылка), может не знать капитализацию
+                    MetricItem(title: "Market Cap", value: formatMarketCap(company.marketCap))
+                }
                 if let pe = company.peRatio {
                     Spacer()
                     MetricItem(title: "P/E", value: formatDecimal(pe))
@@ -274,6 +278,7 @@ struct CompanyDetailView: View {
             .panelCard()
         }
         .padding(.horizontal)
+        }
     }
 
     // MARK: Ключевые данные

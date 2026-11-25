@@ -135,6 +135,9 @@ struct ContentView: View {
                 splitSelection = id
                 path.append(id)
             }
+            // Для снимков App Store: `-demoPortfolio` / `-demoWatchlist` заполняют портфель и список демо-данными.
+            if UserDefaults.standard.bool(forKey: "demoPortfolio") { DebugDemoData.seedPortfolio() }
+            if UserDefaults.standard.bool(forKey: "demoWatchlist") { DebugDemoData.seedWatchlist() }
             // `-openTab markets|watchlists|portfolio|screener|more` — сразу открыть вкладку.
             if let raw = UserDefaults.standard.string(forKey: "openTab"), let t = AppTab(rawValue: raw) { tab = t }
             // `-openScreen settings|calendar|screener|portfolios|favorites|portfolio:m_dalio` — сразу открыть экран.
@@ -297,3 +300,33 @@ struct CompanyLink: Identifiable { let id: String }
 enum AppTab: String {
     case markets, watchlists, portfolio, screener, more
 }
+
+#if DEBUG
+/// Демо-данные для снимков App Store (только Debug).
+@MainActor
+enum DebugDemoData {
+    static func seedPortfolio() {
+        let store = MyPortfolioStore.shared
+        for p in store.all { store.delete(p.id) }
+        let cal = Calendar(identifier: .gregorian)
+        func d(_ monthsAgo: Int) -> Date { cal.date(byAdding: .month, value: -monthsAgo, to: Date()) ?? Date() }
+        // (тикер, индекс, валюта, количество, цена покупки, месяцев назад)
+        let rows: [(String, String, String, Double, Double, Int)] = [
+            ("AAPL", "sp500", "USD", 40, 172, 22), ("MSFT", "sp500", "USD", 18, 340, 20),
+            ("NVDA", "sp500", "USD", 60, 48, 24), ("AMZN", "sp500", "USD", 30, 128, 18),
+            ("SAN.MC", "ibex35", "EUR", 1200, 3.9, 16), ("ITX.MC", "ibex35", "EUR", 150, 35.5, 14),
+            ("IBE.MC", "ibex35", "EUR", 400, 11.8, 12), ("BBVA.MC", "ibex35", "EUR", 500, 8.7, 10),
+        ]
+        var p = store.create(name: AppLanguage.string("My portfolio"), base: .EUR)
+        p.transactions = rows.map { MyPortfolio.Transaction(ticker: $0.0, indexId: $0.1, type: .buy, date: d($0.5), quantity: $0.3, price: $0.4, currency: $0.2) }
+        store.update(p)
+        store.selectedId = p.id
+    }
+
+    static func seedWatchlist() {
+        let f = FavoritesStore.shared
+        let items: [(String, String, String)] = [("TSLA", "Tesla", "sp500"), ("META", "Meta Platforms", "sp500"), ("GOOGL", "Alphabet", "sp500"), ("TEF.MC", "Telefónica", "ibex35"), ("REP.MC", "Repsol", "ibex35")]
+        for it in items where !f.contains(it.0) { f.toggle(ticker: it.0, name: it.1, indexId: it.2) }
+    }
+}
+#endif

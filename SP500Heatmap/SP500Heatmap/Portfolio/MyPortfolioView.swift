@@ -181,9 +181,17 @@ struct MyPortfolioView: View {
                     }
                 } else {
                     PfSummaryCard(result: r, base: p.baseCurrency)
+                    #if DEBUG
+                    // Снимки App Store (`-demoPortfolio`): карта портфеля сразу под сводкой.
+                    if UserDefaults.standard.bool(forKey: "demoPortfolio") { PfTreemapCard(holdings: r.holdings) }
+                    #endif
                     PfPerformanceCard(portfolio: p)
                     PfHoldingsList(holdings: r.holdings, base: p.baseCurrency) { editing = EditorTarget(ticker: $0) }
+                    #if DEBUG
+                    if !UserDefaults.standard.bool(forKey: "demoPortfolio") { PfTreemapCard(holdings: r.holdings) }
+                    #else
                     PfTreemapCard(holdings: r.holdings)
+                    #endif
                     PfAllocationCard(holdings: r.holdings, base: p.baseCurrency)
                     transactionsLink(p)
                 }
